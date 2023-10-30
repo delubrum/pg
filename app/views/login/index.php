@@ -1,37 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="robots" content="noindex">
+    <title>SIPEC</title>
+    <link rel="icon" sizes="192x192" href="app/assets/img/logo.png" />
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Componenti</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="app/assets/css/login.css">
+    <noscript>This Site requires JavaScript! Este sitio require JavaScript!
+        <style>
+        form {display:none;}
+        </style>
+    </noscript>
 </head>
-<body class="bg-gray-100 h-screen flex justify-center items-center">
-    <div class="bg-white p-8 rounded shadow-md max-w-md w-full">
-        <img src="app/assets/img/logo.png" class="mb-4 mx-auto w-60"></h2>
-        <form name="login_form">
-            <div class="mb-4">
-                <label for="username" class="block text-gray-700 text-sm font-medium">Email</label>
-                <input type="text" name="email" class="mt-1 p-2 w-full border border-gray-300 rounded focus:ring focus:ring-blue-200" required>
-            </div>
-            <div class="mb-4">
-                <label for="password" class="block text-gray-700 text-sm font-medium">Password</label>
-                <input type="password" name="pass" class="mt-1 p-2 w-full border border-gray-300 rounded focus:ring focus:ring-blue-200" required>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200">Login</button>
-            </div>
+
+<body>
+     
+    <div class="container">
+    <div class="img">
+    <img src="app/assets/img/intro.png" alt="">
+    </div>    
+    <div class="login-container">
+    <form method="post" id="login_form">
+        <img src="app/assets/img/logo2.png" alt="" class="avatar" >
+         <h2></h2>
+          <div class="input-div one">
+           <div class="i">
+           <i class="ri-user-line" style="color:#333;font-weight:bold"></i>
+        </div>
+        <div>
+            
+            <input type="text" class="input" placeholder="Email" name="email" autofocus required>
+        </div>
+        </div>
+        <div class="input-div two ">
+          <div class="i">
+            <i class="ri-eye-off-line eye show" style="cursor:pointer;color:#333;font-weight:bold"></i>
+          </div>
+        <div>
+            
+            <input type="password" class="input" placeholder="Password" name="pass" id="password">
+
+        </div>
+
+        </div>
+        
+        <input type="submit" class="btn" style="background:#004240" value="Login">
         </form>
     </div>
-</body>
-</html>
+    
+    </div>
+    <script>
 
-<script>
 document.addEventListener('submit', async (e) => {
     e.preventDefault();
     const loginForm = e.target;
@@ -48,7 +74,7 @@ document.addEventListener('submit', async (e) => {
                     toastr.error('Error');
                     console.log('Error');
                 } else {
-                    window.location.href = '/componenti';
+                    window.location.href = '/sipec2';
                 }
             }
         } catch (error) {
@@ -56,4 +82,22 @@ document.addEventListener('submit', async (e) => {
         }
     }
 });
+
+document.querySelector('.eye').addEventListener('click', e => {
+    const passwordInput = document.querySelector('#password');
+    if (e.target.classList.contains('show')) {
+        e.target.classList.remove('show');
+        e.target.classList.remove('ri-eye-off-line');
+        e.target.classList.add('ri-eye-line');
+        passwordInput.type = 'text';
+    } else {
+        e.target.classList.add('show');
+        passwordInput.type = 'password';
+        e.target.classList.remove('ri-eye-line');
+        e.target.classList.add('ri-eye-off-line');
+    }
+});
+
 </script>
+</body>
+</html>

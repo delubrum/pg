@@ -1,4 +1,4 @@
-<?php foreach ($notifications as $r) { ?>
+<?php foreach ($this->notifications as $r) { ?>
   <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group"
   hx-get="<?php echo $r->url ?>&id=<?php echo $r->itemId ?>"
   hx-target="#content"

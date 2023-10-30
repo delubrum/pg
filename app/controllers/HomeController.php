@@ -3,16 +3,19 @@ require_once 'app/models/model.php';
 
 class HomeController{
   private $model;
+  private $notifications;
   public function __CONSTRUCT(){
     $this->model = new Model();
+    $this->notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
   }
 
 	public function Index() {
 		require_once "lib/auth.php";
 		if ($isLoggedIn) {
-			$notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
 			require_once "lib/check.php";
-      require_once 'app/components/layout/index.php';
+      $title = "Welcome To SIPEC";
+      $content = 'app/components/page.php';
+      require_once 'app/views/index.php';
 		} else {
 			if (isset($_REQUEST['pass']) && $_REQUEST['pass'] !== '') {
 				$isAuthenticated = false;
@@ -66,17 +69,7 @@ class HomeController{
 	}
 
 	public function Notifications() {
-		$notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
-		if ($_REQUEST['list'] == 0) {
-			echo count($notifications);
-		} else {
-			require_once "app/components/layout/notifications-list.php";
-		}
-	}
-
-  public function Sidebar() {
-    require_once "lib/check.php";
-		require_once "app/components/layout/sidebar-menu.php";
+		require_once "app/components/notifications-list.php";
 	}
 
   public function Logout() {

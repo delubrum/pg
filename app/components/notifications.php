@@ -13,7 +13,7 @@
         hx-trigger=""
         hx-target="this"
       >
-      <?php echo count($notifications) ?>
+      <?php echo count($this->notifications) ?>
       </span>
   </button>
   <ul 

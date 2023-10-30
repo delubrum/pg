@@ -3,17 +3,24 @@ require_once 'app/models/model.php';
 
 class UsersController{
   private $model;
+  private $notifications;
+  private $fields;
+  private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
+    $this->notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
+    $this->fields = array("fecha","nombre","email","status","acción");
+    $this->url = '?c=Users&a=Data';
   }
 
   public function Index(){
     require_once "lib/check.php";
     if (in_array(1, $permissions)) {
-      $fields = array("id","date","name","email","status","action");
-      $url = '?c=Users&a=Data';
+      $title = "Configuración / Usuarios";
       $new = '?c=Users&a=New';
-      require_once 'app/components/index.php';
+      $content = 'app/components/index.php';
+      $filters = 'app/views/users/filters.php';
+      require_once 'app/views/index.php';
     } else {
       $this->model->redirect();
     }
@@ -29,39 +36,38 @@ class UsersController{
   }
 
   public function Data(){
-
-    header('Content-Type: application/json');
     require_once "lib/check.php";
     if (in_array(1, $permissions)) {
       $result = array();
       $total = $this->model->get("count(id) as total", "users")->total;
       $sql = '';
-      if (!empty($_POST['search']['value'])) {
-        $sql .= " and (id LIKE '%" . $_POST['search']['value'] . "%'";
-        $sql .= " OR username LIKE '%" . $_POST['search']['value'] . "%'";
-        $sql .= " OR email LIKE '%" . $_POST['search']['value'] . "%')";
+      if (!empty($_GET['name'])) { $sql .= " and username LIKE '%" . $_GET['name'] . "%'"; }
+      if (!empty($_GET['email'])) { $sql .= " and email LIKE '%" . $_GET['email'] . "%'"; }
+      if (!empty($_GET['from'])) { $sql .= " and createdAt  >='" . $_REQUEST['from']." 00:00:00'"; }
+      if (!empty($_GET['to'])) { $sql .= " and createdAt <='" . $_REQUEST['to']." 23:59:59'"; }
+      if (!empty($_GET['status'])) {
+        $statusValues = $_GET['status'];
+        $sql .= "AND (status = '$statusValues[0]'";
+        for ($i = 1; $i < count($statusValues); $i++) {
+            $sql .= " OR status = '$statusValues[$i]'";
+        }
+        $sql .= ")";
       }
       $filtered = $this->model->get("count(id) as total", "users",$sql,)->total;
-
-      if (!empty($_POST['order'])) {
-        $columns = array("id","date","name","email","status","action");
-        $sql .= " ORDER BY " . $columns[$_POST['order'][0]['column']] . " " . $_POST['order'][0]['dir'];
+      $colum = isset($_GET['colum']) ? $_GET['colum'] : 'fecha';
+      $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
+      if ($order === 'asc') {
+        $newOrder = 'desc';
+      } else {
+        $newOrder = 'asc';
       }
-      $sql .= " LIMIT " . $_POST['start'] . ", " . $_POST['length'];
-      foreach ($this->model->list("id,createdAt as date,username as name,email,if(status=1,'Enabled','Disabled') as status","users",$sql) as $k => $v) {
-        $b1 = ($v->status != 'Enabled')
-        ? "<a hx-get='?c=Users&a=Status&id=$v->id&status=1' hx-on:htmx:after-request='table.ajax.reload( null, false );' class='block mx-3 float-right'><i class='ri-toggle-line cursor-pointer text-gray-500 hover:text-gray-700 text-2xl'></i> </a>" 
-        : "<a hx-get='?c=Users&a=Status&id=$v->id&status=0' hx-on:htmx:after-request='table.ajax.reload( null, false );' class='block mx-3 float-right'><i class='ri-toggle-fill text-blue-500 hover:text-blue-700 cursor-pointer text-2xl'></i> </a>";
-        $b2 = "<a hx-get='?c=Users&a=Profile&id=$v->id' hx-target='#myModal' @click='showModal = true' class='block text-blue-500 hover:text-blue-700 cursor-pointer float-right mx-3'><i class='ri-edit-2-line text-2xl'></i></a>";
-        $result[] = (array)$v + ['action' => "$b1$b2"];
-      }
-      $json_data = array(
-        "draw" => intval($_POST['draw']),
-        "recordsTotal" => intval($total),
-        "recordsFiltered" => intval($filtered),
-        "data" => $result
-      );
-      echo json_encode($json_data);
+      $sql .= " ORDER BY $colum $newOrder";
+      $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+      $perPage = 10;
+      $start = ($page - 1) * $perPage;
+      $sql .= " LIMIT $start,$perPage";
+      $list = $this->model->list("id,createdAt as fecha,username as nombre,email,if(status=1,'Activo','Inactivo') as status","users",$sql);
+      require_once "app/views/users/list.php";
     } else {
       $this->model->redirect();
     }
@@ -88,7 +94,11 @@ class UsersController{
     if (in_array(1, $permissions)) {
       $item = new stdClass();
       $item->status = $_REQUEST['status'];
-      $this->model->update('users',$item,$_REQUEST['id']);
+      $id = $_REQUEST['id'];
+      $this->model->update('users',$item,$id);
+      echo ($_REQUEST['status'] == 1)
+        ? "<a hx-get='?c=Users&a=Status&id=$id&status=0' hx-swap = 'outerHTML' class='block mx-3 text-teal-900 hover:text-teal-700 cursor-pointer float-right'><i class='ri-toggle-fill text-2xl'></i> Desactivar</a>"
+        : "<a hx-get='?c=Users&a=Status&id=$id&status=1' hx-swap = 'outerHTML' class='block mx-3 text-teal-900 hover:text-teal-700 cursor-pointer float-right'><i class='ri-toggle-line text-2xl'></i> Activar</a>";
     } else {
       $this->model->redirect();
     }
@@ -104,12 +114,7 @@ class UsersController{
       $item->email = $_REQUEST['email'];
       $item->lang = 'en';
       $item->password = $_REQUEST['newpass'];
-      $item->type = $_REQUEST['type'];
-      $item->lang = 'en';
-      $item->payroll = $_REQUEST['payroll'];
-      $item->overtime = $_REQUEST['overtime'];
-      $item->hour = $_REQUEST['hour'];
-      $item->permissions = [];
+      $item->permissions = '[]';
       $cpass = $_REQUEST['cpass'];
       if ($cpass != '' and $cpass != $item->password) {
         http_response_code(400);
@@ -167,7 +172,7 @@ class UsersController{
       sort($newArr);
       $item->permissions = json_encode(array_values($newArr));
       $id = $this->model->update('users',$item,$userId);
-      $color = (in_array($pId,$newArr)) ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-500 hover:bg-gray-600';
+      $color = (in_array($pId,$newArr)) ? 'bg-teal-900 hover:bg-teal-700' : 'bg-gray-500 hover:bg-gray-600';
       $action = (in_array($pId,$newArr)) ? '0' : '1';
       echo "<button 
       hx-put='?c=Users&a=UpdatePermission&userId=$userId&pId=$pId&action=$action&name=$name'

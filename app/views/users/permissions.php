@@ -1,6 +1,6 @@
 <?php if (in_array(1,$permissions)) { ?>
   <div class="w-full">
-    <h2 class="text-lg font-semibold mb-4">Permissions</h2>
+    <h2 class="text-lg font-semibold text-teal-700">Permisos</h2>
     <div class="overflow-y-auto max-h-[600px] p-4"
     >
     <?php
@@ -12,7 +12,7 @@
           echo "<div>";
           $current_category = $r->category;
         }
-        $color = (in_array($r->id,$userPermissions)) ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-500 hover:bg-gray-600';
+        $color = (in_array($r->id,$userPermissions)) ? 'bg-teal-900 hover:bg-teal-700' : 'bg-gray-500 hover:bg-gray-600';
         $action = (in_array($r->id,$userPermissions)) ? '0' : '1';
         echo "
         <button 
