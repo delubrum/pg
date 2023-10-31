@@ -102,8 +102,8 @@
       </div>
 
       <div>
-        <label for="energy0" class="block text-gray-600 text-sm mb-1">Energía Final</label>
-        <input  type="number" id="energy0" name="energy0" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        <label for="energy1" class="block text-gray-600 text-sm mb-1">Energía Final</label>
+        <input  type="number" id="energy1" name="energy1" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
 
     </div>

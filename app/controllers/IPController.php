@@ -1,7 +1,7 @@
 <?php
 require_once 'app/models/model.php';
 
-class BCController{
+class IPController{
   private $model;
   private $notifications;
   private $fields;
@@ -13,12 +13,18 @@ class BCController{
     $this->url = '?c=RM&a=Data';
   }
 
-  public function BC(){
+  public function IP(){
     require_once "lib/check.php";
     if (in_array(3, $permissions)) {
       $filters = "and a.rmId = " . $_REQUEST['id'];
       $id = $this->model->get('a.*, b.paste, b.reactor, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
-      require_once 'app/views/rm/bc.php';
+      $filters = "and rmId = " . $_REQUEST['id'];
+      $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
+      $qty = $net - $id->paste;
+      $recovered =  $this->model->get('SUM(net) as total','bc_items'," and type = 'Ingreso' and bcid = $id->id")->total;
+      $pr = number_format($recovered/$qty*100);
+      $status = $_REQUEST['status'];
+      require_once 'views/rm/ip.php';
     } else {
       $this->model->redirect();
     }
@@ -220,22 +226,6 @@ class BCController{
         header('HX-Trigger: ' . $hxTriggerData);
         http_response_code(204);
       }
-    } else {
-      $this->model->redirect();
-    }
-  }
-
-
-  public function Detail(){
-    require_once "middlewares/check.php";
-    if (in_array(3, $permissions)) {
-      $filters = "and a.rmId = " . $_REQUEST['id'];
-      $id = $this->model->get('a.*, b.paste, b.reactor, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
-      $filters = "and rmId = " . $_REQUEST['id'];
-      $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
-      $qty = $net - $id->paste;
-      $status = "Bitacora";
-      require_once 'views/reports/bc.php';
     } else {
       $this->model->redirect();
     }
