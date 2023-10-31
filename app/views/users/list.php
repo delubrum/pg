@@ -16,7 +16,6 @@
   </tr>
 </thead>
 <tbody>
-</tbody>
 <?php foreach ($list as $r) { ?>
 <tr>
   <td class="px-2 py-2 border-b">
@@ -41,3 +40,4 @@
   </td>
 </tr>
 <?php } require_once "app/components/pagination.php" ?>
+</tbody>

@@ -1,9 +1,9 @@
 <div @click.outside="showModal = false" class="w-[95%] sm:w-[90%] bg-white p-4 rounded-lg shadow-lg relative z-50">
     <!-- Close Button (X) in Top-Right Corner -->
-    <button id="closeModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-900 hover:text-teal-700">
+    <button id="closeModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-700 hover:text-teal-900">
         <i class="ri-close-line text-2xl"></i>
     </button>
-    <h1 class="text-lg font-semibold mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> Nuevo Registro</h1>
+    <h1 class="mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> <span class="text-2xl font-semibold">Nuevo RM</span></h1>
     <form  id="newForm" 
         class="overflow-y-auto max-h-[600px] p-4"
         hx-post='?c=RM&a=Save' 
@@ -64,9 +64,8 @@
         <div class="text-center text-sm" id="spreadsheet"></div>
       </div>
 
-      <div class="mt-6 flex justify-end">
-          <button type="submit" class="bg-teal-900 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"><i class="ri-save-line"></i> Registrar</button>
-      </div>
+      <button type="submit" class="pt-6 float-right text-xl text-teal-900 font-bold hover:text-teal-700"><i class="ri-save-line"></i> Guardar</button>
+
     </form>
 </div>
 

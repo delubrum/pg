@@ -3,7 +3,7 @@
   <button id="closeModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-900 hover:text-teal-700">
       <i class="ri-close-line text-2xl"></i>
   </button>
-  <h1 class="text-lg font-semibold mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> Bitácora</h1>
+  <h1 class="mb-4 text-teal-700"><i class="ri-hammer-line text-3xl"></i> <span class="text-2xl font-semibold">Producción</span></h1>
   <form id="newForm" 
       class="overflow-y-auto max-h-[600px] p-4"
       hx-post='?c=BC&a=Save' 
@@ -13,32 +13,30 @@
   >
   <?php echo isset($id) ? "<input type='hidden' name='id' value='$id->id'>" : '' ?>
     <div class="grid grid-cols-1 sm:grid-cols-5 gap-4 text-sm">
-        <div>
-            <b>LOTE:</b> <?php echo $id->id ?>
-        </div>
-        <div>
-            <b>RM:</b> <?php echo $id->rmId ?>
-        </div>
-        <div>
-            <b>CLIENTE:</b> <?php echo $id->clientname ?>
-        </div>
-        <div>
-          <b>PRODUCTO: </b> <?php echo $id->productname ?>
-        </div>
-        <div>
-            <b>REACTOR:</b> <?php echo $id->reactor ?>
-        </div>
+      <div>
+          <b>LOTE:</b> <?php echo $id->id ?>
+      </div>
+      <div>
+          <b>RM:</b> <?php echo $id->rmId ?>
+      </div>
+      <div>
+          <b>CLIENTE:</b> <?php echo $id->clientname ?>
+      </div>
+      <div>
+        <b>PRODUCTO: </b> <?php echo $id->productname ?>
+      </div>
+      <div>
+          <b>REACTOR:</b> <?php echo $id->reactor ?>
+      </div>
     </div>
 
     <div 
     class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm py-4"
-    hx-get='?c=BC&a=Results&id=<?php echo $id->id?>'
+    hx-get='?c=BC&a=Results&id=<?php echo $id->rmId?>'
     hx-trigger="load, listItemsChanged from:body"
     hx-swap="innerHtml"
     hx-indicator="#loading"
-    >
-
-    </div>
+    ></div>
 
 
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -107,8 +105,8 @@
       </div>
 
     </div>
-    <button 
-      class="float-right bg-teal-900 text-white px-4 py-2 rounded-md hover:bg-teal-700"
+    <button
+      class="pt-6 float-right text-xl text-teal-900 font-bold hover:text-teal-700"
       hx-get='?c=BC&a=NewItem&id=<?php echo $id->id?>'
       hx-target="#nestedModal"
       hx-swap="innerHtml"
@@ -134,8 +132,7 @@
       ></table> 
     </div>
 
-    <div class="mt-6 flex justify-end">
-      <button type="submit" class="bg-teal-900 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"><i class="ri-save-line"></i> Guardar</button>
-    </div>
+    <button type="submit" class="pt-6 float-right text-xl text-teal-900 font-bold hover:text-teal-700"><i class="ri-save-line"></i> Guardar</button>
+
   </form>
 </div>

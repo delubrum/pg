@@ -215,7 +215,7 @@ class BCController{
       if ($id !== false) {
         $hxTriggerData = json_encode([
           "listChanged" => true,
-          "showMessage" => '{"type": "success", "message": "Bitacora guardado", "close" : "closeModal"}'
+          "showMessage" => '{"type": "success", "message": "Bitacora Guardada", "close" : "closeModal"}'
         ]);
         header('HX-Trigger: ' . $hxTriggerData);
         http_response_code(204);
@@ -227,7 +227,7 @@ class BCController{
 
 
   public function Detail(){
-    require_once "middlewares/check.php";
+    require_once "lib/check.php";
     if (in_array(3, $permissions)) {
       $filters = "and a.rmId = " . $_REQUEST['id'];
       $id = $this->model->get('a.*, b.paste, b.reactor, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
@@ -235,7 +235,7 @@ class BCController{
       $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
       $qty = $net - $id->paste;
       $status = "Bitacora";
-      require_once 'views/reports/bc.php';
+      require_once 'app/views/reports/bc.php';
     } else {
       $this->model->redirect();
     }

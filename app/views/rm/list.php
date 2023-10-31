@@ -16,7 +16,6 @@
   </tr>
 </thead>
 <tbody>
-</tbody>
 <?php foreach ($list as $r) { ?>
 <tr>
   <td class="px-2 py-2 border-b">
@@ -42,14 +41,26 @@
   </td>
   <td class="text-right px-2 py-2 border-b cursor-pointer">
     <?php
-      if ($r->status == 'Terminar R.M.') { $edit = "<a hx-get='?c=RM&a=RM&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Editar</a>"; }
-      if ($r->status == 'Producción' || $r->status == 'Iniciado') { $edit = "<a hx-get='?c=BC&a=BC&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Editar</a>"; }
-      if ($r->status == 'Análisis' || $r->status == 'Iniciado') { $edit = "<a hx-get='?c=IP&a=IP&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Editar</a>"; }
+      if ($r->status == 'Terminar R.M.') { $edit = "<a hx-get='?c=RM&a=RM&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Terminar R.M.</a>"; }
+      if ($r->status == 'Producción' || $r->status == 'Iniciado') { $edit = "<a hx-get='?c=BC&a=BC&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-hammer-line text-2xl'></i> Producir</a>"; }
+      if ($r->status == 'Análisis') { $edit = "<a hx-get='?c=IP&a=IP&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Análisis</a>"; }
+      if ($r->status == 'Facturación') { $edit = "<a hx-get='?c=IP&a=IV&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-exchange-dollar-line text-2xl'></i> Facturar</a>"; }
+      if ($r->status == 'Cerrado') { $edit = ""; }
       $rm = ($r->status != 'Terminar R.M.' and $r->status != 'Registrando') ? "<br><a href='?c=RM&a=Detail&id=$r->RM' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-file-line text-2xl'></i> Recibo de Material</a>" : "";
       $bc = ($r->status == 'Facturación' || $r->status == 'Cerrado' || $r->status == 'Análisis') ? "<br><a href='?c=BC&a=Detail&id=$r->RM' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-file-line text-2xl'></i> Bitácora</a>" : "";
-      $pd = ($r->status == 'Facturación' || $r->status == 'Cerrado') ? "<br><a href='?c=RM&a=PD&id=$r->RM' type='button' target='_blank' class='btn btn-primary'><i class='fas fa-file'></i> Paquete Despacho</a><br>" : "";
-      echo "$edit $rm $bc $pd"
+      $pd = ($r->status == 'Facturación' || $r->status == 'Cerrado') ? "<br><a href='?c=Reports&a=PD&id=$r->RM' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-file-line text-2xl'></i> Paquete Despacho</a>" : "";
     ?>
+
+    <div x-data="{ open: false }">
+        <i @click="open = !open" class="ri-more-2-fill text-2xl cursor-pointer text-teal-900 hover:text-teal-700"></i>
+        <div x-show="open" @click.away="open = false" class="absolute right-10 origin-top-right z-50 rounded-md shadow-lg">
+            <div class="bg-white rounded-md py-2 px-4">
+                <?php echo "$edit $rm $bc $pd" ?>
+            </div>
+        </div>
+    </div>
+
   </td>
 </tr>
+</tbody>
 <?php } require_once "app/components/pagination.php" ?>

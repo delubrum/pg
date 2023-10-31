@@ -64,7 +64,7 @@ document.addEventListener('submit', async (e) => {
     if (loginForm.checkValidity()) {
         try {
             const formData = new FormData(loginForm);
-            const response = await fetch("?c=Home&a=Index", {
+            const response = await fetch("?c=Home&a=Index&m=Index", {
                 method: "POST",
                 body: formData,
             });

@@ -3,7 +3,7 @@ if(!isset($_SESSION)) {
     session_start(); 
 }
 if (empty($_SESSION["id-APP"])) {
-    header('Location: ?c=Home&a=Index');
+    header('Location: ?c=Home&a=Index&m=Index');
 }
 else {
 $filter = "and id = " . $_SESSION["id-APP"];

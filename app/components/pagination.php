@@ -1,7 +1,7 @@
 <tr>
-  <td colspan="2" class="text-center my-4 flex">
+  <td colspan="<?php echo count($this->fields) ?>" class="text-left mt-4 pt-4">
       <button 
-        class="px-2 py-1 mx-1 bg-teal-900  hover:bg-teal-700 text-white rounded-md"
+        class="p-1 text-teal-900 font-semibold hover:text-teal-700"
         hx-get="<?php echo $this->url ?>&page=1" 
         hx-target="#list" 
         hx-include=".filter"
@@ -10,16 +10,16 @@
       </button>
       <?php if($page-1 != 0) { ?>
         <button 
-          class="px-2 py-1 mx-1 bg-teal-900  hover:bg-teal-700 text-white rounded-md"
+        class="p-1 text-teal-900 font-semibold hover:text-teal-700"
           hx-get="<?php echo $this->url ?>&page=<?php echo $page-1 ?>" 
           hx-target="#list" 
           hx-include=".filter"
         >
-          <
+          <i class="ri-arrow-left-s-line"></i>
         </button>
       <?php } ?>
       <select name="page" 
-        class="mx-2 cursor-pointer bg-gray-200 py-1 px-2 hover:bg-gray-300 rounded-md"
+        class="p-1 cursor-pointer bg-gray-200 hover:bg-gray-300 rounded-md"
         hx-get="<?php echo $this->url ?>" 
         hx-target="#list"
         hx-include=".filter"
@@ -30,22 +30,22 @@
       </select>
       <?php if($page+1 <= ceil($filtered/$perPage)) { ?>
         <button
-          class="px-2 py-1 mx-1 bg-teal-900  hover:bg-teal-700 text-white rounded-md"
+        class="p-1 text-teal-900 font-semibold hover:text-teal-700"
           hx-get="<?php echo $this->url ?>&page=<?php echo $page+1 ?>" 
           hx-target="#list"
           hx-include=".filter"
         >
-          >
+        <i class="ri-arrow-right-s-line"></i>
       </button>
       <?php } ?>
-        <button 
-          class="px-2 py-1 mx-1 bg-teal-900  hover:bg-teal-700 text-white rounded-md"
-          hx-get="<?php echo $this->url ?>&page=<?php echo ceil($filtered/$perPage) ?>" 
-          hx-target="#list"
-          hx-include=".filter"
-        >
-          Última
-        </button>
+      <button 
+      class="p-1 text-teal-900 font-semibold hover:text-teal-700"
+        hx-get="<?php echo $this->url ?>&page=<?php echo ceil($filtered/$perPage) ?>" 
+        hx-target="#list"
+        hx-include=".filter"
+      >
+        Última
+      </button>
+      <span class="float-right"><?php echo $filtered ?> / <?php echo $total ?> (10 por Página)</span>
   </td>
-  <td class="text-right p-2 mx-2" colspan="<?php echo count($this->fields)-1 ?>"> <?php echo $filtered ?> Filtrados / <?php echo $total ?> Total (10 por Página)</td>
 </tr>

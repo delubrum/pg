@@ -1,192 +1,95 @@
-<form method="post" id="formIP">
-  <div class="modal-header">
-  <h5 class="modal-title">Informe Proceso y Análisis</b></h5>
-  <input type="hidden" name="id" value="<?php echo $id->id ?>">
-  <input type="hidden" name="status" value="<?php echo $status ?>">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="row mb-4">
-        <div class="col-sm-1">
-            <b>LOTE:</b> <?php echo $id->id ?>
-        </div>
-        <div class="col-sm-1">
-            <b>RM:</b> <?php echo $id->rmId ?>
-        </div>
-        <div class="col-sm-3">
-            <b>CLIENTE:</b> <?php echo $id->clientname ?>
-        </div>
-        <div class="col-sm-2">
-           <b>PRODUCTO: </b> <?php echo $id->productname ?>
-        </div>
-        <div class="col-sm-1">
-            <b>REACTOR:</b> <?php echo $id->reactor ?>
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-2 offset-3 text-center">
-            <b>PESO MP A RECUPERAR:</b> <h2 class="text-primary" id="torecover"><?php echo $qty ?></h2>
-        </div>
-
-        <div class="col-sm-2 text-center">
-        <b>CALCULO CERO:</b> <h2 class="text-danger" id="calc">0</h2>
-        </div>
-
-        <div class="col-sm-2 text-center">
-        <b>% RECUPERACIÓN CLIENTE:</b> <h2 class="text-danger" id="calcMPC">0</h2>
-        </div>
-
-    </div>
-
-    <div class="row">
-
-
-        <div class="col-sm-3">
-            <div class="form-group">
-                <label>* Peso Recuperado Cliente:</label>
-                <div class="input-group">
-                <input class="form-control" id="mpc" name="mpClient" required>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="form-group">
-                <label>* Lodos del Proceso Cliente:</label>
-                <div class="input-group">
-                <input class="form-control" id="lp" name="mudpClient" required>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="form-group">
-                <label>* Destilado Humedo Cliente:</label>
-                <div class="input-group">
-                <input class="form-control" id="dh" name="distilledClient" required>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="form-group">
-                <label>* Perdida Evaporación Cliente:</label>
-                <div class="input-group">
-                <input class="form-control" id="pe" name="evaporationClient" required>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="form-group">
-                <label>* Apariencia:</label>
-                <div class="input-group">
-                <input class="form-control" id="pe" name="apariencia" value="Liquido Transparente" required>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="form-group">
-                <label>* Olor:</label>
-                <div class="input-group">
-                <input class="form-control" id="pe" name="olor" value="Característico" required>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-sm-2">
-            <div class="form-group">
-                <label>* Densidad (g/ml):</label>
-                <div class="input-group">
-                <input class="form-control" id="pe" name="densidad" required>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-2">
-            <div class="form-group">
-                <label>* % Humedad:</label>
-                <div class="input-group">
-                <input class="form-control" id="pe" name="humedad" required>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-2">
-            <div class="form-group">
-                <label>* % PH:</label>
-                <div class="input-group">
-                <input class="form-control" id="pe" name="ph" required>
-                </div>
-            </div>
-        </div>
-
-
-
-
+<div class="w-[95%] sm:w-[90%] bg-white p-4 rounded-lg shadow-lg relative z-50">
+  <!-- Close Button (X) in Top-Right Corner -->
+  <button id="closeModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-900 hover:text-teal-700">
+      <i class="ri-close-line text-2xl"></i>
+  </button>
+  <h1 class="text-lg font-semibold mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> Informe Proceso y Análisis</h1>
+  <form x-data="{ recover: <?php echo $qty ?>, mpc: 0, lp: 0, dh: 0, pe: 0 }"
+      class="overflow-y-auto max-h-[600px] p-4"
+      hx-post='?c=IP&a=Save' 
+      hx-swap="none" 
+      hx-trigger='submit'
+      hx-indicator="#loading"
+  >
+  <?php echo isset($id) ? "<input type='hidden' name='id' value='$id->id'>" : '' ?>
+    <div class="grid grid-cols-1 sm:grid-cols-5 gap-4 text-sm">
+      <div>
+          <b>LOTE:</b> <?php echo $id->id ?>
       </div>
-  </div>
+      <div>
+        <b>RM:</b> <?php echo $id->rmId ?>
+      </div>
+      <div>
+        <b>CLIENTE:</b> <?php echo $id->clientname ?>
+      </div>
+      <div>
+        <b>PRODUCTO: </b> <?php echo $id->productname ?>
+      </div>
+      <div>
+        <b>REACTOR:</b> <?php echo $id->reactor ?>
+      </div>
+    </div>
 
-  <div class="modal-footer">
-    <button type="submit" class="btn btn-primary">Guardar</button>
-  </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 py-4">
+      <div class="text-center">
+          <b>PESO MP A RECUPERAR:</b> <br>
+          <span class='text-2xl text-teal-700 font-bold' x-text="recover"></span>
+      </div>
+      <div class="text-center">
+          <b>CALCULO CERO:</b><br>
+          <span class='text-2xl text-teal-700 font-bold' x-text="(recover - mpc - lp - dh - pe).toFixed(2);"></span>
+          <input type="hidden" name="cero" x-model="(recover - mpc - lp - dh - pe).toFixed(2);">
+      </div>
+      <div class="text-center">
+          <b>% RECUPERACIÓN CLIENTE:</b><br>
+          <span class='text-2xl text-teal-700 font-bold' x-text="((mpc / recover) * 100).toFixed();"></span>
+      </div>
+    </div>
 
-</form>
-
-
-<script>
-
-
-$(document).ready(function() {
-    torecover = Number($("#torecover").html());
-    mp = Number($("#mpc").val());
-    lp = Number($("#lp").val());
-    dh = Number($("#dh").val());
-    pe = Number($("#pe").val());
-    calc = (torecover-mp-lp-dh-pe).toFixed(2);
-    calcMPC = ((mp/torecover)*100).toFixed();
-
-    $("#calc").html(calc);
-    $("#calcMPC").html(calcMPC);
-});
-
-$(document).on("change", "#mpc,#lp,#dh,#pe", function(e) {
-    torecover = Number($("#torecover").html());
-    mp = Number($("#mpc").val());
-    lp = Number($("#lp").val());
-    dh = Number($("#dh").val());
-    pe = Number($("#pe").val());
-    calc = (torecover-mp-lp-dh-pe).toFixed(2);
-    calcMPC = ((mp/torecover)*100).toFixed();
-
-    $("#calc").html(calc);
-    $("#calcMPC").html(calcMPC);
-
-});
-
-$(document).on('submit', '#formIP', function(e) {
-    e.stopImmediatePropagation();
-    e.preventDefault();
-    if ($("#calc").html() != 0) {
-      toastr.error('El Cálculo debe ser 0');
-      return;
-    }
-    if (document.getElementById("formIP").checkValidity()) {
-        $("#loading").show();
-        $.post( "?c=IP&a=Update", $( "#formIP" ).serialize()).done(function(res) {
-            if (isNaN(res)) {
-                toastr.error(res);
-                $("#loading").hide();
-            } else {
-              location.reload();
-            }
-        });
-    }
-});
-</script>
-
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <div>
+        <label for="mpClient" class="block text-gray-600 text-sm mb-1">Peso Recuperado Cliente</label>
+        <input  type="number" step="0.01" x-model="mpc" id="mpClient" name="mpClient" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+      </div>
+      <div>
+        <label for="mudpClient" class="block text-gray-600 text-sm mb-1">Lodos del Proceso Cliente</label>
+        <input  type="number" step="0.01" x-model="lp" id="mudpClient" name="mudpClient" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+      </div>
+      <div>
+        <label for="distilledClient" class="block text-gray-600 text-sm mb-1">Destilado Humedo Cliente</label>
+        <input  type="number" step="0.01" x-model="dh" id="distilledClient" name="distilledClient" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+      </div>
+      <div>
+        <label for="evaporationClient" class="block text-gray-600 text-sm mb-1">Perdida Evaporación Cliente</label>
+        <input  type="number" step="0.01" x-model="pe" id="evaporationClient" name="evaporationClient" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+      </div>
+      <div>
+        <label for="apariencia" class="block text-gray-600 text-sm mb-1">Apariencia</label>
+        <input id="apariencia" name="apariencia" value="Liquido Transparente" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+      </div>
+      <div>
+        <label for="olor" class="block text-gray-600 text-sm mb-1">Olor</label>
+        <input id="olor" name="olor" value="Característico" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+      </div>
+      <div>
+        <label for="densidad" class="block text-gray-600 text-sm mb-1">Densidad (g/ml)</label>
+        <input id="densidad" name="densidad" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+      </div>
+      <div>
+        <label for="humedad" class="block text-gray-600 text-sm mb-1">% Humedad</label>
+        <input id="humedad" name="humedad" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+      </div>
+      <div>
+        <label for="ph" class="block text-gray-600 text-sm mb-1">% PH</label>
+        <input id="ph" name="ph" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+      </div>
+    </div>
+    <div class="mt-6 flex justify-end">
+      <button type="submit" 
+      class="text-xl float-left text-teal-900 px-4 py-2 font-bold hover:text-teal-700"
+      >
+        <i class="ri-save-line"></i> Guardar
+      </button>
+    </div>
+  </form>
+</div>

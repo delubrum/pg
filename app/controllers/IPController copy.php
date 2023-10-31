@@ -1,7 +1,7 @@
 <?php
 require_once 'app/models/model.php';
 
-class IPController{
+class ReportsController{
   private $model;
   private $notifications;
   private $fields;
@@ -13,17 +13,17 @@ class IPController{
     $this->url = '?c=RM&a=Data';
   }
 
-  public function IP(){
+  public function PD(){
     require_once "lib/check.php";
     if (in_array(3, $permissions)) {
-      $filters = "and a.rmId = " . $_REQUEST['id'];
-      $id = $this->model->get('a.*, b.paste, b.reactor, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
+      $filters = "and a.id = " . $_REQUEST['id'];
+      $id = $this->model->get('a.*,b.company as clientname, b.username as contactname, c.name as productname, b.city, d.id as bcId, d.mud, d.distilled, d.evaporation, d.mud_dist, d.evaporation','rm a',$filters,'LEFT JOIN users b ON a.clientId=b.id LEFT JOIN products c ON a.productId = c.id LEFT JOIN bc d ON a.id = d.rmId');
       $filters = "and rmId = " . $_REQUEST['id'];
       $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
-      $qty = $net - $id->paste;
-      $recovered =  $this->model->get('SUM(net) as total','bc_items'," and type = 'Ingreso' and bcid = $id->id")->total;
-      $pr = number_format($recovered/$qty*100);
-      require_once 'app/views/rm/ip.php';
+      $kg = $this->model->get('SUM(kg) as total','rm_items',$filters)->total;
+      $tara = $this->model->get('SUM(tara) as total','rm_items',$filters)->total;
+
+      require_once 'app/views/reports/pd.php';
     } else {
       $this->model->redirect();
     }

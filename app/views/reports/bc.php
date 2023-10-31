@@ -2,11 +2,11 @@
 <html lang="es">
 <head>
   <title>SIPEC | Bitacora</title>
-  <link rel="icon" sizes="192x192" href="assets/img/logo.png">
+  <link rel="icon" sizes="192x192" href="app/assets/img/logo.png">
   <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
   <script src="https://adminlte.io/themes/v3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="https://adminlte.io/themes/v3/dist/js/adminlte.min.js"></script>
-  <link rel="stylesheet" href="assets/css/adminlte.min.css">
+  <link rel="stylesheet" href="https://adminlte.io/themes/v3/dist/css/adminlte.min.css?v=3.2.0">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
   <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 
@@ -25,7 +25,7 @@
     <div class="row">    
     <table style='text-align:center;padding:0' class="mb-4 col-12">
         <tr>
-        <td style='width:33%'><img style='width:200px' src='assets/img/logo2.png'></td>
+        <td style='width:33%'><img style='width:200px' src='app/assets/img/logo2.png'></td>
         <td style='width:33%'><h1> BITACORA</h1></td>
         <td style='width:33%;font-size:18px'>
             <b>Código:</b> 
@@ -86,28 +86,28 @@
 
     <div class="row mb-2">
         <div class="col-sm-2">
-        <b>AGUA INICIAL:</b> <?php echo $id->water_0 ?>
+        <b>AGUA INICIAL:</b> <?php echo $id->water0 ?>
         </div>
 
         <div class="col-sm-2">
-        <b>AGUA FINAL:</b> <?php echo $id->water_1 ?>
+        <b>AGUA FINAL:</b> <?php echo $id->water1 ?>
         </div>
 
 
         <div class="col-sm-2">
-        <b>GAS INICIAL:</b> <?php echo $id->gas_0 ?>
+        <b>GAS INICIAL:</b> <?php echo $id->gas0 ?>
         </div>
 
         <div class="col-sm-2">
-        <b>GAS FINAL:</b> <?php echo $id->gas_1 ?>
+        <b>GAS FINAL:</b> <?php echo $id->gas1 ?>
         </div>
 
         <div class="col-sm-2">
-        <b>ENERGÍA INICIAL:</b> <?php echo $id->energy_0 ?>
+        <b>ENERGÍA INICIAL:</b> <?php echo $id->energy0 ?>
         </div>
 
         <div class="col-sm-2">
-        <b>ENERGÍA FINAL:</b> <?php echo $id->energy_1 ?>
+        <b>ENERGÍA FINAL:</b> <?php echo $id->energy1 ?>
         </div>
     </div>
 

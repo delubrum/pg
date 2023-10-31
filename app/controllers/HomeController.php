@@ -77,7 +77,7 @@ class HomeController{
     $_SESSION["id-APP"] = "";
     session_destroy();
     $this->model->clearAuthCookie();
-    header('Location: ?c=Home&a=Index');
+    header('Location: ?c=Home&a=Index&m=Index');
   }
 
 }

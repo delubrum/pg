@@ -1,10 +1,10 @@
-<div class="w-[95%] sm:w-[30%] bg-white p-4 rounded-lg shadow-lg relative z-50">
+<div class="w-[95%] sm:w-[25%] bg-white p-4 rounded-lg shadow-lg relative z-50">
 
 <button id="closeNested" @click="nestedModal = !nestedModal" class="absolute top-0 right-0 m-3 text-teal-900 hover:text-teal-700">
     <i class="ri-close-line text-2xl"></i>
 </button>
 
-<h1 class="text-lg font-semibold mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> Nuevo Registro</h1>
+<h1 class="mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> <span class="text-2xl font-semibold">Nuevo Registro</span></h1>
 
 <form
   class="overflow-y-auto max-h-[600px] p-4"
@@ -41,14 +41,13 @@
     </div>
   </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 pt-4">
-      <div>
-          <label for="notes" class="block text-gray-600 text-sm mb-1">Notas</label>
-          <textarea name="notes" id="notes" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none"></textarea>
-      </div>
+  <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 pt-4">
+    <div>
+        <label for="notes" class="block text-gray-600 text-sm mb-1">Notas</label>
+        <textarea name="notes" id="notes" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none"></textarea>
     </div>
-
-    <div class="mt-6 flex justify-end">
-      <button type="submit" class="bg-teal-900 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"><i class="ri-save-line"></i> Agregar</button>
   </div>
+
+  <button type="submit" class="pt-6 float-right text-xl text-teal-900 font-bold hover:text-teal-700"><i class="ri-save-line"></i> Agregar</button>
+
 </form>

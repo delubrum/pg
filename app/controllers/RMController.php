@@ -16,7 +16,7 @@ class RMController{
   public function Index(){
     require_once "lib/check.php";
     if (in_array(3, $permissions)) {
-      $title = "Registro de Material / Registro";
+      $title = "Recibo de Material";
       $new = '?c=RM&a=New';
       $content = 'app/components/index.php';
       $filters = 'app/views/rm/filters.php';
@@ -153,7 +153,7 @@ class RMController{
       $id = $this->model->save('transport',$itemb);
       $hxTriggerData = json_encode([
         "listChanged" => true,
-        "showMessage" => '{"type": "success", "message": "RM Guardado", "close" : ""}'
+        "showMessage" => '{"type": "success", "message": "RM Guardado", "close" : "closeModal"}'
       ]);
       header('HX-Trigger: ' . $hxTriggerData);
       http_response_code(204);
@@ -192,67 +192,59 @@ class RMController{
     if (in_array(3, $permissions)) {
       header('Content-Type: application/json');
       $item = new stdClass();
-      if (isset($_REQUEST['status']) and $_REQUEST['status'] == 'Facturación') {
-        $item->status = 'Cerrado';
-        $item->invoice = $_REQUEST['invoice'];
-        $item->invoiceAt = date("Y-m-d H:i:s");
-        $this->model->update('rm',$item,$_REQUEST['id']);
+      if (!$this->emptyColum(json_decode($_REQUEST['table'], true),2)) {
+      $hxTriggerData = json_encode([
+        "showMessage" => '{"type": "error", "message": "Complete la columna TARA", "close" : ""}'
+      ]);
+      header('HX-Trigger: ' . $hxTriggerData);
+      http_response_code(204);
+      exit;
       }
-      if (isset($_REQUEST['status']) and $_REQUEST['status'] == 'Terminar R.M.') {
-        if (!$this->emptyColum(json_decode($_REQUEST['table'], true),2)) {
-          $hxTriggerData = json_encode([
-            "showMessage" => '{"type": "error", "message": "Complete la columna TARA", "close" : ""}'
-          ]);
-          header('HX-Trigger: ' . $hxTriggerData);
-          http_response_code(204);
-          exit;
-        }
-  
-        if (!$this->emptyColum(json_decode($_REQUEST['table'], true),3)) {
-          $hxTriggerData = json_encode([
-            "showMessage" => '{"type": "error", "message": "Complete la columna TARA CLIENTE", "close" : ""}'
-          ]);
-          header('HX-Trigger: ' . $hxTriggerData);
-          http_response_code(204);
-          exit;
-        }
-        $item->rmAt = date("Y-m-d H:i:s");
-        $item->datetime = $_REQUEST['datetime'];
-        $item->operatorId = $_REQUEST['operatorId'];
-        $item->reactor = $_REQUEST['reactor'];
-        $item->paste = $_REQUEST['paste'];
-        $item->toreturn = $_REQUEST['toreturn'];
-        $item->surplus = $_REQUEST['surplus'];
-        $item->notes =$_REQUEST['notes'];
-        $item->data = $_REQUEST['table'];
-        $itemb = new stdClass();
-        $itemb->rmId = $_REQUEST['id'];
-        $items = new stdClass();
-        $this->model->save('bc',$itemb);
-        $item->status = 'Producción';
-        $this->model->update('rm',$item,$_REQUEST['id']);
-        $id = $_REQUEST['id'];
-        foreach(json_decode($this->model->get("data","rm","and id = $id")->data) as $r) {
-          $items->rmId = $id;
-          $items->kg = $r[0];
-          $items->kg_client = $r[1];
-          $items->tara = $r[2];
-          $items->tara_client = $r[3];
-          $items->status = $r[6];
-          $car = ($r[7] == "true") ? 'Vehículo' : '';
-          $bucket = ($r[8] == "true") ? 'Caneca' : '';
-          $plant = ($r[9] == "true") ? 'Planta' : '';
-          $items->spills = "$car $bucket $plant";
-          $this->model->save('rm_items',$items);
-        }
+
+      if (!$this->emptyColum(json_decode($_REQUEST['table'], true),3)) {
         $hxTriggerData = json_encode([
-          "listChanged" => true,
-          "showMessage" => '{"type": "success", "message": "RM Terminado", "close" : ""}'
+          "showMessage" => '{"type": "error", "message": "Complete la columna TARA CLIENTE", "close" : ""}'
         ]);
         header('HX-Trigger: ' . $hxTriggerData);
         http_response_code(204);
         exit;
       }
+      $item->rmAt = date("Y-m-d H:i:s");
+      $item->datetime = $_REQUEST['datetime'];
+      $item->operatorId = $_REQUEST['operatorId'];
+      $item->reactor = $_REQUEST['reactor'];
+      $item->paste = $_REQUEST['paste'];
+      $item->toreturn = $_REQUEST['toreturn'];
+      $item->surplus = $_REQUEST['surplus'];
+      $item->notes =$_REQUEST['notes'];
+      $item->data = $_REQUEST['table'];
+      $itemb = new stdClass();
+      $itemb->rmId = $_REQUEST['id'];
+      $items = new stdClass();
+      $this->model->save('bc',$itemb);
+      $item->status = 'Producción';
+      $this->model->update('rm',$item,$_REQUEST['id']);
+      $id = $_REQUEST['id'];
+      foreach(json_decode($this->model->get("data","rm","and id = $id")->data) as $r) {
+        $items->rmId = $id;
+        $items->kg = $r[0];
+        $items->kg_client = $r[1];
+        $items->tara = $r[2];
+        $items->tara_client = $r[3];
+        $items->status = $r[6];
+        $car = ($r[7] == "true") ? 'Vehículo' : '';
+        $bucket = ($r[8] == "true") ? 'Caneca' : '';
+        $plant = ($r[9] == "true") ? 'Planta' : '';
+        $items->spills = "$car $bucket $plant";
+        $this->model->save('rm_items',$items);
+      }
+      $hxTriggerData = json_encode([
+        "listChanged" => true,
+        "showMessage" => '{"type": "success", "message": "RM Terminado", "close" : "closeModal"}'
+      ]);
+      header('HX-Trigger: ' . $hxTriggerData);
+      http_response_code(204);
+      exit;
     } else {
       $this->model->redirect();
     }

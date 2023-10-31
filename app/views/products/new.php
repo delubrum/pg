@@ -19,7 +19,11 @@
       </div>
 
       <div class="mt-6 flex justify-end">
-          <button type="submit" class="bg-teal-900 text-white py-2 px-4 rounded-md hover:bg-teal-700 transition"><i class="ri-save-line"></i> <?php echo (isset($id)) ? 'Actualizar' : 'Guardar'; ?></button>
+        <button type="submit" 
+        class="text-xl float-left text-teal-900 px-4 py-2 font-bold hover:text-teal-700"
+        >
+          <i class="ri-save-line"></i> Guardar
+        </button>
       </div>
     </form>
 </div>

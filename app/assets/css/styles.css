@@ -1,7 +1,16 @@
 .jexcel > thead > tr > td {
-  background: rgb(17 94 89) !important;
-  color:white; /* Change this to your desired color */
+  background: rgb(15 118 110) !important;
+  color: rgb(255 255 255) !important;
   font-size:13px !important;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.jexcel > tfoot > tr > td {
+  color: rgb(15 118 110) !important;
+  font-size:13px !important;
+  font-weight: bold;
+  padding: 5px;
 }
 
 .select2-container--default .select2-selection--single {

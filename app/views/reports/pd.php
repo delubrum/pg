@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
   <title>SIPEC | Paquete de Despacho</title>
-  <link rel="icon" sizes="192x192" href="assets/img/logo.png">
-  <link rel="stylesheet" href="assets/css/adminlte.min.css">
+  <link rel="icon" sizes="192x192" href="app/assets/img/logo.png">
+  <link rel="stylesheet" href="https://adminlte.io/themes/v3/dist/css/adminlte.min.css?v=3.2.0">
 
   <style>
     .tabla th, .tabla td {
@@ -13,7 +13,7 @@
     }
 
     body {
-      background-image: url('assets/img/membrete.jpg');
+      background-image: url('app/assets/img/membrete.jpg');
       background-repeat: no-repeat;
       background-size: cover;4
     }
