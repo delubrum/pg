@@ -94,6 +94,16 @@ class ProductsController{
     require_once "lib/check.php";
     if (in_array(4, $permissions)) {
       header('Content-Type: application/json');
+      $name = $_POST['name'];
+      if ($this->model->get('id','products',"and name = '$name'")) {
+        $hxTriggerData = json_encode([
+          "showMessage" => '{"type": "error", "message": "El producto ya existe", "close" : ""}'
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(409);
+        exit;
+      }
+      
       $item = new stdClass();
       $table = 'products';
       foreach($_POST as $k => $val) {
@@ -103,23 +113,14 @@ class ProductsController{
           }
         }
       }
-      $name = $_POST['name'];
-      if ($this->model->get('id','products',"and name = '$name'")) {
-        $hxTriggerData = json_encode([
-          "showMessage" => '{"type": "error", "text": "El producto ya existe"}'
-        ]);
-        header('HX-Trigger: ' . $hxTriggerData);
-        http_response_code(409);
-        exit;
-      }
 
       empty($_POST['id'])
       ? $id = $this->model->save($table,$item)
       : $id = $this->model->update($table,$item,$_POST['id']);
       if ($id !== false) {
         (empty($_POST['id'])) 
-          ? $message = '{"type": "success", "text": "Producto guardado"}'
-          : $message = '{"type": "success", "text": "Producto actualizado"}';
+          ? $message = '{"type": "success", "message": "Producto guardado", "close" : "closeModal"}'
+          : $message = '{"type": "success", "message": "Producto actualizado", "close" : "closeModal"}';
         $hxTriggerData = json_encode([
           "listChanged" => true,
           "showMessage" => $message

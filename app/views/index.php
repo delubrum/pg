@@ -17,7 +17,7 @@
       <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
     <?php } ?>
 	</head>
-  <body x-data='{ showModal: false, sidebar: false, showFilters : false }'>
+  <body x-data='{ showModal: false, nestedModal: false, sidebar: false, showFilters : false }'>
 		<?php require_once "app/components/sidebar.php" ?>
 		<main class="w-full bg-gray-100 min-h-screen transition-all main active custombg">
 			<?php require_once "app/components/navbar.php" ?>
@@ -36,6 +36,6 @@
 		<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.1/dist/cdn.min.js"></script>
 		<script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-    <script src="app/assets/js/script6.js"></script>
+    <script src="app/assets/js/script11.js"></script>
   </body>
 </html>

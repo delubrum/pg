@@ -9,6 +9,7 @@
         hx-post='?c=Users&a=Save' 
         hx-swap="none" 
         hx-on:htmx:after-request="toast(event.detail.xhr.response)" 
+        hx-indicator="#loading"
     >
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>

@@ -92,12 +92,12 @@ class RMController{
 
   function emptyColum(array $data, $columnIndex) {
     if ($columnIndex < 0 || $columnIndex >= count($data[0])) {
-        return true; // Invalid column index
+      return true; // Invalid column index
     }
     foreach ($data as $row) {
-        if (empty($row[$columnIndex])) {
-            return false; // At least one empty value found in the column
-        }
+      if (empty($row[$columnIndex])) {
+        return false; // At least one empty value found in the column
+      }
     }
     return true; // No empty values found in the column
   }
@@ -109,7 +109,7 @@ class RMController{
 
       if (!$this->emptyColum(json_decode($_REQUEST['table'], true),0)) {
         $hxTriggerData = json_encode([
-          "showMessage" => '{"type": "error", "message": "Complete la columna PESO BRUTO"}'
+          "showMessage" => '{"type": "error", "message": "Complete la columna PESO BRUTO", "close" : ""}'
         ]);
         header('HX-Trigger: ' . $hxTriggerData);
         http_response_code(204);
@@ -118,7 +118,7 @@ class RMController{
 
       if (!$this->emptyColum(json_decode($_REQUEST['table'], true),1)) {
         $hxTriggerData = json_encode([
-          "showMessage" => '{"type": "error", "message": "Complete la columna PESO BRUTO CLIENTE"}'
+          "showMessage" => '{"type": "error", "message": "Complete la columna PESO BRUTO CLIENTE", "close" : ""}'
         ]);
         header('HX-Trigger: ' . $hxTriggerData);
         http_response_code(204);
@@ -127,7 +127,7 @@ class RMController{
 
       if (!$this->emptyColum(json_decode($_REQUEST['table'], true),6)) {
         $hxTriggerData = json_encode([
-          "showMessage" => '{"type": "error", "message": "Complete la columna ESTADO DEL TAMBOR"}'
+          "showMessage" => '{"type": "error", "message": "Complete la columna ESTADO DEL TAMBOR", "close" : ""}'
         ]);
         header('HX-Trigger: ' . $hxTriggerData);
         http_response_code(204);
@@ -138,7 +138,7 @@ class RMController{
       $item->clientId = $_REQUEST['clientId'];
       $item->productId = $_REQUEST['productId'];
       $item->date = $_REQUEST['date'];
-      $item->userId = $_SESSION["id-SIPEC"];
+      $item->userId = $_SESSION["id-APP"];
       $item->data = $_REQUEST['table'];
       $item->status = 'Terminar R.M.';
       $rm = $this->model->save('rm',$item);
@@ -153,7 +153,7 @@ class RMController{
       $id = $this->model->save('transport',$itemb);
       $hxTriggerData = json_encode([
         "listChanged" => true,
-        "showMessage" => '{"type": "success", "message": "RM Guardado"}'
+        "showMessage" => '{"type": "success", "message": "RM Guardado", "close" : ""}'
       ]);
       header('HX-Trigger: ' . $hxTriggerData);
       http_response_code(204);
@@ -182,6 +182,90 @@ class RMController{
       $result[] = array();
       $filters = "and id = " . $_REQUEST['id'];
       echo $this->model->get('data','rm',$filters)->data;
+    } else {
+      $this->model->redirect();
+    }
+  }
+
+  public function Update(){
+    require_once "lib/check.php";
+    if (in_array(3, $permissions)) {
+      header('Content-Type: application/json');
+      $item = new stdClass();
+      if (isset($_REQUEST['status']) and $_REQUEST['status'] == 'Facturación') {
+        $item->status = 'Cerrado';
+        $item->invoice = $_REQUEST['invoice'];
+        $item->invoiceAt = date("Y-m-d H:i:s");
+        $this->model->update('rm',$item,$_REQUEST['id']);
+      }
+      if (isset($_REQUEST['status']) and $_REQUEST['status'] == 'Terminar R.M.') {
+        if (!$this->emptyColum(json_decode($_REQUEST['table'], true),2)) {
+          $hxTriggerData = json_encode([
+            "showMessage" => '{"type": "error", "message": "Complete la columna TARA", "close" : ""}'
+          ]);
+          header('HX-Trigger: ' . $hxTriggerData);
+          http_response_code(204);
+          exit;
+        }
+  
+        if (!$this->emptyColum(json_decode($_REQUEST['table'], true),3)) {
+          $hxTriggerData = json_encode([
+            "showMessage" => '{"type": "error", "message": "Complete la columna TARA CLIENTE", "close" : ""}'
+          ]);
+          header('HX-Trigger: ' . $hxTriggerData);
+          http_response_code(204);
+          exit;
+        }
+        $item->rmAt = date("Y-m-d H:i:s");
+        $item->datetime = $_REQUEST['datetime'];
+        $item->operatorId = $_REQUEST['operatorId'];
+        $item->reactor = $_REQUEST['reactor'];
+        $item->paste = $_REQUEST['paste'];
+        $item->toreturn = $_REQUEST['toreturn'];
+        $item->surplus = $_REQUEST['surplus'];
+        $item->notes =$_REQUEST['notes'];
+        $item->data = $_REQUEST['table'];
+        $itemb = new stdClass();
+        $itemb->rmId = $_REQUEST['id'];
+        $items = new stdClass();
+        $this->model->save('bc',$itemb);
+        $item->status = 'Producción';
+        $this->model->update('rm',$item,$_REQUEST['id']);
+        $id = $_REQUEST['id'];
+        foreach(json_decode($this->model->get("data","rm","and id = $id")->data) as $r) {
+          $items->rmId = $id;
+          $items->kg = $r[0];
+          $items->kg_client = $r[1];
+          $items->tara = $r[2];
+          $items->tara_client = $r[3];
+          $items->status = $r[6];
+          $car = ($r[7] == "true") ? 'Vehículo' : '';
+          $bucket = ($r[8] == "true") ? 'Caneca' : '';
+          $plant = ($r[9] == "true") ? 'Planta' : '';
+          $items->spills = "$car $bucket $plant";
+          $this->model->save('rm_items',$items);
+        }
+        $hxTriggerData = json_encode([
+          "listChanged" => true,
+          "showMessage" => '{"type": "success", "message": "RM Terminado", "close" : ""}'
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
+        exit;
+      }
+    } else {
+      $this->model->redirect();
+    }
+  }
+
+  public function Detail(){
+    require_once "lib/check.php";
+    if (in_array(3, $permissions)) {
+      $filters = "and a.id = " . $_REQUEST['id'];
+      $id = $this->model->get('a.*,d.username as operatorname,b.company as clientname, c.name as productname, b.city','rm a',$filters,'LEFT JOIN users b ON a.clientId=b.id LEFT JOIN products c ON a.productId = c.id LEFT JOIN users d ON a.operatorId=d.id');
+      $filters = "and rmId = " . $_REQUEST['id'];
+      $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
+      require_once 'app/views/reports/rm.php';
     } else {
       $this->model->redirect();
     }

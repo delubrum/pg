@@ -133,7 +133,7 @@ class UsersController{
       if ($this->model->get('email','users',"and email = '$item->email'")) {
         http_response_code(400);
         $response['status'] = 'error';
-        $response['message'] = 'Email already existsh';
+        $response['message'] = 'Email already exists';
         echo json_encode($response);
         exit;
       }

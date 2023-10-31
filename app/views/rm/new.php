@@ -1,6 +1,6 @@
 <div @click.outside="showModal = false" class="w-[95%] sm:w-[90%] bg-white p-4 rounded-lg shadow-lg relative z-50">
     <!-- Close Button (X) in Top-Right Corner -->
-    <button id="close" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-900 hover:text-teal-700">
+    <button id="closeModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-900 hover:text-teal-700">
         <i class="ri-close-line text-2xl"></i>
     </button>
     <h1 class="text-lg font-semibold mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> Nuevo Registro</h1>
@@ -95,12 +95,12 @@ var SUMCOL = function(instance, columnId) {
       { 
         title:'PESO BRUTO',
         type:'numeric',
-        width:100,
+        width:120,
       },
       { 
         title:'PESO BRUTO \n CLIENTE',
         type:'numeric',
-        width:100,
+        width:120,
       },
       { 
         type:'hidden',
@@ -117,7 +117,7 @@ var SUMCOL = function(instance, columnId) {
       {
         type: 'dropdown',
         title:'ESTADO DEL \n TAMBOR',
-        width:100,
+        width:120,
         source:[
           "Bueno",
           "Malo",
@@ -127,12 +127,12 @@ var SUMCOL = function(instance, columnId) {
       { 
         title:'DERRAMES \n VEHÍCULO',
         type: 'checkbox',
-        width:100,
+        width:120,
       },
       { 
         title:'DERRAMES \n CANECA',
         type: 'checkbox',
-        width:100,
+        width:120,
       },
       { 
         type:'hidden',
@@ -148,24 +148,4 @@ var SUMCOL = function(instance, columnId) {
         areYouSureToDeleteTheSelectedRows:'Desea borrar las filas seleccionadas?',
     }
 });
-
-function hasEmptyFields(data) {
-  function checkObject(obj) {
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        const value = obj[key];
-        
-        if (value === '' || value === null || value === undefined) {
-          return true; // Found an empty field, return true
-        } else if (typeof value === 'object') {
-          if (checkObject(value)) {
-            return true; // Recursively found an empty field, return true
-          }
-        }
-      }
-    }
-    return false; // No empty fields found in this object
-  }
-  return checkObject(data);
-}
 </script>
