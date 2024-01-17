@@ -145,11 +145,16 @@ class RMController{
       $itemb = new stdClass();
       $itemb->type = 'RM';
       $itemb->code = $rm;
-      $itemb->start = $_REQUEST['start'];
-      $itemb->end = $_REQUEST['end'];
       $itemb->qty = $_REQUEST['qty'];
       $itemb->user = $_REQUEST['user'];
-      $itemb->price = preg_replace('/[^0-9]+/', '', $_REQUEST['price']);
+      $itemb->drums = count(json_decode($_REQUEST['table']));
+      $sum = 0;
+      foreach (json_decode($_REQUEST['table']) as $row) {
+        $sum += (float)$row[0];
+      }
+      $itemb->kg = $sum;
+      $clientId = $_REQUEST['clientId'];
+      $itemb->price = $this->model->get("price", "users" , "and id = $clientId")->price;
       $id = $this->model->save('transport',$itemb);
       $hxTriggerData = json_encode([
         "listChanged" => true,

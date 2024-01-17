@@ -11,7 +11,7 @@
       hx-trigger='submit'
       hx-indicator="#loading"
   >
-  <?php echo isset($id) ? "<input type='hidden' name='id' value='$id->id'>" : '' ?>
+  <?php echo isset($id) ? "<input type='hidden' name='id' value='$id->rmId'>" : '' ?>
     <div class="grid grid-cols-1 sm:grid-cols-5 gap-4 text-sm">
       <div>
           <b>LOTE:</b> <?php echo $id->id ?>
@@ -43,6 +43,9 @@
       <div>
         <label for="type" class="block text-gray-600 text-sm mb-1">Tipo</label>
         <select id="type" name="type" 
+          hx-post='?c=BC&a=Update' 
+          hx-trigger="change"
+          hx-indicator="#loading"
           class="w-full bg-white p-[9px] w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none"
           required
         >
@@ -53,8 +56,7 @@
         </select>
       </div>
 
-
-      <div>
+      <!-- <div>
         <label for="mud_dist" class="block text-gray-600 text-sm mb-1">Lodos de Destilación</label>
         <input  type="number" id="mud_dist" name="mud_dist" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
@@ -72,36 +74,66 @@
       <div>
         <label for="evaporation" class="block text-gray-600 text-sm mb-1">Perdida Evaporación</label>
         <input  type="number" id="evaporation" name="evaporation" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
-      </div>
+      </div> -->
 
       <div>
         <label for="water0" class="block text-gray-600 text-sm mb-1">Agua Inicial</label>
-        <input  type="number" id="water0" name="water0" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        <input  type="number" id="water0" name="water0"  
+          hx-post='?c=BC&a=Update' 
+          hx-trigger="change"
+          hx-indicator="#loading"
+          value="<?php echo isset($id) ? $id->water0 : '' ?>"
+          class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
 
       <div>
         <label for="water1" class="block text-gray-600 text-sm mb-1">Agua Final</label>
-        <input  type="number" id="water1" name="water1" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        <input  type="number" id="water1" name="water1"  
+          hx-post='?c=BC&a=Update' 
+          hx-trigger="change"
+          hx-indicator="#loading"
+          value="<?php echo isset($id) ? $id->water1 : '' ?>"
+          class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
 
       <div>
         <label for="gas0" class="block text-gray-600 text-sm mb-1">Gas Inicial</label>
-        <input  type="number" id="gas0" name="gas0" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        <input  type="number" id="gas0" name="gas0"  
+          hx-post='?c=BC&a=Update' 
+          hx-trigger="change"
+          hx-indicator="#loading"
+          value="<?php echo isset($id) ? $id->gas0 : '' ?>"
+          class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
 
       <div>
         <label for="gas1" class="block text-gray-600 text-sm mb-1">Gas Final</label>
-        <input  type="number" id="gas1" name="gas1" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        <input  type="number" id="gas1" name="gas1"  
+          hx-post='?c=BC&a=Update' 
+          hx-trigger="change"
+          hx-indicator="#loading"
+          value="<?php echo isset($id) ? $id->gas1 : '' ?>"
+          class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
 
       <div>
         <label for="energy0" class="block text-gray-600 text-sm mb-1">Energía Inicial</label>
-        <input  type="number" id="energy0" name="energy0" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        <input  type="number" id="energy0" name="energy0"  
+          hx-post='?c=BC&a=Update' 
+          hx-trigger="change"
+          hx-indicator="#loading"
+          value="<?php echo isset($id) ? $id->energy0 : '' ?>"
+          class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
 
       <div>
         <label for="energy1" class="block text-gray-600 text-sm mb-1">Energía Final</label>
-        <input  type="number" id="energy1" name="energy1" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        <input  type="number" id="energy1" name="energy1"  
+          hx-post='?c=BC&a=Update' 
+          hx-trigger="change"
+          hx-indicator="#loading"
+          value="<?php echo isset($id) ? $id->energy1 : '' ?>"
+          class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
 
     </div>

@@ -1,5 +1,6 @@
 <div class="mx-10 mr-2 sm:mx-6 mt-2 sm:mt-6 px-2 sm:px-4 py-3 sm:py-4 bg-white rounded-lg shadow-xl">
 
+<?php if(isset($new)) { ?>
   <button 
     class="text-xl float-left text-teal-900 px-4 py-2 font-bold hover:text-teal-700"
     hx-get='<?php echo $new ?>'
@@ -9,6 +10,7 @@
   >
     <i class="ri-file-add-line"></i> Crear
   </button>
+<?php } ?>
 
   <button 
     class="text-xl float-right text-teal-900 px-4 py-2 font-bold hover:text-teal-700"

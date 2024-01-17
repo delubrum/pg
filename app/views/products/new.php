@@ -1,6 +1,6 @@
 <div @click.outside="showModal = false" class="w-[95%] sm:w-[25%] bg-white p-4 rounded-lg shadow-lg relative z-50">
     <!-- Close Button (X) in Top-Right Corner -->
-    <button @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-900 hover:text-teal-700">
+    <button id="closeModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-900 hover:text-teal-700">
         <i class="ri-close-line text-2xl"></i>
     </button>
     <h1 class="text-lg font-semibold mb-4 text-teal-700"><i class="ri-contrast-drop-2-line text-3xl"></i> <?php echo (isset($id)) ? 'Editar' : 'Nuevo'; ?> Producto</h1>

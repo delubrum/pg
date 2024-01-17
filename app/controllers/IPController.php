@@ -86,14 +86,15 @@ class IPController{
       $item->invoice = $_REQUEST['invoice'];
       $item->invoiceAt = date("Y-m-d H:i:s");
       $this->model->update('rm',$item,$_REQUEST['id']);
+      $id = $_REQUEST['id'];
       $itemb = new stdClass();
       $itemb->type = 'Factura';
       $itemb->code = $_REQUEST['invoice'];
-      $itemb->start = $_REQUEST['start'];
-      $itemb->end = $_REQUEST['end'];
-      $itemb->qty = $_REQUEST['qty'];
       $itemb->user = $_REQUEST['user'];
-      $itemb->price = preg_replace('/[^0-9]+/', '', $_REQUEST['price']);
+      $itemb->drums = $this->model->get("count(id) as total", "bc_items" , "and id = $id")->total;
+      $itemb->kg = $this->model->get("sum(net + drum) as total", "bc_items" , "and id = $id")->total;
+      $clientId = $this->model->get("clientId", "rm" , "and id = $id")->clientId;
+      $itemb->price = $this->model->get("price", "users" , "and id = $clientId")->price;
       $this->model->save('transport',$itemb);
       $hxTriggerData = json_encode([
         "listChanged" => true,

@@ -8,22 +8,71 @@
         <!-- Columna 1 - Update Data -->
         <div class="bg-white rounded-lg p-4">
             <h2 class="text-lg font-semibold mb-4 text-teal-700">Datos Generales</h2>
-            <form action="tu_script_de_actualización.php" method="POST" class="w-[95%] sm:w-[100%]">
+            <form method="POST" class="w-[95%] sm:w-[100%]">
+            <input type="hidden" value="<?php echo $id->id ?>" id="id" name="id">
+                <?php if($id->type == 'Cliente') { ?>
+                <div class="mt-2">
+									<label for="company" class="block text-gray-600 text-sm mb-1">Empresa</label>
+									<input value="<?php echo $id->company ?>" type="company" id="company" name="company"  
+                    hx-post='?c=Users&a=Update' 
+                    hx-trigger="change"
+                    hx-indicator="#loading"
+                    class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+                </div>
+                <?php } ?>
                 <div>
-									<label for="name" class="block text-gray-600 text-sm mb-1">Nombre</label>
-									<input value="<?php echo $id->username ?>" type="text" id="name" name="name" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+									<label for="username" class="block text-gray-600 text-sm mb-1">Nombre</label>
+									<input value="<?php echo $id->username ?>" type="text" id="username" name="username"   
+                    hx-post='?c=Users&a=Update' 
+                    hx-trigger="change"
+                    hx-indicator="#loading"
+                    class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
                 </div>
                 <div class="mt-2">
 									<label for="email" class="block text-gray-600 text-sm mb-1">Email</label>
-									<input value="<?php echo $id->email ?>" type="email" id="email" name="email" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+									<input value="<?php echo $id->email ?>" type="email" id="email" name="email"   
+                    hx-post='?c=Users&a=Update' 
+                    hx-trigger="change"
+                    hx-indicator="#loading"
+                    class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
                 </div>
+                <?php if($id->type == 'Cliente') { ?>
+                <div class="mt-2">
+									<label for="phone" class="block text-gray-600 text-sm mb-1">Tel</label>
+									<input value="<?php echo $id->phone ?>" type="text" id="phone" name="phone"   
+                    hx-post='?c=Users&a=Update' 
+                    hx-trigger="change"
+                    hx-indicator="#loading"
+                    class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+                </div>
+                <div class="mt-2">
+									<label for="city" class="block text-gray-600 text-sm mb-1">Ciudad</label>
+									<input value="<?php echo $id->city ?>" type="text" id="city" name="city"   
+                    hx-post='?c=Users&a=Update' 
+                    hx-trigger="change"
+                    hx-indicator="#loading"
+                    class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+                </div>
+                <div class="mt-2">
+									<label for="price" class="block text-gray-600 text-sm mb-1">Valor Transporte</label>
+									<input value="<?php echo $id->price ?>" type="number" id="price" name="price"   
+                    hx-post='?c=Users&a=Update' 
+                    hx-trigger="change"
+                    hx-indicator="#loading"
+                    class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+                </div>
+                <?php } ?>
+
             </form>
         </div>
 
         <!-- Columna 2 - Update Password -->
         <div class="bg-white rounded-lg p-4">
             <h2 class="text-lg font-semibold mb-4 text-teal-700">Actualizar Password</h2>
-            <form action="tu_script_de_actualización_de_contraseña.php" method="POST" class="w-[95%] sm:w-[100%]">
+            <form hx-post='?c=Users&a=UpdatePassword' 
+              hx-indicator="#loading"
+              class="w-[95%] sm:w-[100%]">
+              <input type="hidden" value="<?php echo $id->id ?>" id="id" name="id">
 							<div>
 								<label for="newpass" class="block text-gray-600 text-sm mb-1">Password</label>
 								<input type="password" id="newpass" name="newpass" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>

@@ -209,8 +209,7 @@ class BCController{
       $itemb = new stdClass();
       $itemb->bcAt = date("Y-m-d H:i:s");
       $itemb->status = 'Análisis';
-      $bcId = $_REQUEST['id'];
-      $rmId = $this->model->get("*","bc"," and id = $bcId")->rmId;
+      $rmId = $_REQUEST['id'];
       $this->model->update('rm',$itemb,$rmId);
       if ($id !== false) {
         $hxTriggerData = json_encode([
@@ -220,6 +219,25 @@ class BCController{
         header('HX-Trigger: ' . $hxTriggerData);
         http_response_code(204);
       }
+    } else {
+      $this->model->redirect();
+    }
+  }
+
+  public function Update(){
+    require_once "lib/check.php";
+    if (in_array(3, $permissions)) {
+      $item = new stdClass();
+      foreach($_POST as $k => $val) {
+        if (!empty($val)) {
+          if($k != 'id') {
+            $item->{$k} = $val;
+          }
+        }
+      }
+      $rmId = $_REQUEST['id'];
+      $bcId = $this->model->get("id","bc"," and rmId = $rmId")->id;
+      $id = $this->model->update('bc',$item,$bcId);
     } else {
       $this->model->redirect();
     }

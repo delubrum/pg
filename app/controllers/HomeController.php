@@ -13,7 +13,7 @@ class HomeController{
 		require_once "lib/auth.php";
 		if ($isLoggedIn) {
 			require_once "lib/check.php";
-      $title = "Welcome To SIPEC";
+      $title = "Bienvenido a SIPEC";
       $content = 'app/components/page.php';
       require_once 'app/views/index.php';
 		} else {

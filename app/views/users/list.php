@@ -19,6 +19,9 @@
 <?php foreach ($list as $r) { ?>
 <tr>
   <td class="px-2 py-2 border-b">
+    <?php echo $r->type ?>
+  </td>
+  <td class="px-2 py-2 border-b">
     <?php echo $r->fecha ?>
   </td>
   <td class="px-2 py-2 border-b">

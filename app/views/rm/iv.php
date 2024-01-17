@@ -19,19 +19,12 @@
       </div>
       <div>
         <label for="user" class="block text-gray-600 text-sm mb-1">Responsable</label>
-        <input type="text"  id="user" name="user" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
-      </div>
-      <div>
-        <label for="start" class="block text-gray-600 text-sm mb-1">Origen</label>
-        <input type="text"  id="start" name="start" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
-      </div>
-      <div>
-        <label for="end" class="block text-gray-600 text-sm mb-1">Destino</label>
-        <input type="text"  id="end" name="end" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
-      </div>
-      <div>
-        <label for="price" class="block text-gray-600 text-sm mb-1">Valor</label>
-        <input type="number" step="0.01" id="price" name="price" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        <select id="user" name="user" class="w-full bg-white p-[9px] w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+          <option value='' disabled selected></option>
+          <?php foreach ($this->model->list("*","users"," and type = 'Operario' and status = 1") as $r) { ?>     
+            <option value='<?php echo $r->id?>'><?php echo $r->username?></option>
+          <?php } ?>
+        </select>
       </div>
 
       <button type="submit" class="py-2 text-right text-xl text-teal-900 font-bold hover:text-teal-700"><i class="ri-save-line"></i> Guardar</button>

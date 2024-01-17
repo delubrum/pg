@@ -64,14 +64,6 @@
         <input  type="number" step="0.01" x-model="pe" id="evaporationClient" name="evaporationClient" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
       <div>
-        <label for="apariencia" class="block text-gray-600 text-sm mb-1">Apariencia</label>
-        <input id="apariencia" name="apariencia" value="Liquido Transparente" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
-      </div>
-      <div>
-        <label for="olor" class="block text-gray-600 text-sm mb-1">Olor</label>
-        <input id="olor" name="olor" value="Característico" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
-      </div>
-      <div>
         <label for="densidad" class="block text-gray-600 text-sm mb-1">Densidad (g/ml)</label>
         <input id="densidad" name="densidad" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>

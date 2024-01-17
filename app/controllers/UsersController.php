@@ -9,7 +9,7 @@ class UsersController{
   public function __CONSTRUCT(){
     $this->model = new Model();
     $this->notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
-    $this->fields = array("fecha","nombre","email","status","acción");
+    $this->fields = array("tipo","fecha","nombre","email","status","acción");
     $this->url = '?c=Users&a=Data';
   }
 
@@ -66,7 +66,7 @@ class UsersController{
       $perPage = 10;
       $start = ($page - 1) * $perPage;
       $sql .= " LIMIT $start,$perPage";
-      $list = $this->model->list("id,createdAt as fecha,username as nombre,email,if(status=1,'Activo','Inactivo') as status","users",$sql);
+      $list = $this->model->list("id,type,createdAt as fecha,username as nombre,email,if(status=1,'Activo','Inactivo') as status","users",$sql);
       require_once "app/views/users/list.php";
     } else {
       $this->model->redirect();
@@ -115,38 +115,52 @@ class UsersController{
       $item->lang = 'en';
       $item->password = $_REQUEST['newpass'];
       $item->permissions = '[]';
+      $item->company = $_REQUEST['company'];
+      $item->phone = $_REQUEST['phone'];
+      $item->type = $_REQUEST['type'];
+      $item->city = $_REQUEST['city'];
+      $cpass = $_REQUEST['cpass'];
+      $item->price = preg_replace('/[^0-9]+/', '', $_REQUEST['price']);
+      $item->products = json_encode($_REQUEST['products']);
       $cpass = $_REQUEST['cpass'];
       if ($cpass != '' and $cpass != $item->password) {
-        http_response_code(400);
-        $response['status'] = 'error';
-        $response['message'] = 'Passwords do not match';
-        echo json_encode($response);
+        $hxTriggerData = json_encode([
+          "showMessage" => '{"type": "error", "message": "Las contraseñas no coinciden", "close" : ""}'
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
         exit;
       }
+
       if (strlen($item->password) < 4) {
-        http_response_code(400);
-        $response['status'] = 'error';
-        $response['message'] = 'Password must be at least 4 characters long';
-        echo json_encode($response);
+        $hxTriggerData = json_encode([
+          "showMessage" => '{"type": "error", "message": "La contraseña debe tener almenos 4 caracteres", "close" : ""}'
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
         exit;
       }
+
       if ($this->model->get('email','users',"and email = '$item->email'")) {
-        http_response_code(400);
-        $response['status'] = 'error';
-        $response['message'] = 'Email already exists';
-        echo json_encode($response);
+        $hxTriggerData = json_encode([
+          "showMessage" => '{"type": "error", "message": "El email ya existe", "close" : ""}'
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
         exit;
       }
+
       $item->password = password_hash($item->password, PASSWORD_DEFAULT);
       $id = $this->model->save('users', $item);
       if ($id !== false) {
-        $response['status'] = 'success';
-        $response['message'] = 'Success';
-        $response['id'] = $id;
-        echo json_encode($response);
-        exit;
-      }
-      
+        $message = '{"type": "success", "message": "Usuario guardado", "close" : "closeModal"}';
+        $hxTriggerData = json_encode([
+          "listChanged" => true,
+          "showMessage" => $message
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
+      }   
     } else {
       $this->model->redirect();
     }
@@ -183,6 +197,70 @@ class UsersController{
           $name
         </div>
       </button>";
+    }
+  }
+
+  public function Update(){
+    require_once "lib/check.php";
+    if (in_array(1, $permissions)) {
+      $item = new stdClass();
+      foreach($_POST as $k => $val) {
+        if (!empty($val)) {
+          if($k != 'id') {
+            $item->{$k} = $val;
+          }
+        }
+      }
+      $id = $this->model->update('users',$item,$_REQUEST['id']);
+      if ($id !== false) {
+        $message = '{"type": "success", "message": "Dato Actualizado", "close" : ""}';
+        $hxTriggerData = json_encode([
+          "listChanged" => true,
+          "showMessage" => $message
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
+      }
+    } else {
+      $this->model->redirect();
+    }
+  }
+
+  public function UpdatePassword(){
+    require_once "lib/check.php";
+    if (in_array(1, $permissions)) {
+      $item = new stdClass();
+      $item->password = $_REQUEST['newpass'];
+      $cpass = $_REQUEST['cpass'];
+      if ($cpass != '' and $cpass != $item->password) {
+        $hxTriggerData = json_encode([
+          "showMessage" => '{"type": "error", "message": "Las contraseñas no coinciden", "close" : ""}'
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
+        exit;
+      }
+      if (strlen($item->password) < 4) {
+        $hxTriggerData = json_encode([
+          "showMessage" => '{"type": "error", "message": "La contraseña debe tener almenos 4 caracteres", "close" : ""}'
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
+        exit;
+      }
+      $item->password = password_hash($item->password, PASSWORD_DEFAULT);
+      $id = $this->model->update('users',$item,$_REQUEST['id']);
+      if ($id !== false) {
+        $message = '{"type": "success", "message": "Contraseña Actualizada", "close" : ""}';
+        $hxTriggerData = json_encode([
+          "listChanged" => true,
+          "showMessage" => $message
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
+      }
+    } else {
+      $this->model->redirect();
     }
   }
 
