@@ -46,7 +46,7 @@
       >
     </div>
 
-    <!-- <div class="max-w-md">
+    <div class="max-w-md">
         <span class="text-gray-600 text-sm">Status</span>
         <div 
           class="space-y-2 mt-1"
@@ -57,14 +57,14 @@
           hx-include=".filter"
         >
           <div class="flex items-center">
-            <input id="Activo" type="checkbox" name="status[]" value="1" checked class="filter form-checkbox h-5 w-5 checked:bg-teal-700 cursor-pointer">
+            <input id="Activo" type="checkbox" name="statusFilter[]" value="1" checked class="filter form-checkbox h-5 w-5 checked:bg-teal-700 cursor-pointer">
             <label for="Activo" class="ml-2 cursor-pointer">Activo</label>
           </div>
           <div class="flex items-center">
-            <input id="Inactivo" type="checkbox" name="status[]" value="0" checked class="filter form-checkbox h-5 w-5 checked:bg-teal-700 cursor-pointer">
+            <input id="Inactivo" type="checkbox" name="statusFilter[]" value="0" checked class="filter form-checkbox h-5 w-5 checked:bg-teal-700 cursor-pointer">
             <label for="Inactivo" class="ml-2 cursor-pointer">Inactivo</label>
           </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </div>

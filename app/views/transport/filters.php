@@ -22,7 +22,7 @@
       >
     </div>
 
-    <div>
+    <!-- <div>
       <label for="name" class="block text-gray-600 text-sm mb-1">Nombre</label>
       <input type="text" id="name" name="name"
         class="filter w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" 
@@ -32,7 +32,7 @@
         hx-indicator="#loading"
         hx-include=".filter"
       >
-    </div>
+    </div> -->
 
   </div>
 </div>

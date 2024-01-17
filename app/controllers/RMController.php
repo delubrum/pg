@@ -59,18 +59,20 @@ class RMController{
     if (in_array(3, $permissions)) {
       $total = $this->model->get("count(id) as total", "rm")->total;
       $sql = '';
-      if (!empty($_GET['RM'])) { $sql .= " and a.id LIKE '%" . $_GET['RM'] . "%'"; }
-      if (!empty($_GET['from'])) { $sql .= " and a.date  >='" . $_REQUEST['from']." 00:00:00'"; }
-      if (!empty($_GET['to'])) { $sql .= " and a.date <='" . $_REQUEST['to']." 23:59:59'"; }
-      if (!empty($_GET['status'])) {
-        $statusValues = $_GET['status'];
+      if (!empty($_GET['RMFilter'])) { $sql .= " and a.id LIKE '%" . $_GET['RMFilter'] . "%'"; }
+      if (!empty($_GET['userFilter'])) { $sql .= " and d.username LIKE '%" . $_GET['userFilter'] . "%'"; }
+      if (!empty($_GET['productFilter'])) { $sql .= " and c.name LIKE '%" . $_GET['productFilter'] . "%'"; }
+      if (!empty($_GET['fromFilter'])) { $sql .= " and a.date  >='" . $_REQUEST['fromFilter']." 00:00:00'"; }
+      if (!empty($_GET['toFilter'])) { $sql .= " and a.date <='" . $_REQUEST['toFilter']." 23:59:59'"; }
+      if (!empty($_GET['statusFilter'])) {
+        $statusValues = $_GET['statusFilter'];
         $sql .= "AND (a.status = '$statusValues[0]'";
         for ($i = 1; $i < count($statusValues); $i++) {
             $sql .= " OR a.status = '$statusValues[$i]'";
         }
         $sql .= ")";
       }
-      $filtered = $this->model->get("count(id) as total", "rm a",$sql,)->total;
+      $filtered = $this->model->get("count(a.id) as total", "rm a",$sql,'LEFT JOIN users b ON a.clientId = b.id LEFT JOIN products c ON a.productId = c.id LEFT JOIN users d ON a.userId = d.id')->total;
       $colum = isset($_GET['colum']) ? $_GET['colum'] : 'RM';
       $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
       if ($order === 'asc') {

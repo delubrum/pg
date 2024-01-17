@@ -15,7 +15,7 @@
     body {
       background-image: url('app/assets/img/membrete.jpg');
       background-repeat: no-repeat;
-      background-size: cover;4
+      background-size: cover;
     }
 
     .margin {
@@ -146,12 +146,12 @@
       <tr>
         <td>Apariencia</td>
         <td>Liquido Transparente</td>
-        <td><?php echo $id->apariencia ?></td>
+        <td>Liquido Transparente</td>
       </tr>
       <tr>
         <td>Olor</td>
         <td>Característico</td>
-        <td><?php echo $id->olor ?></td>
+        <td>Característico</td>
       </tr>
       <tr>
         <td>Densidad (g/ml)</td>
@@ -215,6 +215,15 @@
       </tr>
     </table>  
     </center>
+    <br>
+    <p>
+      <b>PESO NETO RECIBIDO ECOAMBIENTALES:</b> <?php echo $net ?>
+      <br>
+      <b>PESO NETO REMISIÓN COMPAÑIA:</b> <?php echo $net_client ?>
+    </p> 
+    <p>
+      <b>Observaciones:</b> Estos fueron los pesos reflejados por parte de <b>PROCESOS ECOAMBIENTALES</b>. Hay una diferencia de <b><?php echo number_format($net_client - $net,2) ?> Kg</b> respecto a la remisión. Tener en cuenta pasta que no entra <b><?php echo $id->paste?> Kg</b> 
+    </p>
   </section>
 
   <section class="mt-4">

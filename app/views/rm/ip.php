@@ -4,7 +4,7 @@
       <i class="ri-close-line text-2xl"></i>
   </button>
   <h1 class="text-lg font-semibold mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> Informe Proceso y Análisis</h1>
-  <form x-data="{ recover: <?php echo $qty ?>, mpc: 0, lp: 0, dh: 0, pe: 0 }"
+  <form x-data="{ recover: <?php echo $qty ?>, recoverbit: <?php echo $qtybit ?>, mpc: 0, lp: 0, dh: 0, pe: 0 }"
       class="overflow-y-auto max-h-[600px] p-4"
       hx-post='?c=IP&a=Save' 
       hx-swap="none" 
@@ -30,7 +30,12 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 py-4">
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 py-4">
+    <div class="text-center">
+          <b>RECUPERADO BITACORA:</b> <br>
+          <span class='text-2xl text-teal-700 font-bold' x-text="recoverbit"></span>
+      </div>
+
       <div class="text-center">
           <b>PESO MP A RECUPERAR:</b> <br>
           <span class='text-2xl text-teal-700 font-bold' x-text="recover"></span>
@@ -64,15 +69,15 @@
         <input  type="number" step="0.01" x-model="pe" id="evaporationClient" name="evaporationClient" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
       <div>
-        <label for="densidad" class="block text-gray-600 text-sm mb-1">Densidad (g/ml)</label>
+        <label for="densidad" class="block text-gray-600 text-sm mb-1">Densidad (g/ml - 0.800 - 0.900)</label>
         <input id="densidad" name="densidad" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
       <div>
-        <label for="humedad" class="block text-gray-600 text-sm mb-1">% Humedad</label>
+        <label for="humedad" class="block text-gray-600 text-sm mb-1">% Humedad (4.90 - 9.50)</label>
         <input id="humedad" name="humedad" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
       <div>
-        <label for="ph" class="block text-gray-600 text-sm mb-1">% PH</label>
+        <label for="ph" class="block text-gray-600 text-sm mb-1">% PH (5)</label>
         <input id="ph" name="ph" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
     </div>

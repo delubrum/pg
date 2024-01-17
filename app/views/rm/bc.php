@@ -26,7 +26,7 @@
         <b>PRODUCTO: </b> <?php echo $id->productname ?>
       </div>
       <div>
-          <b>REACTOR:</b> <?php echo $id->reactor ?>
+        <b>REACTOR:</b> <?php echo $id->reactor ?>
       </div>
     </div>
 

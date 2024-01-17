@@ -41,12 +41,12 @@ class UsersController{
       $result = array();
       $total = $this->model->get("count(id) as total", "users")->total;
       $sql = '';
-      if (!empty($_GET['name'])) { $sql .= " and username LIKE '%" . $_GET['name'] . "%'"; }
-      if (!empty($_GET['email'])) { $sql .= " and email LIKE '%" . $_GET['email'] . "%'"; }
-      if (!empty($_GET['from'])) { $sql .= " and createdAt  >='" . $_REQUEST['from']." 00:00:00'"; }
-      if (!empty($_GET['to'])) { $sql .= " and createdAt <='" . $_REQUEST['to']." 23:59:59'"; }
-      if (!empty($_GET['status'])) {
-        $statusValues = $_GET['status'];
+      if (!empty($_GET['nameFilter'])) { $sql .= " and username LIKE '%" . $_GET['nameFilter'] . "%'"; }
+      if (!empty($_GET['emailFilter'])) { $sql .= " and email LIKE '%" . $_GET['emailFilter'] . "%'"; }
+      if (!empty($_GET['fromFilter'])) { $sql .= " and createdAt  >='" . $_REQUEST['fromFilter']." 00:00:00'"; }
+      if (!empty($_GET['toFilter'])) { $sql .= " and createdAt <='" . $_REQUEST['toFilter']." 23:59:59'"; }
+      if (!empty($_GET['statusFilter'])) {
+        $statusValues = $_GET['statusFilter'];
         $sql .= "AND (status = '$statusValues[0]'";
         for ($i = 1; $i < count($statusValues); $i++) {
             $sql .= " OR status = '$statusValues[$i]'";

@@ -56,7 +56,7 @@
         </div>
 
         <div class="col-sm-2">
-        <b>REACTOR:</b> <?php echo $qty?>
+        <b>REACTOR:</b> <?php echo $id->reactor?>
         </div>
 
         <div class="col-sm-2">

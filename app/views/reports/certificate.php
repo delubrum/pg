@@ -2,13 +2,9 @@
 <html lang="es">
 <head>
   <title>SIPEC | Certificado Recuperación de Material</title>
-  <link rel="icon" sizes="192x192" href="assets/img/logo.png">
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-  <script src="https://adminlte.io/tdemes/v3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="https://adminlte.io/tdemes/v3/dist/js/adminlte.min.js"></script>
-  <link rel="stylesheet" href="assets/css/adminlte.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
-  <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+  <link rel="icon" sizes="192x192" href="app/assets/img/logo.png">
+  <link rel="stylesheet" href="https://adminlte.io/themes/v3/dist/css/adminlte.min.css?v=3.2.0">
+
 
   <style>
     .tabla th, .tabla td {
@@ -18,7 +14,7 @@
     }
 
     body {
-      background-image: url('assets/img/membrete.jpg');
+      background-image: url('app/assets/img/membrete.jpg');
       background-repeat: no-repeat;
       background-size: cover;4
     }
@@ -77,7 +73,7 @@ Certifica a:
 <p>
 Quien durante el mes de mayo de 2023 realizó la entrega de los solventes contaminados descritos a continuación, resultantes de su proceso productivo, para su correcta y avalada recuperación.
 </p>
-<table class="tabla text-center" style="width:100%">
+<table class="tabla" style="width:100%; margin-top:25px;">
       <tr>
         <th>Producto</th>
         <th>Cantidad (kg)</th>

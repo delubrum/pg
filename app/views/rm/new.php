@@ -49,7 +49,7 @@
           </select>
         </div>
         <div>
-            <label for="qty" class="block text-gray-600 text-sm mb-1">Tambores Devueltos</label>
+            <label for="qty" class="block text-gray-600 text-sm mb-1">Tambores Plásticos Recibidos</label>
             <input type="number" step="1" id="qty" name="qty" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
         </div>
       </div>

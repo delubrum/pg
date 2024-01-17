@@ -1,6 +1,6 @@
 <thead>
   <tr>
-    <?php foreach($this->fields as $f) { ?>
+    <?php $suma = 0; foreach($this->fields as $f) { ?>
       <th 
       <?php if ($f != 'acción') { ?>
         hx-get="<?php echo $this->url ?>&colum=<?php echo $f ?>&order=<?php echo $newOrder ?>" 
@@ -45,11 +45,16 @@
       <?php echo $r->kg ?>
     </td>
     <td class="px-2 py-2 border-b">
-      <?php echo $r->valor ?>
+      <?php echo number_format($r->valor) ?>
     </td>
   </tr>
-  <?php } require_once "app/components/pagination.php" ?>
+  <?php $suma += $r->valor;} require_once "app/components/pagination.php" ?>
 </tbody>
+<tfoot>
+  <tr>
+    <th colspan="9" ><br><br><div style="font-size:20px">TOTAL: <?php echo number_format($suma) ?></div></th>
+  </tr>
+</tfoot>
 
 
 

@@ -21,6 +21,10 @@ class IPController{
       $filters = "and rmId = " . $_REQUEST['id'];
       $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
       $qty = $net - $id->paste;
+      $rmId = $_REQUEST['id'];
+      $bcId = $this->model->get("id","bc"," and rmId = $rmId")->id;
+      $filters = "and bcId = " .  $bcId;
+      $qtybit = $this->model->get('SUM(net) as total','bc_items',$filters)->total;
       $recovered =  $this->model->get('SUM(net) as total','bc_items'," and type = 'Ingreso' and bcid = $id->id")->total;
       $pr = number_format($recovered/$qty*100);
       require_once 'app/views/rm/ip.php';
