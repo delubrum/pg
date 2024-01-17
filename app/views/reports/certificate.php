@@ -16,7 +16,7 @@
     body {
       background-image: url('app/assets/img/membrete.jpg');
       background-repeat: no-repeat;
-      background-size: cover;4
+      background-size: cover;
     }
 
     .margin {
