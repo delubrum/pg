@@ -36,7 +36,7 @@
     );
 
     // Fecha a formatear
-    $fecha = $id->bcAt; // Cambia esto por la fecha que necesitas
+    $fecha = isset($id->invoiceAt) ? $id->invoiceAt : $id->bcAt; // Cambia esto por la fecha que necesitas
 
     // Convierte la fecha en formato legible
     $timestamp = strtotime($fecha);

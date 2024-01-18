@@ -24,8 +24,11 @@
     <td class="px-2 py-2 border-b">
     <?php echo date("Y-m",strtotime($r->date)); ?>
     </td>
+    <td class="px-2 py-2 border-b">
+    <?php echo $r->clientname ?>
+    </td>
     <td class="text-right px-2 py-2 border-b cursor-pointer">
-    <?php echo "<a href='?c=CMonth&a=Detail&date=$date' type='button' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-eye-line text-2xl'></i></a>" ?>
+    <?php echo "<a href='?c=CAll&a=Detail&date=$date&userId=$r->clientId' type='button' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-eye-line text-2xl'></i></a>" ?>
     </td>
   </tr>
   <?php }} require_once "app/components/pagination.php" ?>

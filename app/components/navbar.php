@@ -4,7 +4,7 @@
   </button>
   <ul class="flex items-center text-sm text-gray-600 ml-4 font-medium"><?php echo $title ?></ul>
   <ul class="ml-auto flex items-center">
-    <?php require_once "app/components/notifications.php" ?>
+    <?php if(in_array(12,$permissions)) {require_once "app/components/notifications.php";} ?>
     <li class="dropdown" x-data="{ dropdown: false}">
       <button type="button" 
         class="text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600"

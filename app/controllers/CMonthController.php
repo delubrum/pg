@@ -18,13 +18,11 @@ class CMonthController{
     if (in_array(5, $permissions)) {
       $title = "Recuperación Mensual";
       $content = 'app/components/index.php';
-      $filters = 'app/views/certificates/month/filters.php';
       require_once 'app/views/index.php';
     } else {
       $this->model->redirect();
     }
   }
-
 
   public function Data(){
     require_once "lib/check.php";
@@ -56,42 +54,11 @@ class CMonthController{
   public function Detail(){
     require_once "lib/check.php";
     if (in_array(5, $permissions)) {
+      $date = $_REQUEST['date'];
       require_once 'app/views/reports/certificate.php';
     } else {
       $this->model->redirect();
     }
-  }
-
-  public function PD(){
-    require_once "lib/check.php";
-    if (in_array(8, $permissions)) {
-      require_once 'views/layout/header.php';
-      require_once 'views/certificates/pd.php';
-    } else {
-      $this->model->redirect();
-    }
-  }
-
-  public function PDData(){
-    header('Content-Type: application/json');
-    require_once "lib/check.php";
-    if (in_array(8, $permissions)) {
-      $result[] = array();
-      $i=0;
-      foreach($this->model->list('a.*,b.company as clientname, c.name as productname','rm a'," and clientId = $user->id and a.status = 'Cerrado'",'LEFT JOIN users b ON a.clientId = b.id LEFT JOIN products c ON a.productId = c.id') as $r) {
-        $result[$i]['id'] = $r->id;
-        $result[$i]['date'] = $r->date;
-        $result[$i]['product'] = $r->productname;
-        $pd = "<a href='?c=RM&a=PD&id=$r->id' type='button' target='_blank' class='btn btn-primary float-right m-1'><i class='fas fa-eye'></i> Ver</a>";
-        $result[$i]['action'] = "$pd";
-        $i++;
-      }
-      echo json_encode($result);
-    } else {
-      $this->model->redirect();
-    }
-  }
-
-  
+  } 
 
 }

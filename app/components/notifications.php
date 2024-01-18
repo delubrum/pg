@@ -10,7 +10,7 @@
       <span 
         class="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
         hx-get="?c=Home&a=Notifications&list=0"
-        hx-trigger=""
+        hx-trigger="every 2s"
         hx-target="this"
       >
       <?php echo count($this->notifications) ?>

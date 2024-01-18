@@ -16,23 +16,20 @@
   </tr>
 </thead>
 <tbody>
-  <?php foreach ($list as $r) { 
-    if ((date("Y-m-l",strtotime($r->date)) <= date("Y-m-d"))) {
-      $date = $r->date;
-    ?>
+  <?php foreach ($list as $r) { ?>
   <tr>
     <td class="px-2 py-2 border-b">
-    <?php echo date("Y-m",strtotime($r->date)); ?>
+    <?php echo $r->id; ?>
+    </td>
+    <td class="px-2 py-2 border-b">
+    <?php echo date("Y-m-d",strtotime($r->invoiceAt)) ?>
+    </td>
+    <td class="px-2 py-2 border-b">
+    <?php echo $r->productname ?>
     </td>
     <td class="text-right px-2 py-2 border-b cursor-pointer">
-    <?php echo "<a href='?c=CMonth&a=Detail&date=$date' type='button' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-eye-line text-2xl'></i></a>" ?>
+    <?php echo "<a href='?c=Reports&a=PD&id=$r->id' type='button' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-eye-line text-2xl'></i></a>" ?>
     </td>
   </tr>
-  <?php }} require_once "app/components/pagination.php" ?>
+  <?php } require_once "app/components/pagination.php" ?>
 </tbody>
-
-
-
-
-
- 

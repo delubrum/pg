@@ -69,7 +69,12 @@ class HomeController{
 	}
 
 	public function Notifications() {
-		require_once "app/components/notifications-list.php";
+		$notifications = $this->model->list('title','notifications', "and status = 1");
+		if ($_REQUEST['list'] == 0) {
+			echo count($notifications);
+		} else {
+      require_once "app/components/notifications-list.php";
+		}
 	}
 
   public function Logout() {

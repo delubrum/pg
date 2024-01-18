@@ -205,20 +205,35 @@ class BCController{
           }
         }
       }
-      $id = $this->model->save('bc',$item);
       $itemb = new stdClass();
       $itemb->bcAt = date("Y-m-d H:i:s");
       $itemb->status = 'Análisis';
       $rmId = $_REQUEST['id'];
-      $this->model->update('rm',$itemb,$rmId);
-      if ($id !== false) {
+      //$this->model->update('rm',$itemb,$rmId);
+      //Alert
+      $alert = new stdClass();
+      $bcId = $this->model->get('id','bc',"and rmId = $rmId")->id;
+      $net = $this->model->get('SUM(kg-tara) as total','rm_items',"and rmId = $rmId")->total;
+      $total = $net - $this->model->get('paste','rm',"and id = $rmId")->paste;
+      $recover = $this->model->get('SUM(net) as total','bc_items',"and bcId = '$bcId'")->total;
+      $perc = ($recover/$total*100);
+      if ($perc < 70) {
+        $alert->title = "El RM con id $rmId tuvo un porcentaje de recuperación menor al 70%";
+        $this->model->save('notifications',$alert);
+      }
+
+      if ($perc >= 90) {
+        $alert->title = "El RM con id $rmId tuvo un porcentaje de recuperación >= al 90%";
+        $this->model->save('notifications',$alert);
+      }
+      // if ($id !== false) {
         $hxTriggerData = json_encode([
           "listChanged" => true,
           "showMessage" => '{"type": "success", "message": "Bitacora Guardada", "close" : "closeModal"}'
         ]);
         header('HX-Trigger: ' . $hxTriggerData);
         http_response_code(204);
-      }
+      // }
     } else {
       $this->model->redirect();
     }

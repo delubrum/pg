@@ -79,16 +79,13 @@ Quien durante el mes de mayo de 2023 realizó la entrega de los solventes contam
         <th>Cantidad (kg)</th>
         <th>Lodos (kg)</th>
       </tr>
+      <?php foreach(json_decode($user->products,true) as $p) {?>
       <tr>
-        <td>Propyflex</td>
-        <td>2.550</td>
-        <td>100</td>
+        <td><?php echo $this->model->get('name','products'," and id='$p'")->name ?></td>
+        <td><?php echo $this->model->get('sum(mpClient) as total','rm'," and clientId='$user->id' and productId = '$p' and MONTH(invoiceAt) = MONTH('$date') and YEAR(invoiceAt) = YEAR('$date')")->total ?></td>
+        <td><?php echo $this->model->get('sum(mudpClient) as total','rm'," and clientId='$user->id' and productId = '$p' and MONTH(invoiceAt) = MONTH('$date') and YEAR(invoiceAt) = YEAR('$date')")->total ?></td>
       </tr>
-      <tr>
-        <td>Improsolve</th>
-        <td>2.550</td>
-        <td>100</td>
-      </tr>
+      <?php } ?>
       <tr>
     </table>
     <p>
