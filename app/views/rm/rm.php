@@ -24,11 +24,18 @@
             <b>CLIENTE:</b> <?php echo $id->clientname ?>
         </div>
         <div>
+            <b>REMISIÓN:</b> <?php echo $id->remission ?>
+        </div>
+        <div>
             <b>PRODUCTO:</b> <?php echo $id->productname ?>
+        </div>
+        <div>
+            <b>TIPO DE ENVASE:</b> <?php echo $id->type ?>
         </div>
         <div>
             <b>CIUDAD:</b> <?php echo $id->city ?>
         </div>
+
       </div>
 
       <div class="w-full text-center py-4" id="spreadsheet"></div>

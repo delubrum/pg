@@ -3,12 +3,10 @@ require_once 'app/models/model.php';
 
 class BCController{
   private $model;
-  private $notifications;
   private $fields;
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
     $this->fields = array("RM","fecha","creador","cliente","producto","status","factura","acción");
     $this->url = '?c=RM&a=Data';
   }
@@ -17,7 +15,7 @@ class BCController{
     require_once "lib/check.php";
     if (in_array(3, $permissions)) {
       $filters = "and a.rmId = " . $_REQUEST['id'];
-      $id = $this->model->get('a.*, b.paste, b.reactor, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
+      $id = $this->model->get('a.*, b.paste, b.reactor,b.remission,b.type as rmtype, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
       require_once 'app/views/rm/bc.php';
     } else {
       $this->model->redirect();
@@ -79,7 +77,25 @@ class BCController{
         $rm->status = 'Iniciado';
         $this->model->update('rm',$rm,$rmId);
       }
-      $this->model->save('bc_items',$item);
+      $id = $this->model->save('bc_items',$item);
+      $alert = new stdClass();
+
+      //Alert 2 hours
+
+      if ($this->model->get('type','bc_items',"and id = '$id'")->type == 'Ingreso') {
+        if ($this->model->get('createdAt','bc_items',"and id < '$id' and type = 'Ingreso' ORDER BY id DESC LIMIT 1")) {
+          $current = $this->model->get('createdAt','bc_items',"and id = '$id'")->createdAt;
+          $previous = $this->model->get('createdAt','bc_items',"and id < '$id' and type = 'Ingreso' ORDER BY id DESC LIMIT 1")->createdAt;
+          $startDate = new DateTime($current);
+          $endDate = new DateTime($previous);
+          $interval = $startDate->diff($endDate);
+          $hours = $interval->h + ($interval->days * 24);
+          if ($hours >= 2) {
+            $alert->title = "El RM con id $rmId presenta un tambor que tomó mas de 2 horas";
+            $this->model->save('notifications',$alert);
+          }
+        }
+      }
       $hxTriggerData = json_encode([
         "listItemsChanged" => true,
         "showMessage" => '{"type": "success", "message": "Registrado", "close" : "closeNested"}'
@@ -197,6 +213,19 @@ class BCController{
         exit;
       }
 
+      $rmId = $_REQUEST['id'];
+      $bcId = $this->model->get('id','bc',"and rmId = $rmId")->id;
+
+      if ($this->model->get('count(id) as total','bc_items'," and bcId = '$bcId'")->total < 3) {
+        $hxTriggerData = json_encode([
+          "showMessage" => '{"type": "error", "message": "No hay Ingresos Suficientes", "close" : ""}'
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(409);
+        exit;
+      }
+
+
       $item = new stdClass();
       foreach($_POST as $k => $val) {
         if (!empty($val)) {
@@ -208,11 +237,9 @@ class BCController{
       $itemb = new stdClass();
       $itemb->bcAt = date("Y-m-d H:i:s");
       $itemb->status = 'Análisis';
-      $rmId = $_REQUEST['id'];
-      //$this->model->update('rm',$itemb,$rmId);
+      $this->model->update('rm',$itemb,$rmId);
       //Alert
       $alert = new stdClass();
-      $bcId = $this->model->get('id','bc',"and rmId = $rmId")->id;
       $net = $this->model->get('SUM(kg-tara) as total','rm_items',"and rmId = $rmId")->total;
       $total = $net - $this->model->get('paste','rm',"and id = $rmId")->paste;
       $recover = $this->model->get('SUM(net) as total','bc_items',"and bcId = '$bcId'")->total;
@@ -226,6 +253,28 @@ class BCController{
         $alert->title = "El RM con id $rmId tuvo un porcentaje de recuperación >= al 90%";
         $this->model->save('notifications',$alert);
       }
+
+      //Alert 11 hours total
+      if ($this->model->get('createdAt','bc_items',"and bcId = $bcId ORDER BY id DESC limit 1")->createdAt) {
+        $first = $this->model->get('createdAt','bc_items',"and bcId = $bcId ORDER BY id ASC limit 1")->createdAt;
+        $last = $this->model->get('createdAt','bc_items',"and bcId = $bcId ORDER BY id DESC limit 1")->createdAt;
+        $startDate = new DateTime($first);
+        $endDate = new DateTime($last);
+        $interval = $startDate->diff($endDate);
+        $hours = $interval->h + ($interval->days * 24);
+        if ($hours >= 11) {
+          $alert->title = "El RM con id $rmId duró mas de 11 horas en producción";
+          $this->model->save('notifications',$alert);
+        }
+      }
+
+      if (strtotime($this->model->get('createdAt','bc_items',"and bcId = $bcId ORDER BY id ASC limit 1")->createdAt) > strtotime(date("Y-m-d") . " 18:15:00")) {
+        $alert->title = "El RM con id $rmId inició luego de las 6:15 pm";
+        $this->model->save('notifications',$alert);
+      }
+
+
+
       // if ($id !== false) {
         $hxTriggerData = json_encode([
           "listChanged" => true,
@@ -262,11 +311,16 @@ class BCController{
   public function Detail(){
     require_once "lib/check.php";
     if (in_array(3, $permissions)) {
+
       $filters = "and a.rmId = " . $_REQUEST['id'];
-      $id = $this->model->get('a.*, b.paste, b.reactor, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
+      $id = $this->model->get('a.*, b.paste, b.reactor, b.remission,b.type as rmtype, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
       $filters = "and rmId = " . $_REQUEST['id'];
       $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
       $qty = $net - $id->paste;
+      $rmId = $_REQUEST['id'];
+      $bcId = $this->model->get("id","bc"," and rmId = $rmId")->id;
+      $filters = "and bcId = " .  $bcId;
+      $qtybit = $this->model->get('SUM(net) as total','bc_items',$filters)->total;
       $status = "Bitacora";
       require_once 'app/views/reports/bc.php';
     } else {

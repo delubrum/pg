@@ -3,12 +3,10 @@ require_once 'app/models/model.php';
 
 class IPController{
   private $model;
-  private $notifications;
   private $fields;
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
     $this->fields = array("RM","fecha","creador","cliente","producto","status","factura","acción");
     $this->url = '?c=RM&a=Data';
   }
@@ -58,6 +56,17 @@ class IPController{
       $bcId = $_REQUEST['id'];
       $rmId = $this->model->get("*","bc"," and id = $bcId")->rmId;
       $this->model->update('rm',$item,$rmId);
+      //Alert
+      $alert = new stdClass();
+      $mudpClient = $_REQUEST['mudpClient'];
+      $paste = $this->model->get('paste','rm',"and id = $rmId")->paste;
+      $net = $this->model->get('SUM(kg-tara) as total','rm_items',"and rmId = $rmId")->total;
+      $perc = number_format($mudpClient/($net - $paste)*100);
+      echo $perc;
+      if ($perc >= 25) {
+        $alert->title = "El RM con id $rmId tuvo un porcentaje de Lodos de Destilación mayor al 25%";
+        $this->model->save('notifications',$alert);
+      }
       if ($id !== false) {
         $hxTriggerData = json_encode([
           "listChanged" => true,

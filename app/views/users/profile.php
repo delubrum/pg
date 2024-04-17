@@ -54,8 +54,32 @@
                     class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
                 </div>
                 <div class="mt-2">
-									<label for="price" class="block text-gray-600 text-sm mb-1">Valor Transporte</label>
+									<label for="price" class="block text-gray-600 text-sm mb-1">Turbo Exclusivo</label>
 									<input value="<?php echo $id->price ?>" type="number" id="price" name="price"   
+                    hx-post='?c=Users&a=Update' 
+                    hx-trigger="change"
+                    hx-indicator="#loading"
+                    class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+                </div>
+                <div class="mt-2">
+									<label for="price2" class="block text-gray-600 text-sm mb-1">Turbo Recorrido</label>
+									<input value="<?php echo $id->price2 ?>" type="number" id="price2" name="price2"   
+                    hx-post='?c=Users&a=Update' 
+                    hx-trigger="change"
+                    hx-indicator="#loading"
+                    class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+                </div>
+                <div class="mt-2">
+									<label for="price3" class="block text-gray-600 text-sm mb-1">Camioneta Exclusivo</label>
+									<input value="<?php echo $id->price3 ?>" type="number" id="price3" name="price3"   
+                    hx-post='?c=Users&a=Update' 
+                    hx-trigger="change"
+                    hx-indicator="#loading"
+                    class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+                </div>
+                <div class="mt-2">
+									<label for="price4" class="block text-gray-600 text-sm mb-1">Camioneta Recorrido</label>
+									<input value="<?php echo $id->price4 ?>" type="number" id="price4" name="price4"   
                     hx-post='?c=Users&a=Update' 
                     hx-trigger="change"
                     hx-indicator="#loading"

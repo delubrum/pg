@@ -3,12 +3,10 @@ require_once 'app/models/model.php';
 
 class CAllController{
   private $model;
-  private $notifications;
   private $fields;
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
     $this->fields = array("fecha","cliente","acción");
     $this->url = '?c=CAll&a=Data';
   }

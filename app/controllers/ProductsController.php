@@ -3,12 +3,10 @@ require_once 'app/models/model.php';
 
 class ProductsController{
   private $model;
-  private $notifications;
   private $fields;
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
     $this->fields = array("fecha","nombre","status","acción");
     $this->url = '?c=Products&a=Data';
   }

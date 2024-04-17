@@ -30,6 +30,10 @@
           </select>
         </div>
         <div>
+            <label for="qty" class="block text-gray-600 text-sm mb-1">Remisión</label>
+            <input id="remission" name="remission" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        </div>
+        <div>
           <label for="product" class="block text-gray-600 text-sm mb-1">Producto</label>
           <select id="product" name="productId" class="bg-white p-[9px] w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
             <option value='' disabled selected>Seleccione el Cliente...</option>
@@ -48,10 +52,40 @@
             <?php } ?>
           </select>
         </div>
+
         <div>
-            <label for="qty" class="block text-gray-600 text-sm mb-1">Tambores Plásticos Recibidos</label>
+          <label for="type" class="block text-gray-600 text-sm mb-1">Tipo de Envase</label>
+          <select id="type" name="type" class="w-full bg-white p-[9px] w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+            <option value='' disabled selected></option>
+            <option value='Tambor'>Tambor</option>
+            <option value='Cuñete'>Cuñete</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="returnToClient" class="block text-gray-600 text-sm mb-1">Devolver al Cliente</label>
+          <select id="returnToClient" name="returnToClient" class="w-full bg-white p-[9px] w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+            <option value='0'>No</option>
+            <option value='1 selected'>Si</option>
+          </select>
+        </div>
+
+        <div>
+            <label for="qty" class="block text-gray-600 text-sm mb-1">Cantidad de Envases</label>
             <input type="number" step="1" id="qty" name="qty" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
         </div>
+
+        <div>
+          <label for="price" class="block text-gray-600 text-sm mb-1">Valor</label>
+          <select id="price" name="price" class="w-full bg-white p-[9px] w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+            <option value=''></option>
+            <option value='price'>Turbo Exclusivo</option>
+            <option value='price2'>Turbo Recorrido</option>
+            <option value='price3'>Camioneta Exclusivo</option>
+            <option value='price4'>Camioneta Recorrido</option>
+          </select>
+        </div>
+
       </div>
       <div class="pt-4 grid grid-cols-1 sm:grid-cols-1 gap-4">
         <div class="text-center text-sm" id="spreadsheet"></div>

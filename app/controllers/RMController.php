@@ -3,12 +3,10 @@ require_once 'app/models/model.php';
 
 class RMController{
   private $model;
-  private $notifications;
   private $fields;
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
     $this->fields = array("RM","fecha","creador","cliente","producto","status","factura","acción");
     $this->url = '?c=RM&a=Data';
   }
@@ -143,6 +141,9 @@ class RMController{
       $item->userId = $_SESSION["id-APP"];
       $item->data = $_REQUEST['table'];
       $item->status = 'Terminar R.M.';
+      $item->remission = $_REQUEST['remission'];
+      $item->type = $_REQUEST['type'];
+      $item->returnToClient = $_REQUEST['returnToClient'];
       $rm = $this->model->save('rm',$item);
       $itemb = new stdClass();
       $itemb->type = 'RM';
@@ -156,7 +157,8 @@ class RMController{
       }
       $itemb->kg = $sum;
       $clientId = $_REQUEST['clientId'];
-      $itemb->price = $this->model->get("price", "users" , "and id = $clientId")->price;
+      $price = $_REQUEST['price'];
+      $itemb->price = $this->model->get("$price", "users" , "and id = $clientId")->{$price};
       $id = $this->model->save('transport',$itemb);
       $hxTriggerData = json_encode([
         "listChanged" => true,

@@ -3,13 +3,11 @@ require_once 'app/models/model.php';
 
 class UsersController{
   private $model;
-  private $notifications;
   private $fields;
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
-    $this->fields = array("tipo","fecha","nombre","email","status","acción");
+    $this->fields = array("tipo","fecha","nombre","compañia","email","status","acción");
     $this->url = '?c=Users&a=Data';
   }
 
@@ -42,6 +40,7 @@ class UsersController{
       $total = $this->model->get("count(id) as total", "users")->total;
       $sql = '';
       if (!empty($_GET['nameFilter'])) { $sql .= " and username LIKE '%" . $_GET['nameFilter'] . "%'"; }
+      if (!empty($_GET['companyFilter'])) { $sql .= " and company LIKE '%" . $_GET['companyFilter'] . "%'"; }
       if (!empty($_GET['emailFilter'])) { $sql .= " and email LIKE '%" . $_GET['emailFilter'] . "%'"; }
       if (!empty($_GET['fromFilter'])) { $sql .= " and createdAt  >='" . $_REQUEST['fromFilter']." 00:00:00'"; }
       if (!empty($_GET['toFilter'])) { $sql .= " and createdAt <='" . $_REQUEST['toFilter']." 23:59:59'"; }
@@ -66,7 +65,7 @@ class UsersController{
       $perPage = 10;
       $start = ($page - 1) * $perPage;
       $sql .= " LIMIT $start,$perPage";
-      $list = $this->model->list("id,type,createdAt as fecha,username as nombre,email,if(status=1,'Activo','Inactivo') as status","users",$sql);
+      $list = $this->model->list("id,type as tipo,createdAt as fecha,username as nombre,company as compañia,email,if(status=1,'Activo','Inactivo') as status","users",$sql);
       require_once "app/views/users/list.php";
     } else {
       $this->model->redirect();

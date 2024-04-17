@@ -6,7 +6,6 @@ class HomeController{
   private $notifications;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->notifications = $this->model->list('title,itemId,url,target,permissionId','notifications', "and status = 1");
   }
 
 	public function Index() {
@@ -69,12 +68,17 @@ class HomeController{
 	}
 
 	public function Notifications() {
-		$notifications = $this->model->list('title','notifications', "and status = 1");
+		$notifications = $this->model->list('id,title','notifications', "and status = 1");
 		if ($_REQUEST['list'] == 0) {
 			echo count($notifications);
 		} else {
       require_once "app/components/notifications-list.php";
 		}
+	}
+
+  public function DeleteAlert() {
+    $filters = ' id = ' . $_REQUEST['id'];
+		$this->model->delete('notifications', $filters);
 	}
 
   public function Logout() {

@@ -19,13 +19,16 @@
 <?php foreach ($list as $r) { ?>
 <tr>
   <td class="px-2 py-2 border-b">
-    <?php echo $r->type ?>
+    <?php echo $r->tipo ?>
   </td>
   <td class="px-2 py-2 border-b">
     <?php echo $r->fecha ?>
   </td>
   <td class="px-2 py-2 border-b">
     <?php echo $r->nombre ?>
+  </td>
+  <td class="px-2 py-2 border-b">
+    <?php echo $r->compañia ?>
   </td>
   <td class="px-2 py-2 border-b">
     <?php echo $r->email ?>

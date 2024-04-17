@@ -52,10 +52,21 @@
         </div>
 
         <div class="col-sm-3">
-        <b>PRODUCTO:</b> <?php echo $id->productname?>
+        <b>REMISIÓN:</b> <?php echo $id->remission?>
         </div>
 
+        <div class="col-sm-3">
+        <b>PRODUCTO:</b> <?php echo $id->productname?>
+        </div>
+        </div>
+
+        <div class="row mb-2">
+   
         <div class="col-sm-2">
+        <b>TIPO DE ENVASE:</b> <?php echo $id->rmtype?>
+        </div>
+
+        <div class="col-sm-3">
         <b>REACTOR:</b> <?php echo $id->reactor?>
         </div>
 
@@ -84,7 +95,7 @@
 
     </div>
 
-    <div class="row mb-2">
+    <div class="row mb-4">
         <div class="col-sm-2">
         <b>AGUA INICIAL:</b> <?php echo $id->water0 ?>
         </div>
@@ -110,6 +121,22 @@
         <b>ENERGÍA FINAL:</b> <?php echo $id->energy1 ?>
         </div>
     </div>
+
+    <div class="row mb-2">
+
+    <div class="col-sm-4">
+        <b>PESO MP A RECUPERAR:</b> <?php echo $qty ?>
+        </div>
+
+        <div class="col-sm-4">
+        <b>PESO MARTERIAL RECUPERADO:</b> <?php echo $qtybit ?>
+        </div>
+
+        <div class="col-sm-4">
+        <b>PORCENTAJE:</b> <?php echo number_format($qtybit/$qty*100,0)?> %
+        </div>
+        </div>
+
 
     <div class="row mb-2">
       <div class="col-sm-6">

@@ -41,8 +41,20 @@
               <input id="city" name="city" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" :required="selectedOption === 'Cliente'">
           </div>
           <div x-show="selectedOption === 'Cliente'">
-              <label for="price" class="block text-gray-600 text-sm mb-1">Valor Transporte</label>
+              <label for="price" class="block text-gray-600 text-sm mb-1">Turbo Exclusivo</label>
               <input id="price" name="price" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" :required="selectedOption === 'Cliente'">
+          </div>
+          <div x-show="selectedOption === 'Cliente'">
+              <label for="price2" class="block text-gray-600 text-sm mb-1">Turbo Recorrido</label>
+              <input id="price2" name="price2" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" :required="selectedOption === 'Cliente'">
+          </div>
+          <div x-show="selectedOption === 'Cliente'">
+              <label for="price3" class="block text-gray-600 text-sm mb-1">Camioneta Exclusivo</label>
+              <input id="price3" name="price3" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" :required="selectedOption === 'Cliente'">
+          </div>
+          <div x-show="selectedOption === 'Cliente'">
+              <label for="price4" class="block text-gray-600 text-sm mb-1">Camioneta Recorrido</label>
+              <input id="price4" name="price4" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" :required="selectedOption === 'Cliente'">
           </div>
           <div>
               <label for="newpass" class="block text-gray-600 text-sm mb-1">Password</label>

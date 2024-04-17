@@ -35,6 +35,18 @@
     </div>
 
     <div>
+      <label for="companyFilter" class="block text-gray-600 text-sm mb-1">Compañia</label>
+      <input type="text" id="companyFilter" name="companyFilter"
+        class="filter w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" 
+        hx-get="<?php echo $this->url ?>"
+        hx-target="#list"
+        hx-trigger="keyup changed delay:200ms"
+        hx-indicator="#loading"
+        hx-include=".filter"
+      >
+    </div>
+
+    <div>
       <label for="emailFilter" class="block text-gray-600 text-sm mb-1">Email</label>
       <input type="text" id="emailFilter" name="emailFilter"
         class="filter w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" 

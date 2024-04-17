@@ -13,7 +13,7 @@
         hx-trigger="every 2s"
         hx-target="this"
       >
-      <?php echo count($this->notifications) ?>
+      <?php echo count($this->model->list('id,title,itemId,url,target,permissionId','notifications', "and status = 1")) ?>
       </span>
   </button>
   <ul 
@@ -23,6 +23,6 @@
     x-show="isOpen"
     @click.away="isOpen = false"
   >
-    <li id="notifications"></li>
+  <table id="notifications"></table>
   </ul>
 </li>
