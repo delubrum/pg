@@ -35,7 +35,7 @@
     </td>
     <td class="px-2 py-2 border-b">
       <?php $query = ($r->tipo == 'RM') ?  'a.id' : 'a.invoice';
-      echo $this->model->get('b.username as clientname','rm a', "and $query = $r->código","LEFT JOIN users b on a.clientId = b.id")->clientname;
+      echo $this->model->get('b.company as clientname','rm a', "and $query = $r->código","LEFT JOIN users b on a.clientId = b.id")->clientname;
       ?>
     </td>
     <td class="px-2 py-2 border-b">

@@ -62,7 +62,7 @@
         <span class="text-gray-600 text-sm">Status</span>
         <div 
           class="space-y-2 mt-1"
-          hx-trigger="change from:body .form-checkbox"
+          hx-trigger="change .form-checkbox"
           hx-get="<?php echo $this->url ?>" 
           hx-target="#list"
           hx-indicator="#loading"

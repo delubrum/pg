@@ -3,7 +3,7 @@
     <button id="closeModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-700 hover:text-teal-900">
         <i class="ri-close-line text-2xl"></i>
     </button>
-    <h1 class="mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> <span class="text-2xl font-semibold">Nuevo RM</span></h1>
+    <h1 class="mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> <span class="text-2xl font-semibold">Nuevo RM (<?php echo $this->model->get('id','rm', ' ORDER BY id DESC LIMIT 1')->id + 1; ?>)</span></h1>
     <form  id="newForm" 
         class="overflow-y-auto max-h-[400px] p-4"
         hx-post='?c=RM&a=Save' 
@@ -24,13 +24,13 @@
             required
           >
             <option value='' disabled selected></option>
-            <?php foreach ($this->model->list("*","users"," and type = 'Cliente' and status = 1") as $r) { ?>     
+            <?php foreach ($this->model->list("*","users"," and type = 'Cliente' and status = 1 ORDER BY company ASC") as $r) { ?>     
                 <option value='<?php echo $r->id?>'><?php echo $r->company?></option>
             <?php } ?>
           </select>
         </div>
         <div>
-            <label for="qty" class="block text-gray-600 text-sm mb-1">Remisión</label>
+            <label for="qty" class="block text-gray-600 text-sm mb-1">Remisión del Cliente</label>
             <input id="remission" name="remission" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
         </div>
         <div>
@@ -76,7 +76,7 @@
         </div>
 
         <div>
-          <label for="price" class="block text-gray-600 text-sm mb-1">Valor</label>
+          <label for="price" class="block text-gray-600 text-sm mb-1">Valor de Transporte</label>
           <select id="price" name="price" class="w-full bg-white p-[9px] w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
             <option value=''></option>
             <option value='price'>Turbo Exclusivo</option>
@@ -98,6 +98,8 @@
 
 <script>
 
+
+
 var SUMCOL = function(instance, columnId) {
     var total = 0;
     for (var j = 0; j < instance.options.data.length; j++) {
@@ -116,10 +118,19 @@ var SUMCOL = function(instance, columnId) {
     allowRenameColumn: false,
     columnDrag:true,
     allowExport: false,
+
+    oninsertrow:function(instance, cell, col, row) {
+      table.getData
+      var data = table.getData();
+      var lastRow = data.length;
+      var cell = table.getCell('A'+lastRow);
+      table.updateSelection(cell);
+    },
+
     footers: [['=SUMCOL(TABLE(), 0)','=SUMCOL(TABLE(), 1)']],
     columns: [
       { 
-        title:'PESO BRUTO',
+        title:'PESO BRUTO \n ECO',
         type:'numeric',
         width:120,
       },

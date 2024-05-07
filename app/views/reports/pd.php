@@ -72,7 +72,7 @@
     </table>
     </center>
     <p>
-    <h4 class="text-center mt-4">INFORME DE PROCESO DE RECUPERACIÓN</h4>
+    <h4 class="text-center mt-4">INFORME DE PROCESO</h4>
     <!-- <h5 class="text-center">
       <span>LOTE: <?php echo $id->bcId ?></span>
       <span>RM: <?php echo $id->id ?></span>
@@ -222,7 +222,7 @@
       <b>PESO NETO REMISIÓN COMPAÑIA:</b> <?php echo $net_client ?>
     </p> 
     <p>
-      <b>Observaciones:</b> Estos fueron los pesos reflejados por parte de <b>PROCESOS ECOAMBIENTALES</b>. Hay una diferencia de <b><?php echo number_format($net_client - $net,2) ?> Kg</b> respecto a la remisión. Tener en cuenta pasta que no entra <b><?php echo $id->paste?> Kg</b> 
+      <b>Observaciones:</b> Estos fueron los pesos reflejados por parte de <b>PROCESOS ECOAMBIENTALES</b>. Hay una diferencia de <b><?php echo number_format($net_client - $net,2) ?> Kg</b> respecto a la remisión <b><?php echo $id->remission ?></b>. Tener en cuenta pasta que no entra <b><?php echo $id->paste?> Kg</b> 
     </p>
   </section>
 

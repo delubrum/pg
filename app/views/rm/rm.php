@@ -136,7 +136,7 @@
     footers: [['=SUMCOL(TABLE(), 0)','=SUMCOL(TABLE(), 1)','=SUMCOL(TABLE(), 2)','=SUMCOL(TABLE(), 3)','=SUMCOL(TABLE(), 4)','=SUMCOL(TABLE(), 5)']],
     columns: [
       { 
-        title:'PESO BRUTO',
+        title:'PESO BRUTO \n ECO',
         type:'numeric',
         width:110,
         readOnly: true,
@@ -148,17 +148,17 @@
         readOnly: true,
       },
       { 
-        title:'TARAS',
+        title:'PESO TARAS \n ECO',
         type:'numeric',
         width:110,
       },
       { 
-        title:'TARAS \n CLIENTE',
+        title:'PESO TARAS \n CLIENTE',
         type:'numeric',
         width:110,
       },
       { 
-        title:'PESO NETO',
+        title:'PESO NETO ECO',
         width:110,
         type:'numeric',
         readOnly: true,

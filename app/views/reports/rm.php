@@ -77,12 +77,12 @@
   <table class="tabla" style="width:100%;">
     <tr>
         <th style="width:40px">N°</th>
-        <th>Peso</th>
-        <th>Peso<br>Cliente</th>
-        <th>Taras</th>
-        <th>Taras<br>Cliente</th>
-        <th>Neto</th>
-        <th>Neto<br>Cliente</th>
+        <th>Peso Bruto<br>Eco</th>
+        <th>Peso Bruto<br>Cliente</th>
+        <th>Peso Taras<br>Eco</th>
+        <th>Peso Taras<br>Cliente</th>
+        <th>Peso Neto<br>Eco</th>
+        <th>Peso Neto<br>Cliente</th>
         <th>Estado</th>
         <th>Derrames</th>
     </tr>

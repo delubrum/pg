@@ -53,8 +53,8 @@ class UsersController{
         $sql .= ")";
       }
       $filtered = $this->model->get("count(id) as total", "users",$sql,)->total;
-      $colum = isset($_GET['colum']) ? $_GET['colum'] : 'fecha';
-      $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
+      $colum = isset($_GET['colum']) ? $_GET['colum'] : 'company';
+      $order = isset($_GET['order']) ? $_GET['order'] : 'desc';
       if ($order === 'asc') {
         $newOrder = 'desc';
       } else {
