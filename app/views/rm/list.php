@@ -34,7 +34,19 @@
     <?php echo $r->producto ?>
   </td>
   <td class="px-2 py-2 border-b">
-    <?php echo $r->status ?>
+    <select hx-trigger="change" <?php echo (!in_array(13, $permissions)) ? 'disabled': '';?>
+      hx-post="?c=RM&a=UpdateField" 
+      hx-vals="js:{id: '<?php echo $r->RM ?>', val: event.target.value, field: 'status'}"
+      hx-swap="none" 
+      hx-indicator="#loading"
+    >
+    <option value=''></option>
+    <?php 
+    $array = ["Terminar R.M.", "Producción", "Iniciado", "Análisis", "Facturación", "Cerrado"];
+    foreach($array as $s) { ?>
+        <option <?php echo ($r->status == $s) ? 'selected' : ''; ?> value='<?php echo $s?>'><?php echo $s?></option>
+    <?php } ?>
+    </select>
   </td>
   <td class="px-2 py-2 border-b">
     <?php echo $r->factura ?>
@@ -44,7 +56,7 @@
     $edit = '';
       if ($r->status == 'Terminar R.M.') { $edit = "<a hx-get='?c=RM&a=RM&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Terminar R.M.</a>"; }
       if ($r->status == 'Producción' || $r->status == 'Iniciado') { $edit = "<a hx-get='?c=BC&a=BC&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-hammer-line text-2xl'></i> Producir</a>"; }
-      if ($r->status == 'Análisis') { $edit = "<a hx-get='?c=IP&a=IP&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Análisis</a>"; }
+      if ($r->status == 'Análisis' and in_array(15,$permissions)) { $edit = "<a hx-get='?c=IP&a=IP&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Análisis</a>"; }
       if ($r->status == 'Facturación' and in_array(10,$permissions)) { $edit = "<a hx-get='?c=IP&a=IV&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-exchange-dollar-line text-2xl'></i> Facturar</a>"; }
       if ($r->status == 'Cerrado') { $edit = ""; }
       $rm = ($r->status != 'Terminar R.M.' and $r->status != 'Registrando') ? "<br><a href='?c=RM&a=Detail&id=$r->RM' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-file-line text-2xl'></i> Recibo de Material</a>" : "";

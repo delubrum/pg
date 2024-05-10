@@ -3,10 +3,10 @@
     <button id="closeModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-700 hover:text-teal-900">
         <i class="ri-close-line text-2xl"></i>
     </button>
-    <h1 class="mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> <span class="text-2xl font-semibold">Nuevo RM (<?php echo $this->model->get('id','rm', ' ORDER BY id DESC LIMIT 1')->id + 1; ?>)</span></h1>
+    <h1 class="mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> <span class="text-2xl font-semibold">Nuevo RM (<?php echo isset($this->model->get('id','rm', ' ORDER BY id DESC LIMIT 1')->id) ?  $this->model->get('id','rm', ' ORDER BY id DESC LIMIT 1')->id + 1 : 1 ; ?>)</span></h1>
     <form  id="newForm" 
         class="overflow-y-auto max-h-[400px] p-4"
-        hx-post='?c=RM&a=Save' 
+        hx-post='?c=RM&a=Save' rm_items
         hx-swap="none" 
         hx-vals='js:{table: JSON.stringify(table.getData())}'
         hx-indicator="#loading"
@@ -41,7 +41,9 @@
         </div>
         <div>
             <label for="date" class="block text-gray-600 text-sm mb-1">Fecha</label>
-            <input type="date"  id="date" name="date" onfocus='this.showPicker()' min="<?php echo date('Y-m-d', strtotime('-2 days')); ?>" max="<?php echo date('Y-m-d'); ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+            <!-- <input type="date"  id="date" name="date" onfocus='this.showPicker()' min="<?php echo date('Y-m-d', strtotime('-2 days')); ?>" max="<?php echo date('Y-m-d'); ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required> -->
+            <input type="date"  id="date" name="date" onfocus='this.showPicker()' class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+
         </div>
         <div>
           <label for="user" class="block text-gray-600 text-sm mb-1">Responsable</label>
@@ -54,16 +56,12 @@
         </div>
 
         <div>
-          <label for="type" class="block text-gray-600 text-sm mb-1">Tipo de Envase</label>
-          <select id="type" name="type" class="w-full bg-white p-[9px] w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
-            <option value='' disabled selected></option>
-            <option value='Tambor'>Tambor</option>
-            <option value='Cuñete'>Cuñete</option>
-          </select>
+            <label for="drumsReturned" class="block text-gray-600 text-sm mb-1">Tambores Plásticos Devueltos por Cliente</label>
+            <input type="number" step="1" id="drumsReturned" name="drumsReturned" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
         </div>
 
         <div>
-          <label for="returnToClient" class="block text-gray-600 text-sm mb-1">Devolver al Cliente</label>
+          <label for="returnToClient" class="block text-gray-600 text-sm mb-1">Devolver al Cliente los Envases Recibidos?</label>
           <select id="returnToClient" name="returnToClient" class="w-full bg-white p-[9px] w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
             <option value='0'>No</option>
             <option value='1 selected'>Si</option>
@@ -71,18 +69,14 @@
         </div>
 
         <div>
-            <label for="qty" class="block text-gray-600 text-sm mb-1">Cantidad de Envases</label>
-            <input type="number" step="1" id="qty" name="qty" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
-        </div>
-
-        <div>
-          <label for="price" class="block text-gray-600 text-sm mb-1">Valor de Transporte</label>
+          <label for="price" class="block text-gray-600 text-sm mb-1"><br>Valor de Transporte</label>
           <select id="price" name="price" class="w-full bg-white p-[9px] w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
             <option value=''></option>
             <option value='price'>Turbo Exclusivo</option>
             <option value='price2'>Turbo Recorrido</option>
             <option value='price3'>Camioneta Exclusivo</option>
             <option value='price4'>Camioneta Recorrido</option>
+            <option value='price5'>Otro</option>
           </select>
         </div>
 
@@ -129,6 +123,16 @@ var SUMCOL = function(instance, columnId) {
 
     footers: [['=SUMCOL(TABLE(), 0)','=SUMCOL(TABLE(), 1)']],
     columns: [
+      {
+        type: 'dropdown',
+        title:'TIPO ENVASE',
+        width:120,
+        source:[
+          "Tambor",
+          "Cuñete",
+        ],
+        validate: 'required',
+      },
       { 
         title:'PESO BRUTO \n ECO',
         type:'numeric',

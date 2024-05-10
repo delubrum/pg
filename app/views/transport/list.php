@@ -34,25 +34,48 @@
       Ecoambientales
     </td>
     <td class="px-2 py-2 border-b">
-      <?php $query = ($r->tipo == 'RM') ?  'a.id' : 'a.invoice';
-      echo $this->model->get('b.company as clientname','rm a', "and $query = $r->código","LEFT JOIN users b on a.clientId = b.id")->clientname;
+      <?php 
+      echo $this->model->get('b.company as clientname','rm a', "and a.id = $r->rmId","LEFT JOIN users b on a.clientId = b.id")->clientname;
       ?>
     </td>
     <td class="px-2 py-2 border-b">
-      <?php echo $r->tambores ?>
+      <?php echo ($r->tipo == 'RM') ? $this->model->get('remission','rm'," and id = $r->rmId")->remission : ''; ?>
     </td>
     <td class="px-2 py-2 border-b">
       <?php echo $r->kg ?>
     </td>
     <td class="px-2 py-2 border-b">
-      <?php echo number_format($r->valor) ?>
+      <input hx-trigger="change" <?php echo (!in_array(14, $permissions)) ? 'disabled': '';?>
+      hx-post="?c=Transport&a=UpdateField"
+      hx-vals="js:{id: '<?php echo $r->id ?>', val: event.target.value, field: 'price'}"
+      hx-swap="none" 
+      hx-indicator="#loading"
+      value="<?php echo number_format($r->valor) ?>">
+    </td>
+    <td class="px-2 py-2 border-b">
+      <?php echo $r->drumsReturned ?>
+    </td>
+    <td class="px-2 py-2 border-b">
+      <?php echo $r->barrels ?>
+    </td>
+    <td class="px-2 py-2 border-b">
+      <?php echo $r->drums ?>
+    </td>
+    <td class="px-2 py-2 border-b">
+      <?php echo ($r->tipo == 'Factura' and isset($this->model->get('returnToClient','rm'," and id = $r->rmId")->returnToClient) and $this->model->get('returnToClient','rm'," and id = $r->rmId")->returnToClient != 0) ? $r->barrels : 0 ?>
+    </td>
+    <td class="px-2 py-2 border-b">
+      <?php echo ($r->tipo == 'Factura' and isset($this->model->get('returnToClient','rm'," and id = $r->rmId")->returnToClient) and $this->model->get('returnToClient','rm'," and id = $r->rmId")->returnToClient != 0) ? $r->drums : 0 ?>
+    </td>
+    <td class="px-2 py-2 border-b">
+      <?php echo $r->drumsSended ?>
     </td>
   </tr>
   <?php $suma += $r->valor;} require_once "app/components/pagination.php" ?>
 </tbody>
 <tfoot>
   <tr>
-    <th colspan="9" ><br><br><div style="font-size:20px">TOTAL: <?php echo number_format($suma) ?></div></th>
+    <th colspan="9" ><br><br><div style="font-size:20px">TOTAL: <?php echo number_format($this->model->get('sum(price) as price','transport')->price) ?></div></th>
   </tr>
 </tfoot>
 

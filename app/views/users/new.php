@@ -56,6 +56,10 @@
               <label for="price4" class="block text-gray-600 text-sm mb-1">Camioneta Recorrido</label>
               <input id="price4" name="price4" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" :required="selectedOption === 'Cliente'">
           </div>
+          <div x-show="selectedOption === 'Cliente'">
+              <label for="price5" class="block text-gray-600 text-sm mb-1">Otros Transporte</label>
+              <input id="price5" name="price5" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" :required="selectedOption === 'Cliente'">
+          </div>
           <div>
               <label for="newpass" class="block text-gray-600 text-sm mb-1">Password</label>
               <input type="password" id="newpass" name="newpass" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required autocomplete="false">

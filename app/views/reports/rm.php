@@ -40,13 +40,16 @@
     <div class="col-sm-1">
       <b>RM:</b> <?php echo $id->id?>
     </div>
-    <div class="col-sm-3">
-      <b>FECHA DE INGRESO:</b> <?php echo $id->date?>
+    <div class="col-sm-2">
+      <b>FECHA:</b> <?php echo $id->date?>
     </div>
     <div class="col-sm-3">
       <b>CLIENTE:</b> <?php echo $id->clientname?>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-2">
+      <b>REMISIÓN:</b> <?php echo $id->remission?>
+    </div>
+    <div class="col-sm-2">
       <b>PRODUCTO:</b> <?php echo $id->productname?>
     </div>
   <div class="col-sm-2">
@@ -54,7 +57,18 @@
     <?php echo $id->reactor?>
   </div>
 </div>
-<div class="row px-4">
+<div class="row px-4 py-2">
+  <div class="col-sm-4">
+    <b>TAMBORES DEVUELTOS POR CLIENTE:</b> <?php echo $id->drumsReturned?>
+  </div>
+
+  <div class="col-sm-4">
+    <b>DEVOLVER AL CLIENTE LOS PROCESADOS:</b> <?php echo ($id->returnToClient == 0) ? 'NO' : 'SI'; ?>
+  </div>
+</div>
+
+
+<div class="row px-4 py-2">
   <div class="col-sm-4">
     <b>FECHA Y HORA CARGUE:</b> <?php echo $id->datetime?>
   </div>
@@ -77,6 +91,7 @@
   <table class="tabla" style="width:100%;">
     <tr>
         <th style="width:40px">N°</th>
+        <th>Tipo de Envase</th>
         <th>Peso Bruto<br>Eco</th>
         <th>Peso Bruto<br>Cliente</th>
         <th>Peso Taras<br>Eco</th>
@@ -93,6 +108,7 @@
     ?>
     </tr>
       <td><?php echo "<b>" . ($i+1) . "</b>" ?></td>
+      <td><?php echo $r->type ?></td>
       <td><?php $kg += $r->kg; echo $r->kg ?></td>
       <td><?php $kg_client += $r->kg_client; echo $r->kg_client ?></td>
       <td><?php $tara += $r->tara; echo $r->tara ?></td>
@@ -104,15 +120,14 @@
     </tr>
     <?php $i++; } ?>
     <tr>
-      <td><b>Σ</b></td>
+      <td COLSPAN="2"><b>Σ</b></td>
       <td><?php echo "<b>$kg</b>" ?></td>
       <td><?php echo "<b>$kg_client</b>" ?></td>
       <td><?php echo "<b>$tara</b>" ?></td>
       <td><?php echo "<b>$tara_client</b>" ?></td>
       <td><?php echo "<b>$net</b>" ?></td>
       <td><?php echo "<b>$net_client</b>" ?></td>
-      <td></td>
-      <td></td>
+      <td COLSPAN="2"></td>
     </tr>
   </table>    
 </div>

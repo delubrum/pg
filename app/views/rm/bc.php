@@ -28,9 +28,6 @@
         <div>
             <b>PRODUCTO:</b> <?php echo $id->productname ?>
         </div>
-        <div>
-            <b>TIPO DE ENVASE:</b> <?php echo $id->rmtype ?>
-        </div>
       <div>
         <b>REACTOR:</b> <?php echo $id->reactor ?>
       </div>

@@ -116,7 +116,45 @@ class RMController{
         exit;
       }
 
+
+      $array = json_decode($_REQUEST['table']);
+
+      $commaFound = false;
+
+      // Iterate over the elements of the array
+      foreach ($array as $subarray) {
+          // Iterate over the elements of each subarray
+          foreach ($subarray as $value) {
+              // Check if the value contains a comma
+              if (strpos($value, ',') !== false) {
+                  // If a comma is found, set the variable to true and break out of the loop
+                  $commaFound = true;
+                  break 2;
+              }
+          }
+      }
+      
+      // Check if a comma was found
+      if ($commaFound) {
+        $hxTriggerData = json_encode([
+          "showMessage" => '{"type": "error", "message": "Se encontraron valores con Coma", "close" : ""}'
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
+        exit;
+      }
+
+
       if (!$this->emptyColum(json_decode($_REQUEST['table'], true),1)) {
+        $hxTriggerData = json_encode([
+          "showMessage" => '{"type": "error", "message": "Complete la columna TIPO ENVASE", "close" : ""}'
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
+        exit;
+      }
+
+      if (!$this->emptyColum(json_decode($_REQUEST['table'], true),2)) {
         $hxTriggerData = json_encode([
           "showMessage" => '{"type": "error", "message": "Complete la columna PESO BRUTO CLIENTE", "close" : ""}'
         ]);
@@ -125,7 +163,7 @@ class RMController{
         exit;
       }
 
-      if (!$this->emptyColum(json_decode($_REQUEST['table'], true),6)) {
+      if (!$this->emptyColum(json_decode($_REQUEST['table'], true),7)) {
         $hxTriggerData = json_encode([
           "showMessage" => '{"type": "error", "message": "Complete la columna ESTADO DEL TAMBOR", "close" : ""}'
         ]);
@@ -142,15 +180,19 @@ class RMController{
       $item->data = $_REQUEST['table'];
       $item->status = 'Terminar R.M.';
       $item->remission = $_REQUEST['remission'];
-      $item->type = $_REQUEST['type'];
+      $item->drumsReturned = $_REQUEST['drumsReturned'];
       $item->returnToClient = $_REQUEST['returnToClient'];
+      $item->barrels = substr_count($_REQUEST['table'], '"Cuñete"');
+      $item->drums = substr_count($_REQUEST['table'], '"Tambor"');
       $rm = $this->model->save('rm',$item);
       $itemb = new stdClass();
       $itemb->type = 'RM';
       $itemb->code = $rm;
-      $itemb->qty = $_REQUEST['qty'];
+      $itemb->rmId = $rm;
       $itemb->user = $_REQUEST['user'];
-      $itemb->drums = count(json_decode($_REQUEST['table']));
+      $itemb->drumsReturned = $_REQUEST['drumsReturned'];
+      $itemb->barrels = substr_count($_REQUEST['table'], '"Cuñete"');
+      $itemb->drums = substr_count($_REQUEST['table'], '"Tambor"');
       $sum = 0;
       foreach (json_decode($_REQUEST['table']) as $row) {
         $sum += (float)$row[0];
@@ -236,14 +278,15 @@ class RMController{
       $id = $_REQUEST['id'];
       foreach(json_decode($this->model->get("data","rm","and id = $id")->data) as $r) {
         $items->rmId = $id;
-        $items->kg = $r[0];
-        $items->kg_client = $r[1];
-        $items->tara = $r[2];
-        $items->tara_client = $r[3];
-        $items->status = $r[6];
-        $car = ($r[7] == "true") ? 'Vehículo' : '';
-        $bucket = ($r[8] == "true") ? 'Caneca' : '';
-        $plant = ($r[9] == "true") ? 'Planta' : '';
+        $items->type = $r[0];
+        $items->kg = $r[1];
+        $items->kg_client = $r[2];
+        $items->tara = $r[3];
+        $items->tara_client = $r[4];
+        $items->status = $r[7];
+        $car = ($r[8] == "true") ? 'Vehículo' : '';
+        $bucket = ($r[9] == "true") ? 'Caneca' : '';
+        $plant = ($r[10] == "true") ? 'Planta' : '';
         $items->spills = "$car $bucket $plant";
         $this->model->save('rm_items',$items);
       }
@@ -267,6 +310,27 @@ class RMController{
       $filters = "and rmId = " . $_REQUEST['id'];
       $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
       require_once 'app/views/reports/rm.php';
+    } else {
+      $this->model->redirect();
+    }
+  }
+
+  public function UpdateField(){
+    require_once "lib/check.php";
+    if (in_array(13, $permissions)) {
+      print_r($_POST);
+      header('Content-Type: application/json');
+      $item = new stdClass();
+      $item->{$_REQUEST['field']} = $_REQUEST['val'];
+      if ($this->model->update('rm',$item,$_REQUEST['id'])) {
+        $message = '{"type": "success", "message": "Dato Actualizado", "close" : ""}';
+        $hxTriggerData = json_encode([
+          "listChanged" => true,
+          "showMessage" => $message
+        ]);
+        header('HX-Trigger: ' . $hxTriggerData);
+        http_response_code(204);
+      }
     } else {
       $this->model->redirect();
     }

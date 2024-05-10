@@ -29,9 +29,9 @@
         <div>
             <b>PRODUCTO:</b> <?php echo $id->productname ?>
         </div>
-        <div>
+        <!-- <div>
             <b>TIPO DE ENVASE:</b> <?php echo $id->type ?>
-        </div>
+        </div> -->
         <div>
             <b>CIUDAD:</b> <?php echo $id->city ?>
         </div>
@@ -43,7 +43,9 @@
       <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div>
             <label for="datetime" class="block text-gray-600 text-sm mb-1">Fecha Y Hora Cargue</label>
-            <input type="datetime-local" min="<?php echo date("Y-m-d H:i")?>" id="datetime" name="datetime" onfocus='this.showPicker()' class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+            <!-- <input type="datetime-local" min="<?php echo date("Y-m-d H:i")?>" id="datetime" name="datetime" onfocus='this.showPicker()' class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required> -->
+            <input type="datetime-local" id="datetime" name="datetime" onfocus='this.showPicker()' class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+
         </div>
 
         <div>
@@ -133,8 +135,19 @@
     parseFormulas: true,
     allowInsertRow: false, // Allow ly inserting columns
     allowDeleteRow: false, // Allow ly inserting columns
-    footers: [['=SUMCOL(TABLE(), 0)','=SUMCOL(TABLE(), 1)','=SUMCOL(TABLE(), 2)','=SUMCOL(TABLE(), 3)','=SUMCOL(TABLE(), 4)','=SUMCOL(TABLE(), 5)']],
+    footers: [['','=SUMCOL(TABLE(), 1)','=SUMCOL(TABLE(), 2)','=SUMCOL(TABLE(), 3)','=SUMCOL(TABLE(), 4)','=SUMCOL(TABLE(), 5)','=SUMCOL(TABLE(), 6)']],
     columns: [
+      {
+        type: 'dropdown',
+        title:'TIPO ENVASE',
+        width:110,
+        source:[
+          "Tambor",
+          "Cuñete",
+        ],
+        validate: 'required',
+        readOnly: true,
+      },
       { 
         title:'PESO BRUTO \n ECO',
         type:'numeric',
@@ -200,14 +213,14 @@
     ],
     updateTable:function(instance, cell, col, row, val, label, cellName) {
         paste = document.getElementById("paste").value;
-        net = SUMCOL(table, 4);
+        net = SUMCOL(table, 5);
         row = row+1;
         document.getElementById("total").value = (net-paste);
-        if (col == 4) {
-            cell.innerHTML = (table.getValue('A'+row)-(table.getValue('C'+row))).toFixed(2);
-        }
         if (col == 5) {
             cell.innerHTML = (table.getValue('B'+row)-(table.getValue('D'+row))).toFixed(2);
+        }
+        if (col == 6) {
+            cell.innerHTML = (table.getValue('C'+row)-(table.getValue('E'+row))).toFixed(2);
         }
     },
     text:{
@@ -219,7 +232,7 @@
 
   document.getElementById("paste").addEventListener("keyup", function(e) {
     var paste = this.value;
-    var net = SUMCOL(table, 4);
+    var net = SUMCOL(table, 5);
     var total = Number(net) - Number(paste);
     console.log(paste,net,);
     document.getElementById("total").value = total;

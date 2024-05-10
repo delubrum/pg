@@ -62,10 +62,6 @@
 
         <div class="row mb-2">
    
-        <div class="col-sm-2">
-        <b>TIPO DE ENVASE:</b> <?php echo $id->rmtype?>
-        </div>
-
         <div class="col-sm-3">
         <b>REACTOR:</b> <?php echo $id->reactor?>
         </div>

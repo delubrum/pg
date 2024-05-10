@@ -1,22 +1,21 @@
 <?php
 require_once 'app/models/model.php';
 
-class TransportController{
+class DrumsController{
   private $model;
   private $fields;
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->fields = array("fecha","tipo","código","responsable","origen","destino","remision","kg","valor","plasticos devueltos cliente","cuñetes para procesar","tambores para procesar","cuñetes enviados","metalicos enviados","plasticos enviados");
-    $this->url = '?c=Transport&a=Data';
+    $this->fields = array("rm","fecha","remisión","cliente","cuñetes que entran","tambores que entran", "cuñetes procesados","tambores procesados","metalicos a devolver");
+    $this->url = '?c=Drums&a=Data';
   }
 
   public function Index(){
     require_once "lib/check.php";
-    if (in_array(9, $permissions)) {
-      $title = "Reportes / Transporte";
+    if (in_array(16, $permissions)) {
+      $title = "Reportes / Tambores";
       $content = 'app/components/index.php';
-      $filters = 'app/views/transport/filters.php';
       require_once 'app/views/index.php';
     } else {
       $this->model->redirect();
@@ -25,7 +24,7 @@ class TransportController{
 
   public function Data(){
     require_once "lib/check.php";
-    if (in_array(9, $permissions)) {
+    if (in_array(16, $permissions)) {
       $total = $this->model->get("count(id) as total", "transport")->total;
       $sql = '';
       if (!empty($_GET['code'])) { $sql .= " and code LIKE '%" . $_GET['code'] . "%'"; }
@@ -52,8 +51,8 @@ class TransportController{
       $perPage = 10;
       $start = ($page - 1) * $perPage;
       $sql .= " LIMIT $start,$perPage";
-      $list = $this->model->list("id, createdAt as fecha,type as tipo,code as código, rmId, user as responsable,drumsSended, drums,barrels,drumsReturned,kg,price as valor","transport",$sql);
-      require_once "app/views/transport/list.php";
+      $list = $this->model->list("id, createdAt as fecha,type as tipo,code as código,user as responsable, drums as tambores,kg,price as valor","transport",$sql);
+      require_once "app/views/drums/list.php";
     } else {
       $this->model->redirect();
     }
@@ -133,6 +132,16 @@ class TransportController{
         header('HX-Trigger: ' . $hxTriggerData);
         http_response_code(204);
       }
+    } else {
+      $this->model->redirect();
+    }
+  }
+
+  public function Client(){
+    require_once "lib/check.php";
+    if (in_array(16, $permissions)) {
+      $filters = "and clientId = " . $_REQUEST['clientId'];
+      require_once 'app/views/drums/client.php';
     } else {
       $this->model->redirect();
     }

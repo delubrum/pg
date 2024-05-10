@@ -52,6 +52,14 @@ class UsersController{
         }
         $sql .= ")";
       }
+      if (!empty($_GET['typeFilter'])) {
+        $statusValues = $_GET['typeFilter'];
+        $sql .= "AND (status = '$statusValues[0]'";
+        for ($i = 1; $i < count($statusValues); $i++) {
+            $sql .= " OR type = '$statusValues[$i]'";
+        }
+        $sql .= ")";
+      }
       $filtered = $this->model->get("count(id) as total", "users",$sql,)->total;
       $colum = isset($_GET['colum']) ? $_GET['colum'] : 'company';
       $order = isset($_GET['order']) ? $_GET['order'] : 'desc';

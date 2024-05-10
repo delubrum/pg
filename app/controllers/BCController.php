@@ -15,7 +15,7 @@ class BCController{
     require_once "lib/check.php";
     if (in_array(3, $permissions)) {
       $filters = "and a.rmId = " . $_REQUEST['id'];
-      $id = $this->model->get('a.*, b.paste, b.reactor,b.remission,b.type as rmtype, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
+      $id = $this->model->get('a.*, b.paste, b.reactor,b.remission, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
       require_once 'app/views/rm/bc.php';
     } else {
       $this->model->redirect();
@@ -313,7 +313,7 @@ class BCController{
     if (in_array(3, $permissions)) {
 
       $filters = "and a.rmId = " . $_REQUEST['id'];
-      $id = $this->model->get('a.*, b.paste, b.reactor, b.remission,b.type as rmtype, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
+      $id = $this->model->get('a.*, b.paste, b.reactor, b.remission, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
       $filters = "and rmId = " . $_REQUEST['id'];
       $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
       $qty = $net - $id->paste;

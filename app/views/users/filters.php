@@ -59,6 +59,31 @@
     </div>
 
     <div class="max-w-md">
+        <span class="text-gray-600 text-sm">Tipo</span>
+        <div 
+          class="space-y-2 mt-1"
+          hx-trigger="change from:body .form-checkbox"
+          hx-get="<?php echo $this->url ?>" 
+          hx-target="#list"
+          hx-indicator="#loading"
+          hx-include=".filter"
+        >
+          <div class="flex items-center">
+            <input id="Usuario" type="checkbox" name="typeFilter[]" value="0" checked class="filter form-checkbox h-5 w-5 checked:bg-teal-700 cursor-pointer">
+            <label for="Usuario" class="ml-2 cursor-pointer">Usuario</label>
+          </div>
+          <div class="flex items-center">
+            <input id="Operario" type="checkbox" name="typeFilter[]" value="0" checked class="filter form-checkbox h-5 w-5 checked:bg-teal-700 cursor-pointer">
+            <label for="Operario" class="ml-2 cursor-pointer">Operario</label>
+          </div>
+          <div class="flex items-center">
+            <input id="Cliente" type="checkbox" name="typeFilter[]" value="0" checked class="filter form-checkbox h-5 w-5 checked:bg-teal-700 cursor-pointer">
+            <label for="Cliente" class="ml-2 cursor-pointer">Cliente</label>
+          </div>
+      </div>
+    </div>
+
+    <div class="max-w-md">
         <span class="text-gray-600 text-sm">Status</span>
         <div 
           class="space-y-2 mt-1"
@@ -69,7 +94,7 @@
           hx-include=".filter"
         >
           <div class="flex items-center">
-            <input id="Activo" type="checkbox" name="statusFilter[]" value="1" checked class="filter form-checkbox h-5 w-5 checked:bg-teal-700 cursor-pointer">
+            <input id="Activo" type="checkbox" name="statusFilter[]" value="0" checked class="filter form-checkbox h-5 w-5 checked:bg-teal-700 cursor-pointer">
             <label for="Activo" class="ml-2 cursor-pointer">Activo</label>
           </div>
           <div class="flex items-center">

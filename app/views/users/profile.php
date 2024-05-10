@@ -85,6 +85,14 @@
                     hx-indicator="#loading"
                     class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
                 </div>
+                <div class="mt-2">
+									<label for="price5" class="block text-gray-600 text-sm mb-1">Otros Transporte</label>
+									<input value="<?php echo $id->price4 ?>" type="number" id="price5" name="price5"   
+                    hx-post='?c=Users&a=Update' 
+                    hx-trigger="change"
+                    hx-indicator="#loading"
+                    class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+                </div>
                 <?php } ?>
 
             </form>
