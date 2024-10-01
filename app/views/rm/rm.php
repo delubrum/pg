@@ -24,7 +24,7 @@
             <b>CLIENTE:</b> <?php echo $id->clientname ?>
         </div>
         <div>
-            <b>REMISIÓN:</b> <?php echo $id->remission ?>
+            <b>REMISIÓN DEL CLIENTE:</b> <?php echo $id->remission ?>
         </div>
         <div>
             <b>PRODUCTO:</b> <?php echo $id->productname ?>
@@ -39,6 +39,8 @@
       </div>
 
       <div class="w-full text-center py-4" id="spreadsheet"></div>
+
+      <?php if ($id->productname != 'Lodos') { ?>
 
       <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div>
@@ -102,6 +104,8 @@
             <textarea name="notes" id="notes" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none"></textarea>
         </div>
       </div>
+
+      <?php } ?>
 
       <button type="submit" class="pt-6 float-right text-xl text-teal-900 font-bold hover:text-teal-700"><i class="ri-save-line"></i> Guardar</button>
 

@@ -58,7 +58,7 @@
       >
     </div>
 
-    <div class="max-w-md">
+    <!-- <div class="max-w-md">
         <span class="text-gray-600 text-sm">Tipo</span>
         <div 
           class="space-y-2 mt-1"
@@ -102,6 +102,6 @@
             <label for="Inactivo" class="ml-2 cursor-pointer">Inactivo</label>
           </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>

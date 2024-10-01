@@ -101,18 +101,21 @@ class IPController{
       $id = $_REQUEST['id'];
       $item->drumsSended = ceil($this->model->get("mpClient", "rm" , "and id = $id")->mpClient / 170);
       $this->model->update('rm',$item,$id);
+      $product = $this->model->get("productId", "rm" , "and id = $id")->productId;
+      if ($product != 6) {
       $itemb = new stdClass();
       $itemb->type = 'Factura';
       $itemb->code = $_REQUEST['invoice'];
       $itemb->rmId = $id;
       $itemb->user = $_REQUEST['user'];
-      $item->kg = $this->model->get("mpClient", "rm" , "and id = $id")->mpClient;
+      $itemb->kg = $this->model->get("mpClient", "rm" , "and id = $id")->mpClient;
       $itemb->drumsSended = ceil($this->model->get("mpClient", "rm" , "and id = $id")->mpClient / 170);
       $itemb->barrels = ($this->model->get('returnToClient','rm'," and id = $id")->returnToClient != 0) ? $this->model->get('barrels','rm'," and id = $id")->barrels : 0;
       $itemb->drums = ($this->model->get('returnToClient','rm'," and id = $id")->returnToClient != 0) ? $this->model->get('drums','rm'," and id = $id")->drums : 0;
       $clientId = $this->model->get("clientId", "rm" , "and id = $id")->clientId;
       $itemb->price = $this->model->get("price", "users" , "and id = $clientId")->price;
       $this->model->save('transport',$itemb);
+      }
       $hxTriggerData = json_encode([
         "listChanged" => true,
         "showMessage" => '{"type": "success", "message": "Factura Guardada", "close" : "closeModal"}'

@@ -47,15 +47,17 @@
       <b>CLIENTE:</b> <?php echo $id->clientname?>
     </div>
     <div class="col-sm-2">
-      <b>REMISIÓN:</b> <?php echo $id->remission?>
+      <b>REMISIÓN DEL CLIENTE:</b> <?php echo $id->remission?>
     </div>
     <div class="col-sm-2">
       <b>PRODUCTO:</b> <?php echo $id->productname?>
     </div>
-  <div class="col-sm-2">
-    <b>REACTOR:</b>
-    <?php echo $id->reactor?>
-  </div>
+    <?php if ($id->productname != 'Lodos') { ?>
+    <div class="col-sm-2">
+      <b>REACTOR:</b>
+      <?php echo $id->reactor?>
+    </div>
+    <?php } ?>
 </div>
 <div class="row px-4 py-2">
   <div class="col-sm-4">
@@ -69,6 +71,9 @@
 
 
 <div class="row px-4 py-2">
+
+<?php if ($id->productname != 'Lodos') { ?>
+
   <div class="col-sm-4">
     <b>FECHA Y HORA CARGUE:</b> <?php echo $id->datetime?>
   </div>
@@ -87,6 +92,9 @@
   <div class="col-sm-12 mt-2 mb-4">
     <b>NOTAS:</b> <?php echo $id->notes ?>
   </div>
+
+  <?php } ?>
+
 
   <table class="tabla" style="width:100%;">
     <tr>
@@ -125,8 +133,8 @@
       <td><?php echo "<b>$kg_client</b>" ?></td>
       <td><?php echo "<b>$tara</b>" ?></td>
       <td><?php echo "<b>$tara_client</b>" ?></td>
-      <td><?php echo "<b>$net</b>" ?></td>
-      <td><?php echo "<b>$net_client</b>" ?></td>
+      <td><?php echo "<b>" . $net - $id->paste . "</b>" ?></td>
+      <td><?php echo "<b>" . $net_client - $id->paste . "</b>" ?></td>
       <td COLSPAN="2"></td>
     </tr>
   </table>    

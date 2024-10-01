@@ -10,8 +10,8 @@
                 <br>
                 <div class="text-xl text-teal-900 font-bold"> Total Plásticos en Inventario: <span class="text-2xl px-4"><?php echo $prestados-$devueltos ?> </span> </div>
                 <br>
-                <div> Total Metálicos en Inventario: <span class="text-xl text-teal-900 px-4 py-2 font-bold"><?php echo $this->model->get('sum(drums) as total','rm',' and returnToClient = 1')->total ?></span> </div>
-                <div> Total Cuñetes en Inventario: <span class="text-xl text-teal-900 px-4 py-2 font-bold"><?php echo $this->model->get('sum(barrels) as total','rm',' and returnToClient = 1')->total ?></span> </div>
+                <div> Total Metálicos en Inventario: <span class="text-xl text-teal-900 px-4 py-2 font-bold"><?php echo $this->model->get('sum(drums) as total','rm',' and returnToClient = 0')->total ?></span> </div>
+                <div> Total Cuñetes en Inventario: <span class="text-xl text-teal-900 px-4 py-2 font-bold"><?php echo $this->model->get('sum(barrels) as total','rm',' and returnToClient = 0')->total ?></span> </div>
             </div>
         </div>
         <div>

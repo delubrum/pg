@@ -8,7 +8,7 @@
         class="overflow-y-auto max-h-[400px] p-4"
         hx-post='?c=RM&a=Save' rm_items
         hx-swap="none" 
-        hx-vals='js:{table: JSON.stringify(table.getData())}'
+        hx-vals='js:{data: JSON.stringify(jspreadsheet.getData())}'
         hx-indicator="#loading"
     >
       <?php echo isset($id) ? "<input type='hidden' name='id' value='$id->id'>" : '' ?>
@@ -91,102 +91,56 @@
 </div>
 
 <script>
-
-
-
 var SUMCOL = function(instance, columnId) {
-    var total = 0;
-    for (var j = 0; j < instance.options.data.length; j++) {
-        if (Number(instance.records[j][columnId].innerHTML)) {
-            total += Number(instance.records[j][columnId].innerHTML);
-        }
+  var total = 0;
+  for (var j = 0; j < instance.options.data.length; j++) {
+    if (Number(instance.records[j][columnId].innerHTML)) {
+      total += Number(instance.records[j][columnId].innerHTML);
     }
-    return total.toFixed(2);
+  }
+  return total.toFixed(2);
 }
 
-    table = jspreadsheet(document.getElementById('spreadsheet'), {
-    minDimensions:[5,1],
-    autoIncrement: false,
-    allowInsertColumn: false, 
-    allowDeleteColumn: false, 
-    allowRenameColumn: false,
-    columnDrag:true,
-    allowExport: false,
-
-    oninsertrow:function(instance, cell, col, row) {
-      table.getData
-      var data = table.getData();
-      var lastRow = data.length;
-      var cell = table.getCell('A'+lastRow);
-      table.updateSelection(cell);
-    },
-
-    footers: [['=SUMCOL(TABLE(), 0)','=SUMCOL(TABLE(), 1)']],
-    columns: [
-      {
-        type: 'dropdown',
-        title:'TIPO ENVASE',
-        width:120,
-        source:[
-          "Tambor",
-          "Cuñete",
-        ],
-        validate: 'required',
-      },
-      { 
-        title:'PESO BRUTO \n ECO',
-        type:'numeric',
-        width:120,
-      },
-      { 
-        title:'PESO BRUTO \n CLIENTE',
-        type:'numeric',
-        width:120,
-      },
-      { 
-        type:'hidden',
-      },
-      { 
-        type:'hidden',
-      },
-      { 
-        type:'hidden',
-      },
-      {
-        type:'hidden',
-      },
-      {
-        type: 'dropdown',
-        title:'ESTADO DEL \n TAMBOR',
-        width:120,
-        source:[
-          "Bueno",
-          "Malo",
-        ],
-        validate: 'required',
-      },
-      { 
-        title:'DERRAMES \n VEHÍCULO',
-        type: 'checkbox',
-        width:120,
-      },
-      { 
-        title:'DERRAMES \n CANECA',
-        type: 'checkbox',
-        width:120,
-      },
-      { 
-        type:'hidden',
-      },
-    ],
-    text:{
-        insertANewRowBefore:'Insertar fila antes',
-        insertANewRowAfter:'Insertar fila despues',
-        deleteSelectedRows:'Borrar filas',
-        copy:'Copiar',
-        paste:'Pegar',
-        about: '',
-        areYouSureToDeleteTheSelectedRows:'Desea borrar las filas seleccionadas?',
-    }
+jspreadsheet = jspreadsheet(document.getElementById('spreadsheet'), {
+  minDimensions:[5,1],
+  autoIncrement: false,
+  allowInsertColumn: false, 
+  allowDeleteColumn: false, 
+  allowRenameColumn: false,
+  columnDrag:true,
+  allowExport: false,
+  oninsertrow:function(instance, cell, col, row) {
+    jspreadsheet.getData
+    var data = jspreadsheet.getData();
+    var lastRow = data.length;
+    var cell = jspreadsheet.getCell('A'+lastRow);
+    jspreadsheet.updateSelection(cell);
+  },
+  footers: [['','=SUMCOL(TABLE(), 1)','=SUMCOL(TABLE(), 2)']],
+  columns: [
+    {type:'dropdown', width:'200', title:'CLIENTE', url:'?c=RM&a=Clients', autocomplete:true, validate: 'required'},
+    {title:'REMISIÓN',type:'text',width:120,},
+    {type:'dropdown', width:'200', title:'PRODUCTO', url:'?c=RM&a=Products', autocomplete:true, validate: 'required'},
+    {type: 'dropdown', title:'TIPO ENVASE', width:120, source:["Tambor","Cuñete",],validate: 'required',},
+    {title:'PESO BRUTO \n ECO',type:'numeric',width:120,},
+    {title:'PESO BRUTO \n CLIENTE',type:'numeric',width:120,},
+    {type:'hidden',},
+    {type:'hidden',},
+    {type:'hidden',},
+    {type:'hidden',},
+    {type: 'dropdown',title:'ESTADO DEL \n TAMBOR',width:120,source:["Bueno","Malo",],validate: 'required',},
+    {title:'DERRAMES \n VEHÍCULO',type: 'checkbox',width:120,},
+    {title:'DERRAMES \n CANECA',type: 'checkbox',width:120,},
+    {type:'hidden',},
+  ],
+  text:{
+    insertANewRowBefore:'Insertar fila antes',
+    insertANewRowAfter:'Insertar fila despues',
+    deleteSelectedRows:'Borrar filas',
+    copy:'Copiar',
+    paste:'Pegar',
+    about: '',
+    areYouSureToDeleteTheSelectedRows:'Desea borrar las filas seleccionadas?',
+  }
 });
 </script>

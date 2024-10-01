@@ -38,18 +38,16 @@ class RMController{
     }
   }
 
-  public function ClientProducts(){
-    require_once "lib/check.php";
-    if (in_array(3, $permissions)) {
-      $filters = "and type = 'Cliente' and id = " . $_REQUEST['clientId'];
-      echo "<option value='' selected disabled></option>";
-      foreach(json_decode($this->model->get('products','users',$filters)->products) as $r) {
-        $name = $this->model->get('name','products',"and id = $r")->name;
-        echo "<option value='$r'>$name</option>";
-      }
-    } else {
-      $this->model->redirect();
+  public function Clients(){
+    $employees = [];
+    foreach($this->model->list("*","users"," and type = 'Cliente' and status = 1 ORDER BY company ASC") as $r) {
+      $employees[] = [
+        'id' => $r->id,
+        'name' => $r->company
+      ];
     }
+    header('Content-Type: application/json');
+    echo json_encode($employees);
   }
 
   public function Data(){
@@ -273,7 +271,8 @@ class RMController{
       $itemb->rmId = $_REQUEST['id'];
       $items = new stdClass();
       $this->model->save('bc',$itemb);
-      $item->status = 'Producción';
+      $id = $_REQUEST['id'];
+      $item->status = ($this->model->get('productId','rm'," and id = $id")->productId == 6) ? 'Facturación' : 'Producción';
       $this->model->update('rm',$item,$_REQUEST['id']);
       $id = $_REQUEST['id'];
       foreach(json_decode($this->model->get("data","rm","and id = $id")->data) as $r) {

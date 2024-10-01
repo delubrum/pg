@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>SIPEC</title>
     <link rel="icon" sizes="192x192" href="app/assets/img/logo.png" />
+    <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
 		<script src="https://cdn.tailwindcss.com"></script>
 		<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 		<link href="app/assets/css/styles.css" rel="stylesheet">
@@ -15,6 +16,19 @@
       <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
       <script src="https://jsuites.net/v4/jsuites.js"></script>
       <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <?php } ?>
+    <?php if(isset($datatables)) { ?>
+      <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/2.1.3/js/dataTables.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.1.1/js/dataTables.buttons.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.1.1/js/buttons.dataTables.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.1.1/js/buttons.html5.min.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.1.1/js/buttons.print.min.js"></script>
+      <link rel="stylesheet" href="https://cdn.datatables.net/2.1.3/css/dataTables.dataTables.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.1/css/buttons.dataTables.css">
     <?php } ?>
 	</head>
   <body x-data='{ showModal: false, nestedModal: false, sidebar: false, showFilters : false }'>
@@ -34,8 +48,7 @@
 		</main>
 		<?php require_once 'app/components/modal.php' ?>
 		<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.1/dist/cdn.min.js"></script>
-		<script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-    <script src="app/assets/js/script11.js"></script>
+    <script src="app/assets/js/script.js"></script>
   </body>
 </html>

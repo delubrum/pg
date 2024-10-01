@@ -52,7 +52,7 @@
         </div>
 
         <div class="col-sm-3">
-        <b>REMISIÓN:</b> <?php echo $id->remission?>
+        <b>REMISIÓN DEL CLIENTE:</b> <?php echo $id->remission?>
         </div>
 
         <div class="col-sm-3">

@@ -12,4 +12,9 @@ htmx.on("showMessage", (e) => {
     document.getElementById(trigger).click();
   };
   notyf.success(JSON.parse(e.detail.value));
-})
+});
+
+htmx.on('listChanged', function(event) {
+  table.ajax.reload(null, false);
+});
+

@@ -41,8 +41,12 @@
       hx-indicator="#loading"
     >
     <option value=''></option>
-    <?php 
+    <?php
+    if ($r->producto != 'Lodos') {
     $array = ["Terminar R.M.", "Producción", "Iniciado", "Análisis", "Facturación", "Cerrado"];
+    } else {
+    $array = ["Terminar R.M.", "Facturación", "Cerrado"];
+    }
     foreach($array as $s) { ?>
         <option <?php echo ($r->status == $s) ? 'selected' : ''; ?> value='<?php echo $s?>'><?php echo $s?></option>
     <?php } ?>
@@ -54,14 +58,14 @@
   <td class="text-right px-2 py-2 border-b cursor-pointer">
     <?php
     $edit = '';
-      if ($r->status == 'Terminar R.M.') { $edit = "<a hx-get='?c=RM&a=RM&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Terminar R.M.</a>"; }
-      if ($r->status == 'Producción' || $r->status == 'Iniciado') { $edit = "<a hx-get='?c=BC&a=BC&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-hammer-line text-2xl'></i> Producir</a>"; }
-      if ($r->status == 'Análisis' and in_array(15,$permissions)) { $edit = "<a hx-get='?c=IP&a=IP&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Análisis</a>"; }
+      if ($r->status == 'Terminar R.M.' ) { $edit = "<a hx-get='?c=RM&a=RM&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Terminar R.M.</a>"; }
+      if ($r->status == 'Producción' || $r->status == 'Iniciado' and $r->producto != 'Lodos') { $edit = "<a hx-get='?c=BC&a=BC&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-hammer-line text-2xl'></i> Producir</a>"; }
+      if ($r->status == 'Análisis' and in_array(15,$permissions) and $r->producto != 'Lodos') { $edit = "<a hx-get='?c=IP&a=IP&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Análisis</a>"; }
       if ($r->status == 'Facturación' and in_array(10,$permissions)) { $edit = "<a hx-get='?c=IP&a=IV&id=$r->RM' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-exchange-dollar-line text-2xl'></i> Facturar</a>"; }
       if ($r->status == 'Cerrado') { $edit = ""; }
       $rm = ($r->status != 'Terminar R.M.' and $r->status != 'Registrando') ? "<br><a href='?c=RM&a=Detail&id=$r->RM' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-file-line text-2xl'></i> Recibo de Material</a>" : "";
-      $bc = ($r->status == 'Facturación' || $r->status == 'Cerrado' || $r->status == 'Análisis') ? "<br><a href='?c=BC&a=Detail&id=$r->RM' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-file-line text-2xl'></i> Bitácora</a>" : "";
-      $pd = ($r->status == 'Facturación' || $r->status == 'Cerrado') ? "<br><a href='?c=Reports&a=PD&id=$r->RM' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-file-line text-2xl'></i> Paquete Despacho</a>" : "";
+      $bc = (($r->status == 'Facturación' || $r->status == 'Cerrado' || $r->status == 'Análisis') and $r->producto != 'Lodos') ? "<br><a href='?c=BC&a=Detail&id=$r->RM' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-file-line text-2xl'></i> Bitácora</a>" : "";
+      $pd = (($r->status == 'Facturación' || $r->status == 'Cerrado') and $r->producto != 'Lodos') ? "<br><a href='?c=Reports&a=PD&id=$r->RM' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-file-line text-2xl'></i> Paquete Despacho</a>" : "";
     ?>
 
     <div x-data="{ open: false }">
