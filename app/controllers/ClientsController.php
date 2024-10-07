@@ -3,8 +3,6 @@ require_once 'app/models/model.php';
 
 class ClientsController{
   private $model;
-  private $fields;
-  private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
   }
@@ -13,7 +11,7 @@ class ClientsController{
     require_once "lib/check.php";
     if (in_array(17, $permissions)) {
       $title = "Configuración / Clientes";
-      $fields = array("id","compañia","ciudad","contactos","acción");
+      $fields = array("compañia","ciudad","tambores","contactos","turboExclusivo","turboRecorrido","camionetaExclusivo","camionetaRecorrido","acción");
       $url = '?c=Clients&a=Data';
       $new = '?c=Clients&a=New';
       $content = 'app/components/indexdt.php';
@@ -26,15 +24,6 @@ class ClientsController{
     }
   }
 
-  public function New(){
-    require_once "lib/check.php";
-    if (in_array(17, $permissions)) {
-      require_once 'app/views/clients/new.php';
-    } else {
-      $this->model->redirect();
-    }
-  }
-
   public function Data(){
     header('Content-Type: application/json');
     require_once "lib/check.php";
@@ -42,21 +31,35 @@ class ClientsController{
       $result[] = array();
       $i=0;
       foreach($this->model->list('*','clients') as $r) {
-        $result[$i]['id'] = $r->id;
         $result[$i]['compañia'] = $r->company;
         $result[$i]['ciudad'] = $r->city;
+        $result[$i]['tambores'] = $r->drums;
         $contacts = "";
         foreach (json_decode($r->contacts) as $item) {
-            $contacts .= $item[0] . " | " . $item[1] . " | " . $item[2] . "\n";
+            $contacts .= $item[0] . " | " . $item[1] . " | " . $item[2] . " | " . $item[3] . "\n";
         }
         $result[$i]['contactos'] = nl2br($contacts);
-        $edit = "<a hx-get='?c=Users&a=Profile&id=$r->id' hx-target='#myModal' @click='showModal = true' class='block text-teal-900 hover:text-teal-700 cursor-pointer float-right mx-3'><i class='ri-edit-2-line text-2xl'></i> Editar</a>";
+        $result[$i]['turboExclusivo'] = $r->price1;
+        $result[$i]['turboRecorrido'] = $r->price2;
+        $result[$i]['camionetaExclusivo'] = $r->price3;
+        $result[$i]['camionetaRecorrido'] = $r->price4;
+
+        $edit = "<a hx-get='?c=Clients&a=x&id=$r->id' hx-target='#myModal' @click='showModal = true' class='block text-teal-900 hover:text-teal-700 cursor-pointer float-right mx-3'><i class='ri-edit-2-line '></i> Editar</a>";
         $result[$i]['acción'] = "$edit";
         $i++;
       }
       echo json_encode($result);
     } else {
-      $this->init->redirect();
+      $this->model->redirect();
+    }
+  }
+
+  public function New(){
+    require_once "lib/check.php";
+    if (in_array(17, $permissions)) {
+      require_once 'app/views/clients/new.php';
+    } else {
+      $this->model->redirect();
     }
   }
 
@@ -77,7 +80,13 @@ class ClientsController{
       $table = 'clients';
       $item->company = $_REQUEST['company'];
       $item->city = $_REQUEST['city'];
-      $item->contacts = $_REQUEST['data'];
+      $item->drums = $_REQUEST['drums'];
+      $item->contacts = $_REQUEST['contacts'];
+      $item->price1 = $_REQUEST['price1'];
+      $item->price2 = $_REQUEST['price2'];
+      $item->price3 = $_REQUEST['price3'];
+      $item->price4 = $_REQUEST['price4'];
+
       empty($_POST['id'])
       ? $id = $this->model->save($table,$item)
       : $id = $this->model->update($table,$item,$_POST['id']);

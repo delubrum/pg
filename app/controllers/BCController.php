@@ -14,8 +14,8 @@ class BCController{
   public function BC(){
     require_once "lib/check.php";
     if (in_array(3, $permissions)) {
-      $filters = "and a.rmId = " . $_REQUEST['id'];
-      $id = $this->model->get('a.*, b.paste, b.reactor,b.remission, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
+      $filters = "and id = " . $_REQUEST['id'];
+      $id = $this->model->get('*','wo',$filters);
       require_once 'app/views/rm/bc.php';
     } else {
       $this->model->redirect();
@@ -25,10 +25,10 @@ class BCController{
   public function Results(){
     require_once "lib/check.php";
     if (in_array(3, $permissions)) {
-      $filters = "and a.rmId = " . $_REQUEST['id'];
-      $id = $this->model->get('a.*, b.paste, b.reactor, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
-      $filters = "and rmId = " . $_REQUEST['id'];
-      $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
+      $filters = "and id = " . $_REQUEST['id'];
+      $id = $this->model->get('*','wo',$filters);
+      $filters = "and woId = " . $_REQUEST['id'];
+      $net = $this->model->get('SUM(kg-tara) as total','mr_items',$filters)->total;
       $qty = $net - $id->paste;
       $recovered =  $this->model->get('SUM(net) as total','bc_items'," and type = 'Ingreso' and bcid = $id->id")->total;
       $pr = number_format($recovered/$qty*100);
@@ -214,9 +214,8 @@ class BCController{
       }
 
       $rmId = $_REQUEST['id'];
-      $bcId = $this->model->get('id','bc',"and rmId = $rmId")->id;
 
-      if ($this->model->get('count(id) as total','bc_items'," and bcId = '$bcId'")->total < 3) {
+      if ($this->model->get('count(id) as total','bc_items'," and bcId = '$rmId'")->total < 3) {
         $hxTriggerData = json_encode([
           "showMessage" => '{"type": "error", "message": "No hay Ingresos Suficientes", "close" : ""}'
         ]);
@@ -235,14 +234,14 @@ class BCController{
         }
       }
       $itemb = new stdClass();
-      $itemb->bcAt = date("Y-m-d H:i:s");
+      $itemb->producedAt = date("Y-m-d H:i:s");
       $itemb->status = 'Análisis';
-      $this->model->update('rm',$itemb,$rmId);
+      $this->model->update('wo',$itemb,$rmId);
       //Alert
       $alert = new stdClass();
       $net = $this->model->get('SUM(kg-tara) as total','rm_items',"and rmId = $rmId")->total;
-      $total = $net - $this->model->get('paste','rm',"and id = $rmId")->paste;
-      $recover = $this->model->get('SUM(net) as total','bc_items',"and bcId = '$bcId'")->total;
+      $total = $net - $this->model->get('paste','wo',"and id = $rmId")->paste;
+      $recover = $this->model->get('SUM(net) as total','bc_items',"and bcId = '$rmId'")->total;
       $perc = ($recover/$total*100);
       if ($perc < 70) {
         $alert->title = "El RM con id $rmId tuvo un porcentaje de recuperación menor al 70%";
@@ -255,9 +254,9 @@ class BCController{
       }
 
       //Alert 11 hours total
-      if ($this->model->get('createdAt','bc_items',"and bcId = $bcId ORDER BY id DESC limit 1")->createdAt) {
-        $first = $this->model->get('createdAt','bc_items',"and bcId = $bcId ORDER BY id ASC limit 1")->createdAt;
-        $last = $this->model->get('createdAt','bc_items',"and bcId = $bcId ORDER BY id DESC limit 1")->createdAt;
+      if ($this->model->get('createdAt','bc_items',"and bcId = $rmId ORDER BY id DESC limit 1")->createdAt) {
+        $first = $this->model->get('createdAt','bc_items',"and bcId = $rmId ORDER BY id ASC limit 1")->createdAt;
+        $last = $this->model->get('createdAt','bc_items',"and bcId = $rmId ORDER BY id DESC limit 1")->createdAt;
         $startDate = new DateTime($first);
         $endDate = new DateTime($last);
         $interval = $startDate->diff($endDate);
@@ -268,7 +267,7 @@ class BCController{
         }
       }
 
-      if (strtotime($this->model->get('createdAt','bc_items',"and bcId = $bcId ORDER BY id ASC limit 1")->createdAt) > strtotime(date("Y-m-d") . " 18:15:00")) {
+      if (strtotime($this->model->get('createdAt','bc_items',"and bcId = $rmId ORDER BY id ASC limit 1")->createdAt) > strtotime(date("Y-m-d") . " 18:15:00")) {
         $alert->title = "El RM con id $rmId inició luego de las 6:15 pm";
         $this->model->save('notifications',$alert);
       }
@@ -299,9 +298,7 @@ class BCController{
           }
         }
       }
-      $rmId = $_REQUEST['id'];
-      $bcId = $this->model->get("id","bc"," and rmId = $rmId")->id;
-      $id = $this->model->update('bc',$item,$bcId);
+      $id = $this->model->update('wo',$item,$_REQUEST['id']);
     } else {
       $this->model->redirect();
     }

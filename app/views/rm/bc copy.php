@@ -11,11 +11,23 @@
       hx-trigger='submit'
       hx-indicator="#loading"
   >
-  <?php echo isset($id) ? "<input type='hidden' name='id' value='$id->id'>" : '' ?>
+  <?php echo isset($id) ? "<input type='hidden' name='id' value='$id->rmId'>" : '' ?>
     <div class="grid grid-cols-1 sm:grid-cols-5 gap-4 text-sm">
       <div>
           <b>LOTE:</b> <?php echo $id->id ?>
       </div>
+      <div>
+          <b>RM:</b> <?php echo $id->rmId ?>
+      </div>
+      <div>
+          <b>CLIENTE:</b> <?php echo $id->clientname ?>
+      </div>
+      <div>
+            <b>REMISIÓN DEL CLIENTE:</b> <?php echo $id->remission ?>
+        </div>
+        <div>
+            <b>PRODUCTO:</b> <?php echo $id->productname ?>
+        </div>
       <div>
         <b>REACTOR:</b> <?php echo $id->reactor ?>
       </div>
@@ -23,7 +35,7 @@
 
     <div 
     class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm py-4"
-    hx-get='?c=BC&a=Results&id=<?php echo $id->id?>'
+    hx-get='?c=BC&a=Results&id=<?php echo $id->rmId?>'
     hx-trigger="load, listItemsChanged from:body"
     hx-swap="innerHtml"
     hx-indicator="#loading"

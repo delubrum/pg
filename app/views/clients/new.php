@@ -1,4 +1,4 @@
-<div @click.outside="showModal = false" class="w-[95%] sm:w-[50%] bg-white p-4 rounded-lg shadow-lg relative z-50">
+<div @click.outside="showModal = false" class="w-[95%] sm:w-[90%] bg-white p-4 rounded-lg shadow-lg relative z-50">
     <!-- Close Button (X) in Top-Right Corner -->
     <button id="closeModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-900 hover:text-teal-700">
         <i class="ri-close-line text-2xl"></i>
@@ -8,11 +8,11 @@
         class="overflow-y-auto max-h-[600px] p-4"
         hx-post='?c=Clients&a=Save' 
         hx-swap="none"
-        hx-vals='js:{data: JSON.stringify(jspreadsheet.getData())}'
+        hx-vals='js:{contacts: JSON.stringify(contacts.getData())}'
         hx-indicator="#loading"
     >
       <?php echo isset($id) ? "<input type='hidden' name='id' value='$id->id'>" : '' ?>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div>
             <label for="company" class="block text-gray-600 text-sm mb-1">Compañia</label>
             <input type="text" id="company" name="company" value="<?php echo isset($id) ? $id->company : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
@@ -21,6 +21,30 @@
             <label for="city" class="block text-gray-600 text-sm mb-1">Ciudad</label>
             <input type="text" id="city" name="city" value="<?php echo isset($id) ? $id->city : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
         </div>
+        <div>
+            <label for="drums" class="block text-gray-600 text-sm mb-1">Tambores</label>
+            <input type="number" id="drums" name="drums" value="<?php echo isset($id) ? $id->drums : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        </div>
+
+
+        <div>
+              <label for="price" class="block text-gray-600 text-sm mb-1">Turbo Exclusivo</label>
+              <input id="price1" name="price1" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
+          </div>
+          <div>
+              <label for="price2" class="block text-gray-600 text-sm mb-1">Turbo Recorrido</label>
+              <input id="price2" name="price2" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
+          </div>
+          <div>
+              <label for="price3" class="block text-gray-600 text-sm mb-1">Camioneta Exclusivo</label>
+              <input id="price3" name="price3" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
+          </div>
+          <div>
+              <label for="price4" class="block text-gray-600 text-sm mb-1">Camioneta Recorrido</label>
+              <input id="price4" name="price4" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
+          </div>
+
+
       </div>
 
       <div class="pt-4 grid grid-cols-1 sm:grid-cols-1 gap-4">
@@ -38,7 +62,7 @@
 </div>
 
 <script>
-jspreadsheet = jspreadsheet(document.getElementById('spreadsheet'), {
+contacts = jspreadsheet(document.getElementById('spreadsheet'), {
   minDimensions:[2,1],
   autoIncrement: false,
   allowInsertColumn: false, 
@@ -48,17 +72,17 @@ jspreadsheet = jspreadsheet(document.getElementById('spreadsheet'), {
   allowExport: false,
   tableWidth: '100%',
   oninsertrow:function(instance, cell, col, row) {
-    jspreadsheet.getData
-    var data = jspreadsheet.getData();
+    contacts.getData
+    var data = contacts.getData();
     var lastRow = data.length;
-    var cell = jspreadsheet.getCell('A'+lastRow);
-    jspreadsheet.updateSelection(cell);
+    var cell = contacts.getCell('A'+lastRow);
+    contacts.updateSelection(cell);
   },
   columns: [
     {title:'Contacto',type:'text',width:200,},
     {title:'Email',type:'text',width:200,},
     {title:'Tel',type:'number',width:200,},
-
+    {title:'Area',type:'text',width:200,},
   ],
   text:{
     insertANewRowBefore:'Insertar fila antes',

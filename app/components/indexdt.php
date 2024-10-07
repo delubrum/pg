@@ -29,7 +29,7 @@
         <thead>
             <tr>
                 <?php foreach($fields as $f) { ?>
-                <th <?php echo ($f == 'action') ? "style='text-align:right'" : "" ?>> <?php echo ucwords($f) ?> </th>
+                <th <?php echo ($f == 'action') ? "style='text-align:right'" : "" ?>> <?php echo  ucwords(preg_replace('/(?<=\w)([A-Z])/', ' $1', $f)); ?> </th>
                 <?php } ?>
             </tr>
         </thead>
@@ -39,6 +39,16 @@
 </div>
 
 <script>
+    $('#example tfoot th').each(function (i) {
+        var title = $('#example thead th')
+            .eq($(this).index())
+            .text();
+        $(this).html(
+            '<input type="text" placeholder="' + title + '" data-index="' + i + '" />'
+        );
+    });
+
+
 var table = $('#list').DataTable({
     layout: {
         topStart: {
@@ -76,11 +86,11 @@ var table = $('#list').DataTable({
         echo "{data: '$f'},";
         } ?>
     ],
-    // columnDefs : [
-    //     { "width": "100px", "targets": [<?php echo count($fields)-1 ?>] },
-    //     { "className": "text-left", "targets": [<?php echo count($fields)-1 ?>] },
+    columnDefs : [
+        { "width": "100px", "targets": [<?php echo count($fields)-1 ?>] },
+        { "className": "text-right", "targets": [<?php echo count($fields)-1 ?>] },
 
-    // ],
+    ],
     <?php if(isset($_REQUEST['id'])) { ?>
     search: {
         "search": '<?php echo $_REQUEST['id'] ?>'
@@ -90,4 +100,11 @@ var table = $('#list').DataTable({
         htmx.process(document.getElementById('list'));
     }
 });
+
+$(table.table().container()).on('keyup', 'tfoot input', function () {
+        table
+            .column($(this).data('index'))
+            .search(this.value)
+            .draw();
+    });
 </script>

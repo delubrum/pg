@@ -41,16 +41,38 @@
       <b>RM:</b> <?php echo $id->id?>
     </div>
     <div class="col-sm-2">
-      <b>FECHA:</b> <?php echo $id->createdAt?>
+      <b>FECHA:</b> <?php echo $id->date?>
     </div>
+    <div class="col-sm-3">
+      <b>CLIENTE:</b> <?php echo $id->clientname?>
+    </div>
+    <div class="col-sm-2">
+      <b>REMISIÓN DEL CLIENTE:</b> <?php echo $id->remission?>
+    </div>
+    <div class="col-sm-2">
+      <b>PRODUCTO:</b> <?php echo $id->productname?>
+    </div>
+    <?php if ($id->productname != 'Lodos') { ?>
     <div class="col-sm-2">
       <b>REACTOR:</b>
       <?php echo $id->reactor?>
     </div>
+    <?php } ?>
+</div>
+<div class="row px-4 py-2">
+  <div class="col-sm-4">
+    <b>TAMBORES DEVUELTOS POR CLIENTE:</b> <?php echo $id->drumsReturned?>
+  </div>
+
+  <div class="col-sm-4">
+    <b>DEVOLVER AL CLIENTE LOS PROCESADOS:</b> <?php echo ($id->returnToClient == 0) ? 'NO' : 'SI'; ?>
+  </div>
 </div>
 
 
 <div class="row px-4 py-2">
+
+<?php if ($id->productname != 'Lodos') { ?>
 
   <div class="col-sm-4">
     <b>FECHA Y HORA CARGUE:</b> <?php echo $id->datetime?>
@@ -71,12 +93,12 @@
     <b>NOTAS:</b> <?php echo $id->notes ?>
   </div>
 
+  <?php } ?>
+
+
   <table class="tabla" style="width:100%;">
     <tr>
         <th style="width:40px">N°</th>
-        <th>Cliente</th>
-        <th>Producto</th>
-        <th>Remision</th>
         <th>Tipo de Envase</th>
         <th>Peso Bruto<br>Eco</th>
         <th>Peso Bruto<br>Cliente</th>
@@ -89,14 +111,11 @@
     </tr>
     <?php 
     $i=0;$kg=0;$kg_client=0;$tara=0;$tara_client=0;$net=0;$net_client=0;
-    $filters = "and woId = " . $_REQUEST['id'];
-    foreach($this->model->list('a.*,b.company,c.name as productname','mr_items a',$filters,'LEFT JOIN clients b on a.clientId = b.company LEFT JOIN products c on a.productId = c.name') as $r) {
+    $filters = "and rmId = " . $_REQUEST['id'];
+    foreach($this->model->list('*','rm_items',$filters) as $r) {
     ?>
     </tr>
       <td><?php echo "<b>" . ($i+1) . "</b>" ?></td>
-      <td><?php echo $r->company ?></td>
-      <td><?php echo $r->productname ?></td>
-      <td><?php echo $r->type ?></td>
       <td><?php echo $r->type ?></td>
       <td><?php $kg += $r->kg; echo $r->kg ?></td>
       <td><?php $kg_client += $r->kg_client; echo $r->kg_client ?></td>
@@ -105,11 +124,7 @@
       <td><?php $net += $r->kg - $r->tara; echo number_format($r->kg - $r->tara,2) ?></td>
       <td><?php $net_client += $r->kg_client - $r->tara_client; echo number_format($r->kg_client - $r->tara_client,2) ?></td>
       <td><?php echo $r->status ?></td>
-      <td><?php echo $car = ($r->car == "true") ? 'Vehículo' : ''?>
-      <?php echo ($r->car == "true") ? 'Vehículo' : ''?>
-      <?php echo ($r->bucket == "true") ? 'Caneca' : ''?>
-      <?php echo ($r->plant == "true") ? 'Planta' : ''?>
-      </td>        
+      <td><?php echo $r->spills ?></td>        
     </tr>
     <?php $i++; } ?>
     <tr>

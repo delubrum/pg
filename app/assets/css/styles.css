@@ -1,6 +1,6 @@
 .jexcel > thead > tr > td {
-  background: rgb(15 118 110) !important;
-  color: rgb(255 255 255) !important;
+  /* background: white !important; */
+  color: #000;
   font-size:13px !important;
   font-weight: bold;
   padding: 5px;

@@ -69,6 +69,23 @@ class Model {
         }
     }
 
+    public function updateAll($table,$item,$ids) {
+        $vals = '';
+        foreach ($item as $k => $v) {
+            $vals .= $k . " = '$v" . "',";
+        }
+        $vals = rtrim($vals, ",");
+        try {
+            $sql = "UPDATE $table 
+                SET $vals 
+                WHERE id IN (" . implode(',', array_map('intval', $ids)) . ")";
+            $this->log($sql);
+            return $this->pdo->prepare($sql)->execute();
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
     public function delete($table,$filters) {
         try {
             $sql = "DELETE FROM $table 

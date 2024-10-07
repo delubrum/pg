@@ -305,7 +305,7 @@ class RMController{
     require_once "lib/check.php";
     if (in_array(3, $permissions)) {
       $filters = "and a.id = " . $_REQUEST['id'];
-      $id = $this->model->get('a.*,d.username as operatorname,b.company as clientname, c.name as productname, b.city','rm a',$filters,'LEFT JOIN users b ON a.clientId=b.id LEFT JOIN products c ON a.productId = c.id LEFT JOIN users d ON a.operatorId=d.id');
+      $id = $this->model->get('*,b.username as operatorname','wo a',$filters,'LEFT JOIN users b ON a.operatorId=b.id');
       $filters = "and rmId = " . $_REQUEST['id'];
       $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
       require_once 'app/views/reports/rm.php';
