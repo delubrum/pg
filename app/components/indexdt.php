@@ -1,4 +1,4 @@
-<div class="mx-10 mr-2 sm:mx-6 mt-2 sm:mt-6 px-2 sm:px-4 py-3 sm:py-4 bg-white rounded-lg shadow-xl">
+<div class="mx-2 sm:mx-6 mt-2 sm:mt-6 px-2 sm:px- py-2 sm:py-4 bg-white rounded-lg shadow-xl">
 
     <?php if(isset($new)) { ?>
 
@@ -39,16 +39,6 @@
 </div>
 
 <script>
-    $('#example tfoot th').each(function (i) {
-        var title = $('#example thead th')
-            .eq($(this).index())
-            .text();
-        $(this).html(
-            '<input type="text" placeholder="' + title + '" data-index="' + i + '" />'
-        );
-    });
-
-
 var table = $('#list').DataTable({
     layout: {
         topStart: {
@@ -59,7 +49,7 @@ var table = $('#list').DataTable({
     lengthChange : true,
     <?php if(isset($paginate)) { ?>
     paginate: true,
-    pageLength: 10,
+    pageLength: 20,
     <?php } else { ?>
     paginate: false,
     <?php } ?>

@@ -12,7 +12,7 @@
   hx-swap="none" 
   hx-indicator="#loading"
 >
-  <?php echo isset($id) ? "<input type='hidden' name='bcId' value='$id'>" : '' ?>
+  <?php echo isset($id) ? "<input type='hidden' name='id' value='$id'>" : '' ?>
   <div x-data="{ selectedOption: '' }" class="grid grid-cols-1 sm:grid-cols-1 gap-4">
     <div>
       <label for="type" class="block text-gray-600 text-sm mb-1">Tipo</label>

@@ -306,8 +306,8 @@ class RMController{
     if (in_array(3, $permissions)) {
       $filters = "and a.id = " . $_REQUEST['id'];
       $id = $this->model->get('*,b.username as operatorname','wo a',$filters,'LEFT JOIN users b ON a.operatorId=b.id');
-      $filters = "and rmId = " . $_REQUEST['id'];
-      $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
+      $filters = "and woId = " . $_REQUEST['id'];
+      $net = $this->model->get('SUM(kg-tara) as total','mr_items',$filters)->total;
       require_once 'app/views/reports/rm.php';
     } else {
       $this->model->redirect();

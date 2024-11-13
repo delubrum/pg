@@ -57,7 +57,7 @@
             <input  type="number" step="0.01" id="paste" name="paste" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
         </div>
 
-        <div>
+        <!-- <div>
             <label for="toreturn" class="block text-gray-600 text-sm mb-1">Devolver</label>
             <input  type="number" step="0.01"  id="toreturn" name="toreturn" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
         </div>
@@ -65,7 +65,7 @@
         <div>
             <label for="surplus" class="block text-gray-600 text-sm mb-1">Excedente</label>
             <input  type="number" step="0.01"  id="surplus" name="surplus" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
-        </div>
+        </div> -->
 
         <div>
             <label for="surplus" class="block text-gray-600 text-sm mb-1">Total a Cargar</label>
@@ -115,7 +115,7 @@
     parseFormulas: true,
     allowInsertRow: false, // Allow ly inserting columns
     allowDeleteRow: false, // Allow ly inserting columns
-    footers: [['','','','','=SUMCOL(TABLE(), 4)','=SUMCOL(TABLE(), 5)','=SUMCOL(TABLE(), 6)','=SUMCOL(TABLE(), 7)','=SUMCOL(TABLE(), 8)','=SUMCOL(TABLE(), 9)']],
+    footers: [['','','','','=SUMCOL(TABLE(), 5)','=SUMCOL(TABLE(), 6)','=SUMCOL(TABLE(), 7)','=SUMCOL(TABLE(), 8)','=SUMCOL(TABLE(), 9)','=SUMCOL(TABLE(), 10)']],
     columns: [
     {type:'hidden'},
     {type:'dropdown', width:'200', title:'CLIENTE', url:'?c=MR&a=Clients', readOnly: true },
@@ -155,7 +155,7 @@
 
   document.getElementById("paste").addEventListener("keyup", function(e) {
     var paste = this.value;
-    var net = SUMCOL(wo, 5);
+    var net = SUMCOL(wo, 9);
     var total = Number(net) - Number(paste);
     console.log(paste,net,);
     document.getElementById("total").value = total;

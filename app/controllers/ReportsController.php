@@ -14,13 +14,12 @@ class ReportsController{
   public function PD(){
     require_once "lib/check.php";
     if (in_array(3, $permissions)) {
-      $filters = "and a.id = " . $_REQUEST['id'];
-      $id = $this->model->get('a.*,b.company as clientname, b.username as contactname, c.name as productname, b.city, d.id as bcId, d.mud, d.distilled, d.evaporation, d.mud_dist, d.evaporation','rm a',$filters,'LEFT JOIN users b ON a.clientId=b.id LEFT JOIN products c ON a.productId = c.id LEFT JOIN bc d ON a.id = d.rmId');
-      $filters = "and rmId = " . $_REQUEST['id'];
-      $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
-      $kg = $this->model->get('SUM(kg) as total','rm_items',$filters)->total;
-      $tara = $this->model->get('SUM(tara) as total','rm_items',$filters)->total;
-
+      $filters = "and id = " . $_REQUEST['id'];
+      $id = $this->model->get('*','wo',$filters);
+      $filters = "and woId = " . $_REQUEST['id'];
+      $net = $this->model->get('SUM(kg-tara) as total','mr_items',$filters)->total;
+      $kg = $this->model->get('SUM(kg) as total','mr_items',$filters)->total;
+      $tara = $this->model->get('SUM(tara) as total','mr_items',$filters)->total;
       require_once 'app/views/reports/pd.php';
     } else {
       $this->model->redirect();

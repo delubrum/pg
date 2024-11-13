@@ -90,36 +90,35 @@
     <?php 
     $i=0;$kg=0;$kg_client=0;$tara=0;$tara_client=0;$net=0;$net_client=0;
     $filters = "and woId = " . $_REQUEST['id'];
-    foreach($this->model->list('a.*,b.company,c.name as productname','mr_items a',$filters,'LEFT JOIN clients b on a.clientId = b.company LEFT JOIN products c on a.productId = c.name') as $r) {
+    foreach($this->model->list('a.*,b.company,c.name as productname','mr_items a',$filters,'LEFT JOIN clients b on a.clientId = b.id LEFT JOIN products c on a.productId = c.id') as $r) {
     ?>
     </tr>
       <td><?php echo "<b>" . ($i+1) . "</b>" ?></td>
       <td><?php echo $r->company ?></td>
       <td><?php echo $r->productname ?></td>
-      <td><?php echo $r->type ?></td>
+      <td><?php echo $r->remision ?></td>
       <td><?php echo $r->type ?></td>
       <td><?php $kg += $r->kg; echo $r->kg ?></td>
       <td><?php $kg_client += $r->kg_client; echo $r->kg_client ?></td>
       <td><?php $tara += $r->tara; echo $r->tara ?></td>
       <td><?php $tara_client += $r->tara_client; echo $r->tara_client ?></td>
-      <td><?php $net += $r->kg - $r->tara; echo number_format($r->kg - $r->tara,2) ?></td>
+      <td><?php $net += ($r->kg - $r->tara); echo number_format($r->kg - $r->tara,2) ?></td>
       <td><?php $net_client += $r->kg_client - $r->tara_client; echo number_format($r->kg_client - $r->tara_client,2) ?></td>
       <td><?php echo $r->status ?></td>
-      <td><?php echo $car = ($r->car == "true") ? 'Vehículo' : ''?>
-      <?php echo ($r->car == "true") ? 'Vehículo' : ''?>
-      <?php echo ($r->bucket == "true") ? 'Caneca' : ''?>
-      <?php echo ($r->plant == "true") ? 'Planta' : ''?>
+      <td><?php echo $car = ($r->car == "1") ? 'Vehículo' : ''?>
+      <?php echo ($r->bucket == "1") ? 'Caneca' : ''?>
+      <?php echo ($r->plant == "1") ? 'Planta' : ''?>
       </td>        
     </tr>
     <?php $i++; } ?>
     <tr>
-      <td COLSPAN="2"><b>Σ</b></td>
+      <td COLSPAN="5"><b>Σ</b></td>
       <td><?php echo "<b>$kg</b>" ?></td>
       <td><?php echo "<b>$kg_client</b>" ?></td>
       <td><?php echo "<b>$tara</b>" ?></td>
       <td><?php echo "<b>$tara_client</b>" ?></td>
-      <td><?php echo "<b>" . $net - $id->paste . "</b>" ?></td>
-      <td><?php echo "<b>" . $net_client - $id->paste . "</b>" ?></td>
+      <td><?php echo "<b>" . $net . "</b>" ?></td>
+      <td><?php echo "<b>" . $net_client . "</b>" ?></td>
       <td COLSPAN="2"></td>
     </tr>
   </table>    

@@ -17,15 +17,6 @@
           <b>LOTE:</b> <?php echo $id->id ?>
       </div>
       <div>
-        <b>RM:</b> <?php echo $id->rmId ?>
-      </div>
-      <div>
-        <b>CLIENTE:</b> <?php echo $id->clientname ?>
-      </div>
-      <div>
-        <b>PRODUCTO: </b> <?php echo $id->productname ?>
-      </div>
-      <div>
         <b>REACTOR:</b> <?php echo $id->reactor ?>
       </div>
     </div>
@@ -80,6 +71,21 @@
         <label for="ph" class="block text-gray-600 text-sm mb-1">% PH (5)</label>
         <input id="ph" name="ph" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
       </div>
+
+
+
+
+        <div>
+            <label for="toreturn" class="block text-gray-600 text-sm mb-1">Devolver</label>
+            <input  type="number" step="0.01"  id="toreturn" name="toreturn" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        </div>
+
+        <div>
+            <label for="surplus" class="block text-gray-600 text-sm mb-1">Excedente</label>
+            <input  type="number" step="0.01"  id="surplus" name="surplus" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none" required>
+        </div>
+
+
     </div>
     <div class="mt-6 flex justify-end">
       <button type="submit" 

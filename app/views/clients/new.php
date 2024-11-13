@@ -29,23 +29,42 @@
 
         <div>
               <label for="price" class="block text-gray-600 text-sm mb-1">Turbo Exclusivo</label>
-              <input id="price1" name="price1" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
+              <input id="price1" name="price1" value="<?php echo isset($id) ? $id->price1 : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
           </div>
           <div>
               <label for="price2" class="block text-gray-600 text-sm mb-1">Turbo Recorrido</label>
-              <input id="price2" name="price2" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
+              <input id="price2" name="price2" value="<?php echo isset($id) ? $id->price2 : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
           </div>
           <div>
               <label for="price3" class="block text-gray-600 text-sm mb-1">Camioneta Exclusivo</label>
-              <input id="price3" name="price3" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
+              <input id="price3" name="price3" value="<?php echo isset($id) ? $id->price3 : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
           </div>
           <div>
               <label for="price4" class="block text-gray-600 text-sm mb-1">Camioneta Recorrido</label>
-              <input id="price4" name="price4" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
+              <input id="price4" name="price4" value="<?php echo isset($id) ? $id->price4 : '' ?>" class="w-full p-1.5 border border-gray-300 rounded-md focus:ring focus:ring-teal-700 focus:outline-none">
           </div>
 
 
+          
+
+
       </div>
+
+
+      <div class="pt-4 grid grid-cols-1 sm:grid-cols-1 gap-4">
+          <div>
+              <?php foreach ($this->model->list('*','products',' and status = 1') as $p) { ?>
+                <button type="button" x-data="{ product: true }"
+                @click="product = !product"
+                class='text-white text-sm py-2 px-4 m-1 rounded-md bg-teal-900 hover:bg-teal-700 transition'
+                :class="{ 'bg-teal-900 hover:bg-teal-700': !product, 'bg-gray-500 hover:bg-gray-600': product }"
+                >
+                  <?php echo $p->name ?>
+                  <input type="hidden" name="products[]" value="<?php echo $p->id ?>" :disabled="product">
+                </button>
+              <?php } ?>                            
+          </div>
+        </div>
 
       <div class="pt-4 grid grid-cols-1 sm:grid-cols-1 gap-4">
         <div class="text-center text-sm" id="spreadsheet"></div>
@@ -55,7 +74,7 @@
         <button type="submit" 
         class="text-xl float-left text-teal-900 px-4 py-2 font-bold hover:text-teal-700"
         >
-          <i class="ri-save-line"></i> Guardar
+          <i class="ri-save-line"></i> <?php echo (isset($id)) ? 'Actualizar' : 'Guardar'; ?>
         </button>
       </div>
     </form>
@@ -63,6 +82,7 @@
 
 <script>
 contacts = jspreadsheet(document.getElementById('spreadsheet'), {
+  <?php echo isset($id) ? "data : $id->contacts," : '' ?>
   minDimensions:[2,1],
   autoIncrement: false,
   allowInsertColumn: false, 

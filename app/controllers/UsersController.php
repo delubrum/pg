@@ -7,8 +7,6 @@ class UsersController{
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->fields = array("tipo","fecha","nombre","compañia","email","status","acción");
-    $this->url = '?c=Users&a=Data';
   }
 
   public function Index(){
@@ -18,6 +16,7 @@ class UsersController{
       $fields = array("id","date","name","email","status","action");
       $url = '?c=Users&a=Data';
       $new = '?c=Users&a=New';
+      $datatables = true;
       $content = 'app/components/indexdt.php';
       // $filters = 'app/views/users/filters.php';
       require_once 'app/views/index.php';
@@ -39,91 +38,19 @@ class UsersController{
     header('Content-Type: application/json');
     require_once "lib/check.php";
     if (in_array(1, $permissions)) {
-      $result = array();
-      $total = $this->model->get("count(id) as total", "users")->total;
-      $sql = '';
-      if (!empty($_POST['search']['value'])) {
-        $search = $_POST['search']['value'];
-        $status = (stripos($search, 'act') !== false) ? 1 : 
-        (stripos($search, 'ina') !== false ? 0 : null);        
-        $sql .= " and (id LIKE '%" . $search . "%'";
-        $sql .= " OR username LIKE '%" . $search . "%'";
-        $sql .= " OR email LIKE '%" . $search . "%'";        
-        $sql .= ")";
-
-      }
-      $filtered = $this->model->get("count(id) as total", "users",$sql,)->total;
-
-      if (!empty($_POST['order'])) {
-        $columns = array("id","date","name","email","status","action");
-        $sql .= " ORDER BY " . $columns[$_POST['order'][0]['column']] . " " . $_POST['order'][0]['dir'];
-      }
-      $sql .= " LIMIT " . $_POST['start'] . ", " . $_POST['length'];
-      foreach ($this->model->list("id,createdAt as date,username as name,email,if(status=1,'Activo','Inactivo') as status","users",$sql) as $k => $v) {
+      $i=0;
+      foreach ($this->model->list("id,createdAt as date,username as name,email,if(status=1,'Activo','Inactivo') as status","users") as $k => $v) {
         $b1 = ($v->status != 'Activo')
         ? "<a hx-get='?c=Users&a=Status&id=$v->id&status=1' hx-swap = 'outerHTML' class='block mx-3 text-teal-900 hover:text-teal-700 cursor-pointer float-right'><i class='ri-toggle-line text-2xl'></i> Activar</a>" 
         : "<a hx-get='?c=Users&a=Status&id=$v->id&status=0' hx-swap = 'outerHTML' class='block mx-3 text-teal-900 hover:text-teal-700 cursor-pointer float-right'><i class='ri-toggle-fill text-2xl'></i> Desactivar</a>";
         $b2 = "<a hx-get='?c=Users&a=Profile&id=$v->id' hx-target='#myModal' @click='showModal = true' class='block text-teal-900 hover:text-teal-700 cursor-pointer float-right mx-3'><i class='ri-edit-2-line text-2xl'></i> Editar</a>";
         $result[] = (array)$v + ['action' => "$b1$b2"];
       }
-      $json_data = array(
-        "draw" => intval($_POST['draw']),
-        "recordsTotal" => intval($total),
-        "recordsFiltered" => intval($filtered),
-        "data" => $result
-      );
-      echo json_encode($json_data);
+      echo json_encode($result);
     } else {
       $this->model->redirect();
     }
   }
-
-  // public function Data(){
-  //   require_once "lib/check.php";
-  //   if (in_array(1, $permissions)) {
-  //     $result = array();
-  //     $total = $this->model->get("count(id) as total", "users")->total;
-  //     $sql = '';
-  //     if (!empty($_GET['nameFilter'])) { $sql .= " and username LIKE '%" . $_GET['nameFilter'] . "%'"; }
-  //     if (!empty($_GET['companyFilter'])) { $sql .= " and company LIKE '%" . $_GET['companyFilter'] . "%'"; }
-  //     if (!empty($_GET['emailFilter'])) { $sql .= " and email LIKE '%" . $_GET['emailFilter'] . "%'"; }
-  //     if (!empty($_GET['fromFilter'])) { $sql .= " and createdAt  >='" . $_REQUEST['fromFilter']." 00:00:00'"; }
-  //     if (!empty($_GET['toFilter'])) { $sql .= " and createdAt <='" . $_REQUEST['toFilter']." 23:59:59'"; }
-  //     if (!empty($_GET['statusFilter'])) {
-  //       $statusValues = $_GET['statusFilter'];
-  //       $sql .= "AND (status = '$statusValues[0]'";
-  //       for ($i = 1; $i < count($statusValues); $i++) {
-  //           $sql .= " OR status = '$statusValues[$i]'";
-  //       }
-  //       $sql .= ")";
-  //     }
-  //     if (!empty($_GET['typeFilter'])) {
-  //       $statusValues = $_GET['typeFilter'];
-  //       $sql .= "AND (status = '$statusValues[0]'";
-  //       for ($i = 1; $i < count($statusValues); $i++) {
-  //           $sql .= " OR type = '$statusValues[$i]'";
-  //       }
-  //       $sql .= ")";
-  //     }
-  //     $filtered = $this->model->get("count(id) as total", "users",$sql,)->total;
-  //     $colum = isset($_GET['colum']) ? $_GET['colum'] : 'company';
-  //     $order = isset($_GET['order']) ? $_GET['order'] : 'desc';
-  //     if ($order === 'asc') {
-  //       $newOrder = 'desc';
-  //     } else {
-  //       $newOrder = 'asc';
-  //     }
-  //     $sql .= " ORDER BY $colum $newOrder";
-  //     $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-  //     $perPage = 10;
-  //     $start = ($page - 1) * $perPage;
-  //     $sql .= " LIMIT $start,$perPage";
-  //     $list = $this->model->list("id,type as tipo,createdAt as fecha,username as nombre,company as compañia,email,if(status=1,'Activo','Inactivo') as status","users",$sql);
-  //     require_once "app/views/users/list.php";
-  //   } else {
-  //     $this->model->redirect();
-  //   }
-  // }
 
   public function Profile(){
     require_once "lib/check.php";
@@ -167,13 +94,8 @@ class UsersController{
       $item->lang = 'en';
       $item->password = $_REQUEST['newpass'];
       $item->permissions = '[]';
-      $item->company = $_REQUEST['company'];
-      $item->phone = $_REQUEST['phone'];
       $item->type = $_REQUEST['type'];
-      $item->city = $_REQUEST['city'];
       $cpass = $_REQUEST['cpass'];
-      $item->price = preg_replace('/[^0-9]+/', '', $_REQUEST['price']);
-      $item->products = json_encode($_REQUEST['products']);
       $cpass = $_REQUEST['cpass'];
       if ($cpass != '' and $cpass != $item->password) {
         $hxTriggerData = json_encode([

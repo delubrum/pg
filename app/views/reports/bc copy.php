@@ -43,6 +43,25 @@
         <b>LOTE:</b> <?php echo $id->id?>
         </div>
 
+        <div class="col-sm-1">
+        <b>RM:</b> <?php echo $id->rmId?>
+        </div>
+
+        <div class="col-sm-3">
+        <b>CLIENTE:</b> <?php echo $id->clientname?>
+        </div>
+
+        <div class="col-sm-3">
+        <b>REMISIÓN DEL CLIENTE:</b> <?php echo $id->remission?>
+        </div>
+
+        <div class="col-sm-3">
+        <b>PRODUCTO:</b> <?php echo $id->productname?>
+        </div>
+        </div>
+
+        <div class="row mb-2">
+   
         <div class="col-sm-3">
         <b>REACTOR:</b> <?php echo $id->reactor?>
         </div>
@@ -129,7 +148,7 @@
           </tr>
           <?php  
           $i=0;
-          foreach($this->model->list("a.*, b.username","bc_items a","and woId = $id->id and a.type='Ingreso'", "LEFT JOIN users b on a.userId = b.id") as $r) { ?>
+          foreach($this->model->list("a.*, b.username","bc_items a","and bcId = $id->id and a.type='Ingreso'", "LEFT JOIN users b on a.userId = b.id") as $r) { ?>
           <tr>
               <td><?php echo ($i !=0) ? $i : ''; ?></td>
               <td><?php echo $r->createdAt ?></td>
@@ -153,7 +172,7 @@
           </tr>
           <?php  
           $i=0;
-          foreach($this->model->list("a.*, b.username","bc_items a","and woId = $id->id and a.type='Caldera'", "LEFT JOIN users b on a.userId = b.id") as $r) { ?>
+          foreach($this->model->list("a.*, b.username","bc_items a","and bcId = $id->id and a.type='Caldera'", "LEFT JOIN users b on a.userId = b.id") as $r) { ?>
           <tr>
               <td><?php echo $r->createdAt ?></td>
               <td><?php echo $r->temp ?></td>

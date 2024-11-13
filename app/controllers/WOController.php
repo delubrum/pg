@@ -38,8 +38,8 @@ class WOController{
 
         $edit = "<a hx-get='?c=WO&a=WO&id=$r->id' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700 cursor-pointer'><i class='ri-edit-2-line'></i> Completar</a>";
         if ($r->status == 'Producción' || $r->status == 'Iniciado') { $edit = "<a hx-get='?c=BC&a=BC&id=$r->id' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700 cursor-pointer'><i class='ri-hammer-line text-2xl'></i> Producir</a>"; }
-        if ($r->status == 'Análisis' and in_array(15,$permissions)) { $edit = "<a hx-get='?c=IP&a=IP&id=$r->id' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-edit-2-line text-2xl'></i> Análisis</a>"; }
-        if ($r->status == 'Facturación' and in_array(10,$permissions)) { $edit = "<a hx-get='?c=IP&a=IV&id=$r->id' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700'><i class='ri-exchange-dollar-line text-2xl'></i> Facturar</a>"; }
+        if ($r->status == 'Análisis' and in_array(15,$permissions)) { $edit = "<a hx-get='?c=IP&a=IP&id=$r->id' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700 cursor-pointer'><i class='ri-edit-2-line text-2xl'></i> Análisis</a>"; }
+        if ($r->status == 'Facturación' and in_array(10,$permissions)) { $edit = "<a hx-get='?c=IP&a=IV&id=$r->id' hx-target='#myModal' @click='showModal = true' class='text-teal-900 hover:text-teal-700 cursor-pointer'><i class='ri-exchange-dollar-line text-2xl'></i> Facturar</a>"; }
         if ($r->status == 'Cerrado') { $edit = ""; }
         $rm = ($r->status != 'Completar') ? "<br><a href='?c=RM&a=Detail&id=$r->id' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-file-line text-2xl'></i> Lote</a>" : "";
         $bc = (($r->status == 'Facturación' || $r->status == 'Cerrado' || $r->status == 'Análisis')) ? "<br><a href='?c=BC&a=Detail&id=$r->id' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-file-line text-2xl'></i> Bitácora</a>" : "";
@@ -178,8 +178,8 @@ class WOController{
       $item->operatorId = $_REQUEST['operatorId'];
       $item->reactor = $_REQUEST['reactor'];
       $item->paste = $_REQUEST['paste'];
-      $item->toreturn = $_REQUEST['toreturn'];
-      $item->surplus = $_REQUEST['surplus'];
+      // $item->toreturn = $_REQUEST['toreturn'];
+      // $item->surplus = $_REQUEST['surplus'];
       $item->notes =$_REQUEST['notes'];
       $item->wo = $_REQUEST['wo'];
       $item->status = 'Producción';

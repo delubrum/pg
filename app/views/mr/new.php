@@ -3,7 +3,7 @@
     <button id="closeModal" @click="showModal = !showModal" class="absolute top-0 right-0 m-3 text-teal-700 hover:text-teal-900">
         <i class="ri-close-line text-2xl"></i>
     </button>
-    <h1 class="mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> <span class="text-2xl font-semibold">Nuevo RM (<?php echo isset($this->model->get('id','rm', ' ORDER BY id DESC LIMIT 1')->id) ?  $this->model->get('id','rm', ' ORDER BY id DESC LIMIT 1')->id + 1 : 1 ; ?>)</span></h1>
+    <h1 class="mb-4 text-teal-700"><i class="ri-file-add-line text-3xl"></i> <span class="text-2xl font-semibold">Nuevo RM (<?php echo isset($this->model->get('id','mr', ' ORDER BY id DESC LIMIT 1')->id) ?  $this->model->get('id','mr', ' ORDER BY id DESC LIMIT 1')->id + 1 : 1 ; ?>)</span></h1>
     <form  id="newForm" 
         class="overflow-y-auto max-h-[400px] p-2"
         hx-post='?c=MR&a=Save' rm_items
@@ -82,7 +82,7 @@ returned = jspreadsheet(document.getElementById('returned'), {
     returned.updateSelection(cell);
   },
   columns: [
-    {type:'dropdown', width: 300, title:'CLIENTE', url:'?c=RM&a=Clients', autocomplete:true, validate: 'required'},
+    {type:'dropdown', width: 300, title:'CLIENTE', url:'?c=MR&a=Clients', autocomplete:true, validate: 'required'},
     {title:'TAMBORES PLASTICOS DEVUELTOS',type:'text',width:300,},
   ],
   text:{
@@ -111,7 +111,7 @@ drums = jspreadsheet(document.getElementById('spreadsheet'), {
     var cell = drums.getCell('A'+lastRow);
     drums.updateSelection(cell);
   },
-  footers: [['','=SUMCOL(TABLE(), 1)','=SUMCOL(TABLE(), 2)']],
+  footers: [['','','','','=SUMCOL(TABLE(), 4)','=SUMCOL(TABLE(), 5)']],
   columns: [
     {type:'dropdown', width:'200', title:'CLIENTE', url:'?c=MR&a=Clients', autocomplete:true, validate: 'required'},
     {title:'REMISIÓN',type:'text',width:120,},

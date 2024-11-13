@@ -7,23 +7,18 @@ class IPController{
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->fields = array("RM","fecha","creador","cliente","producto","status","factura","acción");
-    $this->url = '?c=RM&a=Data';
   }
 
   public function IP(){
     require_once "lib/check.php";
     if (in_array(3, $permissions)) {
-      $filters = "and a.rmId = " . $_REQUEST['id'];
-      $id = $this->model->get('a.*, b.paste, b.reactor, c.company as clientname, d.name as productname','bc a',$filters,'LEFT JOIN rm b ON a.rmId = b.id LEFT JOIN users c ON b.clientId = c.id LEFT JOIN products d ON b.productId = d.id');
-      $filters = "and rmId = " . $_REQUEST['id'];
-      $net = $this->model->get('SUM(kg-tara) as total','rm_items',$filters)->total;
+      $filters = "and id = " . $_REQUEST['id'];
+      $id = $this->model->get('*','wo a',$filters);
+      $filters = "and woId = " . $_REQUEST['id'];
+      $net = $this->model->get('SUM(kg-tara) as total','mr_items',$filters)->total;
       $qty = $net - $id->paste;
-      $rmId = $_REQUEST['id'];
-      $bcId = $this->model->get("id","bc"," and rmId = $rmId")->id;
-      $filters = "and bcId = " .  $bcId;
       $qtybit = $this->model->get('SUM(net) as total','bc_items',$filters)->total;
-      $recovered =  $this->model->get('SUM(net) as total','bc_items'," and type = 'Ingreso' and bcid = $id->id")->total;
+      $recovered =  $this->model->get('SUM(net) as total','bc_items'," and type = 'Ingreso' and woId = $id->id")->total;
       $pr = number_format($recovered/$qty*100);
       require_once 'app/views/rm/ip.php';
     } else {
@@ -53,18 +48,17 @@ class IPController{
       }
       $item->ipAt = date("Y-m-d H:i:s");
       $item->status = 'Facturación';
-      $bcId = $_REQUEST['id'];
-      $rmId = $this->model->get("*","bc"," and id = $bcId")->rmId;
-      $this->model->update('rm',$item,$rmId);
+      $woId = $_REQUEST['id'];
+      $this->model->update('wo',$item,$woId);
       //Alert
       $alert = new stdClass();
       $mudpClient = $_REQUEST['mudpClient'];
-      $paste = $this->model->get('paste','rm',"and id = $rmId")->paste;
-      $net = $this->model->get('SUM(kg-tara) as total','rm_items',"and rmId = $rmId")->total;
+      $paste = $this->model->get('paste','wo',"and id = $woId")->paste;
+      $net = $this->model->get('SUM(kg-tara) as total','mr_items',"and woId = $woId")->total;
       $perc = number_format($mudpClient/($net - $paste)*100);
       echo $perc;
       if ($perc >= 25) {
-        $alert->title = "El RM con id $rmId tuvo un porcentaje de Lodos de Destilación mayor al 25%";
+        $alert->title = "El Lote con id $woId tuvo un porcentaje de Lodos de Destilación mayor al 25%";
         $this->model->save('notifications',$alert);
       }
       if ($id !== false) {
@@ -98,24 +92,25 @@ class IPController{
       $item->status = 'Cerrado';
       $item->invoice = $_REQUEST['invoice'];
       $item->invoiceAt = date("Y-m-d H:i:s");
+      $item->invoiceUser = $_REQUEST['user'];
       $id = $_REQUEST['id'];
-      $item->drumsSended = ceil($this->model->get("mpClient", "rm" , "and id = $id")->mpClient / 170);
-      $this->model->update('rm',$item,$id);
-      $product = $this->model->get("productId", "rm" , "and id = $id")->productId;
-      if ($product != 6) {
-      $itemb = new stdClass();
-      $itemb->type = 'Factura';
-      $itemb->code = $_REQUEST['invoice'];
-      $itemb->rmId = $id;
-      $itemb->user = $_REQUEST['user'];
-      $itemb->kg = $this->model->get("mpClient", "rm" , "and id = $id")->mpClient;
-      $itemb->drumsSended = ceil($this->model->get("mpClient", "rm" , "and id = $id")->mpClient / 170);
-      $itemb->barrels = ($this->model->get('returnToClient','rm'," and id = $id")->returnToClient != 0) ? $this->model->get('barrels','rm'," and id = $id")->barrels : 0;
-      $itemb->drums = ($this->model->get('returnToClient','rm'," and id = $id")->returnToClient != 0) ? $this->model->get('drums','rm'," and id = $id")->drums : 0;
-      $clientId = $this->model->get("clientId", "rm" , "and id = $id")->clientId;
-      $itemb->price = $this->model->get("price", "users" , "and id = $clientId")->price;
-      $this->model->save('transport',$itemb);
-      }
+      $item->drumsSended = ceil($this->model->get("mpClient", "wo" , "and id = $id")->mpClient / 170);
+      $this->model->update('wo',$item,$id);
+      // $product = $this->model->get("productId", "rm" , "and id = $id")->productId;
+      // if ($product != 6) {
+      // $itemb = new stdClass();
+      // $itemb->type = 'Factura';
+      // $itemb->code = $_REQUEST['invoice'];
+      // $itemb->rmId = $id;
+      // $itemb->user = $_REQUEST['user'];
+      // $itemb->kg = $this->model->get("mpClient", "rm" , "and id = $id")->mpClient;
+      // $itemb->drumsSended = ceil($this->model->get("mpClient", "rm" , "and id = $id")->mpClient / 170);
+      // $itemb->barrels = ($this->model->get('returnToClient','rm'," and id = $id")->returnToClient != 0) ? $this->model->get('barrels','rm'," and id = $id")->barrels : 0;
+      // $itemb->drums = ($this->model->get('returnToClient','rm'," and id = $id")->returnToClient != 0) ? $this->model->get('drums','rm'," and id = $id")->drums : 0;
+      // $clientId = $this->model->get("clientId", "rm" , "and id = $id")->clientId;
+      // $itemb->price = $this->model->get("price", "users" , "and id = $clientId")->price;
+      // $this->model->save('transport',$itemb);
+      // }
       $hxTriggerData = json_encode([
         "listChanged" => true,
         "showMessage" => '{"type": "success", "message": "Factura Guardada", "close" : "closeModal"}'
