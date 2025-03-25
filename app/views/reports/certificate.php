@@ -81,9 +81,9 @@ Quien durante el mes de mayo de 2023 realizó la entrega de los solventes contam
       </tr>
       <?php foreach(json_decode($user->products,true) as $p) {?>
       <tr>
-        <td><?php echo $this->model->get('name','products'," and id='$p'")->name ?></td>
-        <td><?php echo $this->model->get('sum(mpClient) as total','rm'," and clientId='$user->id' and productId = '$p' and MONTH(invoiceAt) = MONTH('$date') and YEAR(invoiceAt) = YEAR('$date')")->total ?></td>
-        <td><?php echo $this->model->get('sum(mudpClient) as total','rm'," and clientId='$user->id' and productId = '$p' and MONTH(invoiceAt) = MONTH('$date') and YEAR(invoiceAt) = YEAR('$date')")->total ?></td>
+        <td><?php echo$p; echo $this->model->get('name','products'," and id='$p'")->name ?></td>
+        <td><?php echo $this->model->get('sum(mpClient) as total','mr_items a'," and clientId='$user->id' and productId = '$p' and MONTH(invoiceAt) = MONTH('$date') and YEAR(invoiceAt) = YEAR('$date')",'LEFT JOIN wo b on a.woId = b.id')->total ?></td>
+        <td><?php echo $this->model->get('sum(mudpClient) as total','mr_items a'," and clientId='$user->id' and productId = '$p' and MONTH(invoiceAt) = MONTH('$date') and YEAR(invoiceAt) = YEAR('$date')",'LEFT JOIN wo b on a.woId = b.id')->total ?></td>
       </tr>
       <?php } ?>
       <tr>

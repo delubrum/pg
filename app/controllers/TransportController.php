@@ -7,7 +7,7 @@ class TransportController{
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->fields = array("fecha","tipo","código","responsable","origen","destino","remision","kg","valor","plasticos devueltos cliente","cuñetes para procesar","tambores para procesar","cuñetes enviados","metalicos enviados","plasticos enviados");
+    $this->fields = array("fecha","tipo","código","responsable","kg","valor","plasticos devueltos cliente","cuñetes para procesar","tambores para procesar","cuñetes enviados","metalicos enviados","plasticos enviados");
     $this->url = '?c=Transport&a=Data';
   }
 

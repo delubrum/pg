@@ -7,15 +7,19 @@ class CMonthController{
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->fields = array("fecha","acción");
-    $this->url = '?c=CMonth&a=Data';
   }
 
   public function Index(){
     require_once "lib/check.php";
     if (in_array(5, $permissions)) {
       $title = "Recuperación Mensual";
-      $content = 'app/components/index.php';
+      $fields = array("fecha","acción");
+      $url = '?c=CMonth&a=Data';
+      $content = 'app/components/indexdt.php';
+      //$filters = 'app/views/rm/filters.php';
+      $jspreadsheet = false;
+      $datatables = true;
+      $paginate = true;
       require_once 'app/views/index.php';
     } else {
       $this->model->redirect();
@@ -23,27 +27,16 @@ class CMonthController{
   }
 
   public function Data(){
+    header('Content-Type: application/json');
     require_once "lib/check.php";
     if (in_array(5, $permissions)) {
-      $total = $this->model->get("count(id) as total", "rm","and clientId = $user->id and invoiceAt is not null GROUP BY MONTH(invoiceAt), YEAR(invoiceAt)")->total;
-      $sql = "and clientId = $user->id and invoiceAt is not null GROUP BY MONTH(invoiceAt), YEAR(invoiceAt)";
-      if (!empty($_GET['fromFilter'])) { $sql .= " and createdAt  >='" . $_REQUEST['fromFilter']." 00:00:00'"; }
-      if (!empty($_GET['toFilter'])) { $sql .= " and createdAt <='" . $_REQUEST['toFilter']." 23:59:59'"; }
-      $filtered = $this->model->get("count(id) as total", "rm",$sql)->total;
-      $colum = isset($_GET['colum']) ? $_GET['colum'] : 'createdAt';
-      $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
-      if ($order === 'asc') {
-        $newOrder = 'desc';
-      } else {
-        $newOrder = 'asc';
+      $result[] = array();
+      $i=0;
+      foreach($this->model->list('invoiceAt as fecha',"mr_items a","and clientId = $user->id and invoiceAt is not null GROUP BY MONTH(b.invoiceAt), YEAR(b.invoiceAt)",'LEFT JOIN wo b on a.woId = b.id') as $r) {
+        $result[$i]['fecha'] = $r->date;
+        $i++;
       }
-      $sql .= " ORDER BY $colum $newOrder";
-      $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-      $perPage = 10;
-      $start = ($page - 1) * $perPage;
-      $sql .= " LIMIT $start,$perPage";
-      $list = $this->model->list('invoiceAt as date','rm',$sql);
-      require_once "app/views/certificates/month/list.php";
+      echo json_encode($result);
     } else {
       $this->model->redirect();
     }

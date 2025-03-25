@@ -7,47 +7,40 @@ class CPDController{
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->fields = array("id","fecha","producto","acción");
-    $this->url = '?c=CPD&a=Data';
+
   }
 
   public function Index(){
     require_once "lib/check.php";
     if (in_array(8, $permissions)) {
-      $title = "Paquete de Despacho";
-      $content = 'app/components/index.php';
-      $filters = 'app/views/certificates/pd/filters.php';
+      $title = "Recuperación Todos";
+      $fields = array("id","fecha","producto","acción");
+      $url = '?c=CPD&a=Data';
+      $content = 'app/components/indexdt.php';
+      //$filters = 'app/views/rm/filters.php';
+      $jspreadsheet = false;
+      $datatables = true;
+      $paginate = true;
       require_once 'app/views/index.php';
     } else {
       $this->model->redirect();
     }
   }
 
-
   public function Data(){
+    header('Content-Type: application/json');
     require_once "lib/check.php";
-    if (in_array(8, $permissions)) {
-      $sql = "and clientId = $user->id and a.status = 'Cerrado'";
-      $total = $this->model->get("count(a.id) as total", "rm a",$sql)->total;
-      if (!empty($_GET['idFilter'])) { $sql .= " and a.id LIKE '%" . $_GET['idFilter'] . "%'"; }
-      if (!empty($_GET['productFilter'])) { $sql .= " and c.name LIKE '%" . $_GET['productFilter'] . "%'"; }
-      if (!empty($_GET['fromFilter'])) { $sql .= " and a.invoiceAt  >='" . $_REQUEST['fromFilter']." 00:00:00'"; }
-      if (!empty($_GET['toFilter'])) { $sql .= " and a.invoiceAt <='" . $_REQUEST['toFilter']." 23:59:59'"; }
-      $filtered = $this->model->get("count(a.id) as total", "rm a",$sql,'LEFT JOIN users b ON a.clientId = b.id LEFT JOIN products c ON a.productId = c.id')->total;
-      $colum = isset($_GET['colum']) ? $_GET['colum'] : 'createdAt';
-      $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
-      if ($order === 'asc') {
-        $newOrder = 'desc';
-      } else {
-        $newOrder = 'asc';
+    if (in_array(11, $permissions)) {
+      $result[] = array();
+      $i=0;
+      foreach($this->model->list('a.*, c.name as producto','mr_items a','','LEFT JOIN clients b ON a.clientId = b.id LEFT JOIN products c ON a.productId = c.id') as $r) {
+        $result[$i]['id'] = $r->woId;
+        $result[$i]['fecha'] = '1';
+        $result[$i]['producto'] = $r->producto;
+        $result[$i]['acción'] = "<a href='?c=Reports&a=PD&id=$r->woId' type='button' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-eye-line text-2xl'></i></a>";
+        $i++;
       }
-      $sql .= " ORDER BY $colum $newOrder";
-      $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-      $perPage = 10;
-      $start = ($page - 1) * $perPage;
-      $sql .= " LIMIT $start,$perPage";
-      $list = $this->model->list('a.*,b.company as clientname, c.name as productname','rm a',$sql,'LEFT JOIN users b ON a.clientId = b.id LEFT JOIN products c ON a.productId = c.id');
-      require_once "app/views/certificates/pd/list.php";
+      echo json_encode($result);
     } else {
       $this->model->redirect();
     }

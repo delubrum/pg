@@ -29,7 +29,7 @@
                         hx-indicator="#loading"
                     >
                         <option value='' disabled selected></option>
-                        <?php foreach ($this->model->list("*","users"," and type = 'Cliente' and status = 1 ORDER BY company ASC") as $r) { ?>     
+                        <?php foreach ($this->model->list("*","clients"," and status = 1 ORDER BY company ASC") as $r) { ?>     
                             <option value='<?php echo $r->id?>'><?php echo $r->company?></option>
                         <?php } ?>
                     </select>

@@ -7,45 +7,39 @@ class CAllController{
   private $url;
   public function __CONSTRUCT(){
     $this->model = new Model();
-    $this->fields = array("fecha","cliente","acción");
-    $this->url = '?c=CAll&a=Data';
   }
 
   public function Index(){
     require_once "lib/check.php";
     if (in_array(11, $permissions)) {
       $title = "Recuperación Todos";
-      $content = 'app/components/index.php';
-      $filters = 'app/views/certificates/all/filters.php';
+      $fields = array("fecha","cliente","acción");
+      $url = '?c=CAll&a=Data';
+      $content = 'app/components/indexdt.php';
+      //$filters = 'app/views/rm/filters.php';
+      $jspreadsheet = false;
+      $datatables = true;
+      $paginate = true;
       require_once 'app/views/index.php';
     } else {
       $this->model->redirect();
     }
   }
 
-
   public function Data(){
+    header('Content-Type: application/json');
     require_once "lib/check.php";
     if (in_array(11, $permissions)) {
-      $total = $this->model->get("count(id) as total", "rm","and invoiceAt is not null GROUP BY MONTH(invoiceAt), YEAR(invoiceAt), clientId")->total;
-      $sql = '';
-      if (!empty($_GET['clientFilter'])) { $sql .= " and b.username LIKE '%" . $_GET['clientFilter'] . "%'"; }
-      $sql .= " and invoiceAt is not null GROUP BY MONTH(invoiceAt), YEAR(invoiceAt), b.username";
-      $filtered = $this->model->get("count(a.id) as total", "rm a",$sql,'LEFT JOIN users b on a.clientId = b.id')->total;
-      $colum = isset($_GET['colum']) ? $_GET['colum'] : 'a.createdAt';
-      $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
-      if ($order === 'asc') {
-        $newOrder = 'desc';
-      } else {
-        $newOrder = 'asc';
+      $result[] = array();
+      $i=0;
+      foreach($this->model->list('invoiceAt as fecha, clientId, c.company as cliente',"mr_items a","and invoiceAt is not null GROUP BY MONTH(b.invoiceAt), YEAR(b.invoiceAt), clientId",'LEFT JOIN wo b on a.woId = b.id LEFT JOIN clients c on clientId = c.id') as $r) {
+        $result[$i]['fecha'] = $r->fecha;
+        $result[$i]['cliente'] = $r->cliente;
+        $result[$i]['acción'] = "<a href='?c=CAll&a=Detail&date=$r->fecha&userId=$r->clientId' type='button' target='_blank' class='text-teal-900 hover:text-teal-700'><i class='ri-eye-line text-2xl'></i></a>";
+
+        $i++;
       }
-      $sql .= " ORDER BY $colum $newOrder";
-      $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-      $perPage = 10;
-      $start = ($page - 1) * $perPage;
-      $sql .= " LIMIT $start,$perPage";
-      $list = $this->model->list('invoiceAt as date, clientId, b.username as clientname','rm a',$sql,'LEFT JOIN users b on a.clientId = b.id');
-      require_once "app/views/certificates/all/list.php";
+      echo json_encode($result);
     } else {
       $this->model->redirect();
     }
@@ -56,7 +50,7 @@ class CAllController{
     if (in_array(11, $permissions)) {
       if (isset($_REQUEST['userId'])) {
         $userId = $_REQUEST['userId'];
-        $user = $this->model->get('*','users'," and id = $userId");
+        $user = $this->model->get('*','clients'," and id = $userId");
       }
       $date = $_REQUEST['date'];
       require_once 'app/views/reports/certificate.php';

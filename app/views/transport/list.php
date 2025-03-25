@@ -31,17 +31,6 @@
     <?php echo $this->model->get('username','users', "and id = $r->responsable")->username ?>
     </td>
     <td class="px-2 py-2 border-b">
-      Ecoambientales
-    </td>
-    <td class="px-2 py-2 border-b">
-      <?php 
-      echo $this->model->get('b.company as clientname','rm a', "and a.id = $r->código","LEFT JOIN users b on a.clientId = b.id")->clientname;
-      ?>
-    </td>
-    <td class="px-2 py-2 border-b">
-      <?php echo ($r->tipo == 'RM') ? $this->model->get('remission','rm'," and id = '$r->código'")->remission : ''; ?>
-    </td>
-    <td class="px-2 py-2 border-b">
       <?php echo $r->kg ?>
     </td>
     <td class="px-2 py-2 border-b">
